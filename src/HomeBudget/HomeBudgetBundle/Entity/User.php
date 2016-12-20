@@ -1,0 +1,167 @@
+<?php
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of User
+ *
+ * @author pp
+ */
+namespace HomeBudget\HomeBudgetBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="my_users")
+ */
+class User extends BaseUser {
+    
+    /**
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+    
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * 
+     */
+    private $cellPhone;
+    
+    /**
+     *@ORM\OneToMany(targetEntity="Acount", mappedBy="user")
+     * @var type 
+     */
+    private $acounts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="user")
+     */
+    private $expends;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="user")
+     */
+    private $incomes;
+    
+    public function __construct() {
+        parent::__construct();
+    }
+    
+    public function getCellPhone() {
+        return $this->cellPhone;
+    }
+    public function setCellPhone($cellPhone) {
+        $this->cellPhone = $cellPhone;
+    }
+
+
+
+
+    /**
+     * Add acounts
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @return User
+     */
+    public function addAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    {
+        $this->acounts[] = $acounts;
+
+        return $this;
+    }
+
+    /**
+     * Remove acounts
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     */
+    public function removeAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    {
+        $this->acounts->removeElement($acounts);
+    }
+
+    /**
+     * Get acounts
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAcounts()
+    {
+        return $this->acounts;
+    }
+
+    /**
+     * Add expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     * @return User
+     */
+    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends[] = $expends;
+
+        return $this;
+    }
+
+    /**
+     * Remove expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     */
+    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends->removeElement($expends);
+    }
+
+    /**
+     * Get expends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpends()
+    {
+        return $this->expends;
+    }
+
+    /**
+     * Add incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @return User
+     */
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes[] = $incomes;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     */
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes->removeElement($incomes);
+    }
+
+    /**
+     * Get incomes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomes()
+    {
+        return $this->incomes;
+    }
+}
