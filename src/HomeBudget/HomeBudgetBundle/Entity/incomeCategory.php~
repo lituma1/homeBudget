@@ -28,7 +28,12 @@ class incomeCategory
      */
     private $name;
 
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="incomeCategory")
+     */
+   
+    private $incomes;
     /**
      * Get id
      *
@@ -60,5 +65,45 @@ class incomeCategory
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->incomes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @return incomeCategory
+     */
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes[] = $incomes;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     */
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes->removeElement($incomes);
+    }
+
+    /**
+     * Get incomes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomes()
+    {
+        return $this->incomes;
     }
 }

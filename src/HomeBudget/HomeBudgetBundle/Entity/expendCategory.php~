@@ -27,7 +27,12 @@ class expendCategory
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="expendCategory")
+     */
+   
+    private $expendes;
 
     /**
      * Get id

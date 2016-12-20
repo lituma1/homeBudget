@@ -29,10 +29,10 @@ class Type
     private $name;
     
     /**
-     *@ORM\OneToMany(targetEntity="Acount", mappedBy="type")
+     *@ORM\OneToMany(targetEntity="Account", mappedBy="type")
      * @var type 
      */
-    private $acounts;
+    private $accounts;
     /**
      * Get id
      *
@@ -70,39 +70,51 @@ class Type
      */
     public function __construct()
     {
-        $this->acounts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add acounts
+     * Add accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      * @return Type
      */
-    public function addAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function addAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts[] = $acounts;
+        $this->accounts[] = $accounts;
 
         return $this;
     }
 
     /**
-     * Remove acounts
+     * Remove accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      */
-    public function removeAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function removeAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts->removeElement($acounts);
+        $this->accounts->removeElement($accounts);
     }
 
     /**
-     * Get acounts
+     * Get accounts
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAcounts()
+    public function getAccounts()
     {
         return $this->acounts;
     }
+
+    /**
+     * Add accounts
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
+     * @return Type
+     */
+    
+
+    
+
+    
 }

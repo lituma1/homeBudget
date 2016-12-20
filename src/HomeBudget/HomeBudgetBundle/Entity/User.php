@@ -37,10 +37,10 @@ class User extends BaseUser {
     private $cellPhone;
     
     /**
-     *@ORM\OneToMany(targetEntity="Acount", mappedBy="user")
+     *@ORM\OneToMany(targetEntity="Account", mappedBy="user")
      * @var type 
      */
-    private $acounts;
+    private $accounts;
     
     /**
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="user")
@@ -67,36 +67,36 @@ class User extends BaseUser {
 
 
     /**
-     * Add acounts
+     * Add accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      * @return User
      */
-    public function addAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function addAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts[] = $acounts;
+        $this->accounts[] = $accounts;
 
         return $this;
     }
 
     /**
-     * Remove acounts
+     * Remove accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      */
-    public function removeAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function removeAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts->removeElement($acounts);
+        $this->accounts->removeElement($accounts);
     }
 
     /**
-     * Get acounts
+     * Get accounts
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAcounts()
+    public function getAccounts()
     {
-        return $this->acounts;
+        return $this->accounts;
     }
 
     /**

@@ -5,12 +5,12 @@ namespace HomeBudget\HomeBudgetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Acount
+ * Account
  *
- * @ORM\Table(name="acount")
- * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\AcountRepository")
+ * @ORM\Table(name="account")
+ * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\AccountRepository")
  */
-class Acount
+class Account
 {
     /**
      * @var int
@@ -34,17 +34,18 @@ class Acount
      * @ORM\Column(name="aim", type="string", length=255)
      */
     private $aim;
-
+    
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="acounts")
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="accounts")
      */
     private $user;
     
     /**
-     *@ORM\ManyToOne(targetEntity="Type", inversedBy="acounts")
+     *@ORM\ManyToOne(targetEntity="Type", inversedBy="accounts")
      * @var type 
      */
     private $type;
+
     /**
      * Get id
      *
@@ -59,7 +60,7 @@ class Acount
      * Set balance
      *
      * @param string $balance
-     * @return Acount
+     * @return Account
      */
     public function setBalance($balance)
     {
@@ -82,7 +83,7 @@ class Acount
      * Set aim
      *
      * @param string $aim
-     * @return Acount
+     * @return Account
      */
     public function setAim($aim)
     {
@@ -105,7 +106,7 @@ class Acount
      * Set user
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
-     * @return Acount
+     * @return Account
      */
     public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
     {
@@ -128,7 +129,7 @@ class Acount
      * Set type
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Type $type
-     * @return Acount
+     * @return Account
      */
     public function setType(\HomeBudget\HomeBudgetBundle\Entity\Type $type = null)
     {

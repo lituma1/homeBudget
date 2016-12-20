@@ -42,12 +42,15 @@ class Expend
      */
     private $description;
     
-    
-    
     /**
      *@ORM\ManyToOne(targetEntity="User", inversedBy="expends")
      */
     private $user;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="expendCategory", inversedBy="expends")
+     */
+    private $expendCategory;
     /**
      * Get id
      *
@@ -148,5 +151,28 @@ class Expend
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set expendCategory
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\expendCategory $expendCategory
+     * @return Expend
+     */
+    public function setExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\expendCategory $expendCategory = null)
+    {
+        $this->expendCategory = $expendCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get expendCategory
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\expendCategory 
+     */
+    public function getExpendCategory()
+    {
+        return $this->expendCategory;
     }
 }

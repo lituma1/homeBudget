@@ -37,10 +37,10 @@ class User extends BaseUser {
     private $cellPhone;
     
     /**
-     *@ORM\OneToMany(targetEntity="Acount", mappedBy="user")
+     *@ORM\OneToMany(targetEntity="Account", mappedBy="user")
      * @var type 
      */
-    private $acounts;
+    private $accounts;
     
     /**
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="user")
@@ -67,35 +67,101 @@ class User extends BaseUser {
 
 
     /**
-     * Add acounts
+     * Add accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      * @return User
      */
-    public function addAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function addAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts[] = $acounts;
+        $this->accounts[] = $accounts;
 
         return $this;
     }
 
     /**
-     * Remove acounts
+     * Remove accounts
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Acount $acounts
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      */
-    public function removeAcount(\HomeBudget\HomeBudgetBundle\Entity\Acount $acounts)
+    public function removeAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
     {
-        $this->acounts->removeElement($acounts);
+        $this->accounts->removeElement($accounts);
     }
 
     /**
-     * Get acounts
+     * Get accounts
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAcounts()
+    public function getAccounts()
     {
-        return $this->acounts;
+        return $this->accounts;
+    }
+
+    /**
+     * Add expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     * @return User
+     */
+    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends[] = $expends;
+
+        return $this;
+    }
+
+    /**
+     * Remove expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     */
+    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends->removeElement($expends);
+    }
+
+    /**
+     * Get expends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpends()
+    {
+        return $this->expends;
+    }
+
+    /**
+     * Add incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @return User
+     */
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes[] = $incomes;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     */
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes->removeElement($incomes);
+    }
+
+    /**
+     * Get incomes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomes()
+    {
+        return $this->incomes;
     }
 }

@@ -46,6 +46,11 @@ class Income
      *@ORM\ManyToOne(targetEntity="User", inversedBy="incomes")
      */
     private $user;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="incomeCategory", inversedBy="incomes")
+     */
+    private $incomeCategory;
     /**
      * Get id
      *
@@ -123,5 +128,51 @@ class Income
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return Income
+     */
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\incomeCategory $category
+     * @return Income
+     */
+    public function setCategory(\HomeBudget\HomeBudgetBundle\Entity\incomeCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\incomeCategory 
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }
