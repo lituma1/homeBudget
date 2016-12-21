@@ -11,6 +11,7 @@ use HomeBudget\HomeBudgetBundle\Entity\Type;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+
 class AccountController extends Controller {
 
     /**

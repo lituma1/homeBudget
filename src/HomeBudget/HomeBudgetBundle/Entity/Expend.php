@@ -31,7 +31,7 @@ class Expend
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expendDate", type="datetime")
+     * @ORM\Column(name="expendDate", type="date")
      */
     private $expendDate;
 
