@@ -48,7 +48,7 @@ class Income
     private $user;
     
     /**
-     * @ORM\ManyToOne(targetEntity="incomeCategory", inversedBy="incomes")
+     * @ORM\ManyToOne(targetEntity="IncomeCategory", inversedBy="incomes")
      */
     private $incomeCategory;
     /**

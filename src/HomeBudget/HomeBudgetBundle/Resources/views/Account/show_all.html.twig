@@ -4,4 +4,8 @@
 
 {% block body %}
 <h1>Welcome to the Account:showAll page</h1>
+
+{% for account in accounts %}
+    {{account.name}} {{account.balance}} {{account.type.name}}<br>
+    {% endfor %}
 {% endblock %}

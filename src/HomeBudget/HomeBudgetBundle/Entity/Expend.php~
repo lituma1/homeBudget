@@ -48,7 +48,7 @@ class Expend
     private $user;
     
     /**
-     * @ORM\ManyToOne(targetEntity="expendCategory", inversedBy="expends")
+     * @ORM\ManyToOne(targetEntity="ExpendCategory", inversedBy="expends")
      */
     private $expendCategory;
     /**
