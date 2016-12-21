@@ -9,5 +9,5 @@
 {% for type in types %}
     {{type.name}}<br>
     {% endfor %}
-
+<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}

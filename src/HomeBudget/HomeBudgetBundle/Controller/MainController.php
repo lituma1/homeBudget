@@ -10,7 +10,7 @@ class MainController extends Controller
 {
     
     /**
-     * @Route("/")
+     * @Route("/panel", name="Panel")
      * @Security("has_role('ROLE_USER')")
      */
     public function showMainPageAfterLoginAction()
@@ -20,6 +20,9 @@ class MainController extends Controller
         $linkAcc['href'] = 'show_allAccounts';
         $linkAcc['text'] = "Konta";
         $links[] = $linkAcc;
+        $linkExp['href'] = '';
+        $linkExp['text'] = "Wydatki";
+        //$links[] = $linkExp;
         $linkOut['href'] = 'fos_user_security_logout';
         $linkOut['text'] = 'Wyloguj';
          $links[] = $linkOut;
@@ -34,6 +37,10 @@ class MainController extends Controller
      */
     public function showMainPageAction()
     {   
+        
+        if( $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY') ){
+            return $this->redirectToRoute('Panel');
+        }
         
         $links = [];
         $linkLog['href'] = 'fos_user_security_login';

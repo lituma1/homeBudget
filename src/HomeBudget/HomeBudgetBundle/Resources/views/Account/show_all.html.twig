@@ -8,4 +8,6 @@
 {% for account in accounts %}
     {{account.name}} {{account.balance}} {{account.type.name}}<br>
     {% endfor %}
+    
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}
