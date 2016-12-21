@@ -7,12 +7,14 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use HomeBudget\HomeBudgetBundle\Entity\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 
 class TypeController extends Controller
 {
     /**
      * @Route("/type/new")
+     * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request)
@@ -34,10 +36,10 @@ class TypeController extends Controller
             $em->persist($type);
 
             $em->flush();
-            $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
-            $types = $repository->findAll();
-            return $this->render('HBBundle:Type:show_all.html.twig', array(
-                        'types' => $types));
+            
+            
+            
+            return $this->redirectToRoute('show_allTypes');
         }
         return $this->render('HBBundle:Type:new.html.twig', array(
                     'form' => $form->createView()));
@@ -47,6 +49,7 @@ class TypeController extends Controller
 
     /**
      * @Route("/type/{id}/modify")
+     * @Security("has_role('ROLE_USER')")
      */
     public function modifyAction($id)
     {
@@ -57,6 +60,7 @@ class TypeController extends Controller
 
     /**
      * @Route("/type/{id}/delete")
+     * @Security("has_role('ROLE_USER')")
      */
     public function deleteAction($id)
     {
@@ -66,12 +70,14 @@ class TypeController extends Controller
     }
 
     /**
-     * @Route("/type/showAll")
+     * @Route("/type/showAll", name="show_allTypes")
+     * @Security("has_role('ROLE_USER')")
      */
     public function showAllAction()
     {
+        $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
-            $types = $repository->findAll();
+            $types = $repository->findByUser($user);
         return $this->render('HBBundle:Type:show_all.html.twig', array(
             'types' => $types
         ));

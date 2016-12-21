@@ -21,10 +21,6 @@ class TypeRepository extends EntityRepository {
         return $query;
     }
 
-    public function findOwnedBy($user) {
-        return $this->queryOwnedBy($user)
-                        ->getQuery()
-                        ->getResult();
-    }
+
 
 }

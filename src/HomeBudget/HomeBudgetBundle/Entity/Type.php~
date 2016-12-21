@@ -24,7 +24,7 @@ class Type
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
     
@@ -123,4 +123,27 @@ class Type
     
 
     
+
+    /**
+     * Set user
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return Type
+     */
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

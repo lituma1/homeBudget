@@ -29,11 +29,16 @@ class ExpendCategory
     private $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="Expend", mappedBy="ExpendCategory")
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="expendCategory")
      */
    
     private $expendes;
-
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="expendCategories")
+     * @var type 
+     */
+    private $user;
     /**
      * Get id
      *
@@ -105,5 +110,28 @@ class ExpendCategory
     public function getExpendes()
     {
         return $this->expendes;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return ExpendCategory
+     */
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

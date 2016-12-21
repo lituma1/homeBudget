@@ -30,10 +30,17 @@ class IncomeCategory
 
     
     /**
-     * @ORM\OneToMany(targetEntity="Income", mappedBy="IncomeCategory")
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="incomeCategory")
      */
    
     private $incomes;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="incomeCategories")
+     * @var type 
+     */
+    private $user;
+    
     /**
      * Get id
      *

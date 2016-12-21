@@ -30,10 +30,17 @@ class IncomeCategory
 
     
     /**
-     * @ORM\OneToMany(targetEntity="Income", mappedBy="IncomeCategory")
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="incomeCategory")
      */
    
     private $incomes;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="incomeCategories")
+     * @var type 
+     */
+    private $user;
+    
     /**
      * Get id
      *
@@ -105,5 +112,28 @@ class IncomeCategory
     public function getIncomes()
     {
         return $this->incomes;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return IncomeCategory
+     */
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

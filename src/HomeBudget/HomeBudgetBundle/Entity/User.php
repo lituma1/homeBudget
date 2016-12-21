@@ -57,6 +57,16 @@ class User extends BaseUser {
      */
     private $types;
     
+    /**
+     * @ORM\OneToMany(targetEntity="ExpendCategory", mappedBy="user")
+     */
+    private $expandCategories;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="IncomeCategory", mappedBy="user")
+     */
+    private $incomeCategories;
+    
     public function __construct() {
         parent::__construct();
     }
@@ -201,5 +211,71 @@ class User extends BaseUser {
     public function getTypes()
     {
         return $this->types;
+    }
+
+    /**
+     * Add expandCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
+     * @return User
+     */
+    public function addExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories)
+    {
+        $this->expandCategories[] = $expandCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove expandCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
+     */
+    public function removeExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories)
+    {
+        $this->expandCategories->removeElement($expandCategories);
+    }
+
+    /**
+     * Get expandCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpandCategories()
+    {
+        return $this->expandCategories;
+    }
+
+    /**
+     * Add incomeCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories
+     * @return User
+     */
+    public function addIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories)
+    {
+        $this->incomeCategories[] = $incomeCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomeCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories
+     */
+    public function removeIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories)
+    {
+        $this->incomeCategories->removeElement($incomeCategories);
+    }
+
+    /**
+     * Get incomeCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomeCategories()
+    {
+        return $this->incomeCategories;
     }
 }

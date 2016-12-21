@@ -29,11 +29,16 @@ class ExpendCategory
     private $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="Expend", mappedBy="ExpendCategory")
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="expendCategory")
      */
    
     private $expendes;
-
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="expendCategories")
+     * @var type 
+     */
+    private $user;
     /**
      * Get id
      *
