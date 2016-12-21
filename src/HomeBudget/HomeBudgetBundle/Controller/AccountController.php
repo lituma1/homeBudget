@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use HomeBudget\HomeBudgetBundle\Entity\Account;
 use Symfony\Component\HttpFoundation\Request;
 use HomeBudget\HomeBudgetBundle\Entity\Type;
+use Doctrine\ORM\EntityRepository;
 
 class AccountController extends Controller {
 
@@ -16,21 +17,26 @@ class AccountController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request) {
+        $user = $this->container->get('security.context')->getToken()->getUser();
 
-        $account = new Account();
+        $account = new Account($user);
         $form = $this->createFormBuilder($account)
                 ->add('name', 'text', array('label' => 'Nazwa konta'))
                 ->add('balance', 'number', array('label' => 'Stan konta'))
                 ->add('aim', 'text', array('label' => 'cel konta'))
-                ->add('type', 'entity', array('class' => 'HBBundle:Type', 'choice_label' => 'name', 'label' => 'Typ konta'))
+                ->add('type', 'entity', array('class' => 'HBBundle:Type',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Typ konta'))
                 ->add('save', 'submit', array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
-            $user = $this->container->get('security.context')->getToken()->getUser();
-            
+
+
             $account->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($account);
@@ -65,6 +71,7 @@ class AccountController extends Controller {
 
     /**
      * @Route("/account/showAll", name="show_allAccounts")
+     * 
      */
     public function showAllAction() {
 

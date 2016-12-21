@@ -52,6 +52,11 @@ class User extends BaseUser {
      */
     private $incomes;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Type", mappedBy="user")
+     */
+    private $types;
+    
     public function __construct() {
         parent::__construct();
     }
@@ -163,5 +168,38 @@ class User extends BaseUser {
     public function getIncomes()
     {
         return $this->incomes;
+    }
+
+    /**
+     * Add types
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Type $types
+     * @return User
+     */
+    public function addType(\HomeBudget\HomeBudgetBundle\Entity\Type $types)
+    {
+        $this->types[] = $types;
+
+        return $this;
+    }
+
+    /**
+     * Remove types
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Type $types
+     */
+    public function removeType(\HomeBudget\HomeBudgetBundle\Entity\Type $types)
+    {
+        $this->types->removeElement($types);
+    }
+
+    /**
+     * Get types
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTypes()
+    {
+        return $this->types;
     }
 }

@@ -8,6 +8,7 @@ use HomeBudget\HomeBudgetBundle\Entity\Type;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 
+
 class TypeController extends Controller
 {
     /**
@@ -26,7 +27,9 @@ class TypeController extends Controller
         if ($form->isSubmitted()) {
 
             $type = $form->getData();
-
+            $user = $this->container->get('security.context')->getToken()->getUser();
+            
+            $type->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($type);
 

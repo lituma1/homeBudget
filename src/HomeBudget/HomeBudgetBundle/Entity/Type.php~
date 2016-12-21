@@ -33,6 +33,12 @@ class Type
      * @var type 
      */
     private $accounts;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="type")
+     * @var type 
+     */
+    private $user;
     /**
      * Get id
      *

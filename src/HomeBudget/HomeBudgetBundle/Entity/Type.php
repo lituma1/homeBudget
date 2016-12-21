@@ -33,6 +33,12 @@ class Type
      * @var type 
      */
     private $accounts;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="type")
+     * @var type 
+     */
+    private $user;
     /**
      * Get id
      *
@@ -117,4 +123,27 @@ class Type
     
 
     
+
+    /**
+     * Set user
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return Type
+     */
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

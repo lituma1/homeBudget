@@ -52,6 +52,11 @@ class User extends BaseUser {
      */
     private $incomes;
     
+    /**
+     * @ORM\OneToMany(targetEntity="Type", mappedBy="user")
+     */
+    private $types;
+    
     public function __construct() {
         parent::__construct();
     }
