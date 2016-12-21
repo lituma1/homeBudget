@@ -5,12 +5,12 @@ namespace HomeBudget\HomeBudgetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * incomeCategory
+ * ExpendCategory
  *
- * @ORM\Table(name="income_category")
- * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\incomeCategoryRepository")
+ * @ORM\Table(name="expend_category")
+ * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\ExpendCategoryRepository")
  */
-class incomeCategory
+class ExpendCategory
 {
     /**
      * @var int
@@ -27,13 +27,13 @@ class incomeCategory
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
-
     
     /**
-     * @ORM\OneToMany(targetEntity="Income", mappedBy="incomeCategory")
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="ExpendCategory")
      */
    
-    private $incomes;
+    private $expendes;
+
     /**
      * Get id
      *
@@ -48,7 +48,7 @@ class incomeCategory
      * Set name
      *
      * @param string $name
-     * @return incomeCategory
+     * @return ExpendCategory
      */
     public function setName($name)
     {
@@ -71,39 +71,39 @@ class incomeCategory
      */
     public function __construct()
     {
-        $this->incomes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expendes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
-     * Add incomes
+     * Add expendes
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
-     * @return incomeCategory
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
+     * @return ExpendCategory
      */
-    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
     {
-        $this->incomes[] = $incomes;
+        $this->expendes[] = $expendes;
 
         return $this;
     }
 
     /**
-     * Remove incomes
+     * Remove expendes
      *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
      */
-    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    public function removeExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
     {
-        $this->incomes->removeElement($incomes);
+        $this->expendes->removeElement($expendes);
     }
 
     /**
-     * Get incomes
+     * Get expendes
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIncomes()
+    public function getExpendes()
     {
-        return $this->incomes;
+        return $this->expendes;
     }
 }

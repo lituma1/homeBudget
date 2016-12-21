@@ -175,4 +175,27 @@ class Income
     {
         return $this->category;
     }
+
+    /**
+     * Set incomeCategory
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\incomeCategory $incomeCategory
+     * @return Income
+     */
+    public function setIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\incomeCategory $incomeCategory = null)
+    {
+        $this->incomeCategory = $incomeCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get incomeCategory
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\incomeCategory 
+     */
+    public function getIncomeCategory()
+    {
+        return $this->incomeCategory;
+    }
 }

@@ -5,12 +5,12 @@ namespace HomeBudget\HomeBudgetBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * expendCategory
+ * ExpendCategory
  *
  * @ORM\Table(name="expend_category")
- * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\expendCategoryRepository")
+ * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\ExpendCategoryRepository")
  */
-class expendCategory
+class ExpendCategory
 {
     /**
      * @var int
@@ -29,7 +29,7 @@ class expendCategory
     private $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="Expend", mappedBy="expendCategory")
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="ExpendCategory")
      */
    
     private $expendes;
@@ -48,7 +48,7 @@ class expendCategory
      * Set name
      *
      * @param string $name
-     * @return expendCategory
+     * @return ExpendCategory
      */
     public function setName($name)
     {
@@ -78,7 +78,7 @@ class expendCategory
      * Add expendes
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
-     * @return expendCategory
+     * @return ExpendCategory
      */
     public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
     {
