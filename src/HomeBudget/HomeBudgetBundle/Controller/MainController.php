@@ -20,9 +20,12 @@ class MainController extends Controller
         $linkAcc['href'] = 'show_allAccounts';
         $linkAcc['text'] = "Konta";
         $links[] = $linkAcc;
-        $linkExp['href'] = '';
+        $linkExp['href'] = 'show_allExpends';
         $linkExp['text'] = "Wydatki";
-        //$links[] = $linkExp;
+        $links[] = $linkExp;
+        $linkInc['href'] = 'show_allIncomes';
+        $linkInc['text'] = "Przychody";
+        $links[] = $linkInc;
         $linkOut['href'] = 'fos_user_security_logout';
         $linkOut['text'] = 'Wyloguj';
          $links[] = $linkOut;

@@ -31,7 +31,7 @@ class Income
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="incomeDate", type="datetime")
+     * @ORM\Column(name="incomeDate", type="date")
      */
     private $incomeDate;
 
@@ -51,6 +51,11 @@ class Income
      * @ORM\ManyToOne(targetEntity="IncomeCategory", inversedBy="incomes")
      */
     private $incomeCategory;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="Account", inversedBy="incomes")
+     */
+    private $account;
     /**
      * Get id
      *
@@ -197,5 +202,28 @@ class Income
     public function getIncomeCategory()
     {
         return $this->incomeCategory;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @return Income
+     */
+    public function setAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\Account 
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }

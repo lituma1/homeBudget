@@ -58,6 +58,12 @@ class Account
      */
    
     private $expendes;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="account")
+     */
+   
+    private $incomes;
     /**
      * Get id
      *
@@ -181,5 +187,78 @@ class Account
     public function getName()
     {
         return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->expendes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add expendes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
+     * @return Account
+     */
+    public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
+    {
+        $this->expendes[] = $expendes;
+
+        return $this;
+    }
+
+    /**
+     * Remove expendes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
+     */
+    public function removeExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
+    {
+        $this->expendes->removeElement($expendes);
+    }
+
+    /**
+     * Get expendes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpendes()
+    {
+        return $this->expendes;
+    }
+
+    /**
+     * Add incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @return Account
+     */
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes[] = $incomes;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     */
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes->removeElement($incomes);
+    }
+
+    /**
+     * Get incomes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomes()
+    {
+        return $this->incomes;
     }
 }

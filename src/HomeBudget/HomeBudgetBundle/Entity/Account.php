@@ -58,6 +58,12 @@ class Account
      */
    
     private $expendes;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Income", mappedBy="account")
+     */
+   
+    private $incomes;
     /**
      * Get id
      *
@@ -221,5 +227,38 @@ class Account
     public function getExpendes()
     {
         return $this->expendes;
+    }
+
+    /**
+     * Add incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     * @return Account
+     */
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes[] = $incomes;
+
+        return $this;
+    }
+
+    /**
+     * Remove incomes
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
+     */
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
+    {
+        $this->incomes->removeElement($incomes);
+    }
+
+    /**
+     * Get incomes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getIncomes()
+    {
+        return $this->incomes;
     }
 }

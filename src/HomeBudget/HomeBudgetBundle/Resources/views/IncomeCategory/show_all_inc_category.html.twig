@@ -1,0 +1,12 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}HBBundle:IncomeCategory:showAllIncCategory{% endblock %}
+
+{% block body %}
+    <h1>Welcome to the IncomeCategory:showAllIncCategory page</h1>
+
+{% for inCategory in inCategories %}
+    {{inCategory.name}} <br>
+    {% endfor %}
+<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+{% endblock %}

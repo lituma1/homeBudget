@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}HBBundle:Income:allIncome{% endblock %}
+
+{% block body %}
+<h1>Welcome to the Income:allIncome page</h1>
+
+
+{% for income in incomes %}
+    {{income.description}} {{income.amount}} {{ income.incomeDate|date("d/m/Y")}}
+    {{income.account.name}}<br>
+    {% endfor %}
+    
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+{% endblock %}
