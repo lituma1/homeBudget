@@ -6,14 +6,13 @@
 
 {% block body %}
 <h1>Aplikacja budżet domowy</h1>
-{% if is_granted('ROLE_USER') %}
-<a href="">Konta</a>
-{% else %}
-    <a href="{{path('fos_user_security_login')}}">Przejdź do strony logowania</a> 
+{% for link in links %}
+    <a href="{{path(link.href)}}">{{link.text}}</a>
     <br>
     <br>
-    <a href="{{path('fos_user_registration_register')}}">Przejdź do strony rejestracji nowego użytkownika</a> 
-{% endif %}
     
+    
+    
+{%endfor%}
 
 {% endblock %}
