@@ -31,7 +31,7 @@ class Expend
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="expendDate", type="datetime")
+     * @ORM\Column(name="expendDate", type="date")
      */
     private $expendDate;
 
@@ -46,6 +46,12 @@ class Expend
      *@ORM\ManyToOne(targetEntity="User", inversedBy="expends")
      */
     private $user;
+    
+    /**
+     *@ORM\ManyToOne(targetEntity="Account", inversedBy="expends")
+     */
+    private $account;
+    
     
     /**
      * @ORM\ManyToOne(targetEntity="ExpendCategory", inversedBy="expends")

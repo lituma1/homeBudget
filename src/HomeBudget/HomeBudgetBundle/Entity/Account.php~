@@ -52,7 +52,12 @@ class Account
      * @var type 
      */
     private $type;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Expend", mappedBy="account")
+     */
+   
+    private $expendes;
     /**
      * Get id
      *

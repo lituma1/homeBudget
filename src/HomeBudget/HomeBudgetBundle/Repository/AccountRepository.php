@@ -12,4 +12,12 @@ use Doctrine\ORM\EntityRepository;
  */
 class AccountRepository extends EntityRepository
 {
+    public function queryOwnedBy($user) {
+
+        $query = $this->createQueryBuilder("u")
+                ->where('u.user = :user')
+                ->setParameter('user', $user);
+
+        return $query;
+    }
 }

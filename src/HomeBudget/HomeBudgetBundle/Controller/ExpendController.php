@@ -31,6 +31,11 @@ class ExpendController extends Controller
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Kategoria'))
+                ->add('account', 'entity', array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Zapłacono z: '))
                 ->add('save', 'submit', array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
@@ -76,8 +81,12 @@ class ExpendController extends Controller
      */
     public function allExpendAction()
     {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
+
+        $expends = $repository->findByUser($user);
         return $this->render('HBBundle:Expend:all_expend.html.twig', array(
-            // ...
+            'expends' => $expends
         ));
     }
 

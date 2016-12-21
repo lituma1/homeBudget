@@ -48,6 +48,12 @@ class Expend
     private $user;
     
     /**
+     *@ORM\ManyToOne(targetEntity="Account", inversedBy="expends")
+     */
+    private $account;
+    
+    
+    /**
      * @ORM\ManyToOne(targetEntity="ExpendCategory", inversedBy="expends")
      */
     private $expendCategory;
@@ -174,5 +180,28 @@ class Expend
     public function getExpendCategory()
     {
         return $this->expendCategory;
+    }
+
+    /**
+     * Set account
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @return Expend
+     */
+    public function setAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $account = null)
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    /**
+     * Get account
+     *
+     * @return \HomeBudget\HomeBudgetBundle\Entity\Account 
+     */
+    public function getAccount()
+    {
+        return $this->account;
     }
 }

@@ -4,4 +4,13 @@
 
 {% block body %}
 <h1>Welcome to the Expend:allExpend page</h1>
+
+
+{% for expend in expends %}
+    {{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
+    {{expend.account.name}}<br>
+    {% endfor %}
+    
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+
 {% endblock %}
