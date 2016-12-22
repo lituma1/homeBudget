@@ -1,0 +1,11 @@
+{% extends "::base.html.twig" %}
+
+{% block title %}Potwierdzenie{% endblock %}
+
+{% block body %}
+<h2>Potwierdź usunięcie poniższego konta</h2>
+
+<p>Nazwa: {{account.name}} typ: {{account.type.name}}</p>
+
+<a href="{{ path('delete_Account', {"id" : account.id}) }}"><button>Potwierdź</button></a>
+{% endblock %}

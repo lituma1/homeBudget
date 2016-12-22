@@ -5,14 +5,18 @@
 {% block body %}
     <h2>Lista Twoich kont</h2>
     <table>
+        <th></th>
         <th>Nazwa</th>
         <th>Saldo</th>
         <th>Typ</th>
         
             {% for account in accounts %}
             <tr>
-            <td><a href="{{ path('delete_Account', {"id" : account.id}) }}">usuń</a>
-                <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>  {{account.name}}</td> 
+                <td>
+                    <a href="{{ path('submit_delete', {"id" : account.id}) }}">usuń</a>
+                    <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>
+                </td>
+            <td>{{account.name}}</td> 
             <td>{{account.balance}}</td> 
             <td>{{account.type.name}}</td>
             </tr>

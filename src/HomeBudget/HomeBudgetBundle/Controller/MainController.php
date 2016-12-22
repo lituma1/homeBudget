@@ -30,7 +30,7 @@ class MainController extends Controller {
         $linkOut['href'] = 'fos_user_security_logout';
         $linkOut['text'] = 'Wyloguj';
         $links[] = $linkOut;
-
+        $user = $this->container->get('security.context')->getToken()->getUser();
         return $this->render('HBBundle:Main:show_main_page.html.twig', array(
                     'links' => $links
         ));

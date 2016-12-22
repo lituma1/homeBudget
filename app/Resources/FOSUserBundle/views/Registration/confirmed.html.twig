@@ -1,0 +1,12 @@
+
+{% extends "::base.html.twig" %}
+
+
+
+{% block body %}
+    <h2>Rejestracja przebiegła pomyślnie zapraszamy na stronę główną</h2>
+    {% if targetUrl %}
+    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
+    {% endif %}
+    <a href="{{ path('Panel') }}">Strona główna</a>
+{% endblock body %}
