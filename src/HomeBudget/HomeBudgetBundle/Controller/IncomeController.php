@@ -9,16 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use HomeBudget\HomeBudgetBundle\Entity\Income;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use HomeBudget\HomeBudgetBundle\Entity\Account;
 
-class IncomeController extends Controller
-{
+class IncomeController extends Controller {
+
     /**
      * @Route("/income/new", name="new_income")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
-    public function newIncomeAction(Request $request)
-    {
+    public function newIncomeAction(Request $request) {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $income = new Income($user);
@@ -47,8 +47,14 @@ class IncomeController extends Controller
             $income->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($income);
+            $account = $income->getAccount();
+            //$repository = $this->getDoctrine()->getRepository('HBBundle:Account');
+            $account->addMoney($income->getAmount());
 
             $em->flush();
+            
+
+
 
             return $this->redirectToRoute('show_allIncomes');
         }
@@ -58,36 +64,37 @@ class IncomeController extends Controller
 
     /**
      * @Route("/income/{id}/modify")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function modifyIncomeAction($id)
-    {
+    public function modifyIncomeAction($id) {
         return $this->render('HBBundle:Income:modify_income.html.twig', array(
-            // ...
+                        // ...
         ));
     }
 
     /**
      * @Route("/income/{id}/delete")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function deleteIncomeAction($id)
-    {
+    public function deleteIncomeAction($id) {
         return $this->render('HBBundle:Income:delete_income.html.twig', array(
-            // ...
+                        // ...
         ));
     }
 
     /**
      * @Route("/income/all", name="show_allIncomes")
+     * @Security("has_role('ROLE_USER')")
+     * 
      */
-    public function allIncomeAction()
-    {
+    public function allIncomeAction() {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
 
         $incomes = $repository->findByUser($user);
-        
+
         return $this->render('HBBundle:Income:all_income.html.twig', array(
-            'incomes' => $incomes
+                    'incomes' => $incomes
         ));
     }
 

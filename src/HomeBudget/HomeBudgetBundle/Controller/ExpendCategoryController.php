@@ -47,6 +47,7 @@ class ExpendCategoryController extends Controller
 
     /**
      * @Route("/expandCategory/{id}/modify")
+     * @Security("has_role('ROLE_USER')")
      */
     public function modifyExpCategoryAction($id)
     {
@@ -67,6 +68,7 @@ class ExpendCategoryController extends Controller
 
     /**
      * @Route("/expendCategory/all", name="show_allExpendCategories")
+     * @Security("has_role('ROLE_USER')")
      */
     public function showAllExpCategoryAction()
     {

@@ -9,17 +9,18 @@ use HomeBudget\HomeBudgetBundle\Entity\Expend;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
+use HomeBudget\HomeBudgetBundle\Repository\AccountRepository;
 
-class ExpendController extends Controller
-{
+class ExpendController extends Controller {
+
     /**
      * @Route("/expend/new", name="new_expend")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
-    public function newExpendAction(Request $request)
-    {
+    public function newExpendAction(Request $request) {
         $user = $this->container->get('security.context')->getToken()->getUser();
+        $message = '';
 
         $expend = new Expend($user);
         $form = $this->createFormBuilder($expend)
@@ -47,46 +48,59 @@ class ExpendController extends Controller
             $expend->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($expend);
+            $account = $expend->getAccount();
 
-            $em->flush();
+            $result = $account->spendMoney($expend->getAmount());
 
-            return $this->redirectToRoute('show_allExpends');
+
+
+
+
+            if ($result) {
+                $em->flush();
+                return $this->redirectToRoute('show_allExpends');
+            } else {
+                $message = 'Wydatek większy od salda, nie udało się go zapisać';
+            }
         }
         return $this->render('HBBundle:Expend:new_expend.html.twig', array(
-                    'form' => $form->createView()));
+                    'form' => $form->createView(),
+                    'message' => $message
+        ));
     }
 
     /**
      * @Route("/expend/{id}/modify")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function modifyExpendAction($id)
-    {
+    public function modifyExpendAction($id) {
         return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
-            // ...
+                        // ...
         ));
     }
 
     /**
      * @Route("/expend/{id}/delete")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function deleteExpendAction($id)
-    {
+    public function deleteExpendAction($id) {
         return $this->render('HBBundle:Expend:delete_expend.html.twig', array(
-            // ...
+                        // ...
         ));
     }
 
     /**
      * @Route("/expend/all", name="show_allExpends")
+     * @Security("has_role('ROLE_USER')")
      */
-    public function allExpendAction()
-    {
+    public function allExpendAction() {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
 
         $expends = $repository->findByUser($user);
+
         return $this->render('HBBundle:Expend:all_expend.html.twig', array(
-            'expends' => $expends
+                    'expends' => $expends
         ));
     }
 

@@ -36,7 +36,7 @@ class IncomeCategoryController extends Controller {
 
 
 
-            return $this->redirectToRoute('show_allIncomeCategories');
+            return $this->redirectToRoute('new_income');
         }
         return $this->render('HBBundle:IncomeCategory:new_inc_category.html.twig', array(
                     'form' => $form->createView()));
@@ -44,6 +44,7 @@ class IncomeCategoryController extends Controller {
 
     /**
      * @Route("/incomeCategory/{id}/modify")
+     * @Security("has_role('ROLE_USER')")
      */
     public function modifyIncCategoryAction($id) {
         return $this->render('HBBundle:IncomeCategory:modify_inc_category.html.twig', array(
@@ -53,6 +54,7 @@ class IncomeCategoryController extends Controller {
 
     /**
      * @Route("/incomeCategory/all", name="show_allIncomeCategories")
+     * @Security("has_role('ROLE_USER')")
      */
     public function showAllIncCategoryAction() {
         $user = $this->container->get('security.context')->getToken()->getUser();

@@ -3,6 +3,7 @@
 namespace HomeBudget\HomeBudgetBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use HomeBudget\HomeBudgetBundle\Entity\Account;
 
 /**
  * AccountRepository
@@ -19,5 +20,16 @@ class AccountRepository extends EntityRepository
                 ->setParameter('user', $user);
 
         return $query;
+    }
+    /**
+     * 
+     * @param type $amount
+     */
+    public function addMoney($amount){
+        
+        $balance = $this->getBalance();
+        
+        $balance += $amount;
+        $this->setBalance($balance);
     }
 }

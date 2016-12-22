@@ -7,7 +7,7 @@
 
 <ul>
 {% for expend in expends %}
-    <li>{{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
+    <li>{{expend.expendCategory.name}} {{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
     {{expend.account.name}}</li>
     {% endfor %}
 </ul>
