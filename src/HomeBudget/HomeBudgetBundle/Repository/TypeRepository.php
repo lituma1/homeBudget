@@ -16,6 +16,7 @@ class TypeRepository extends EntityRepository {
 
         $query = $this->createQueryBuilder("u")
                 ->where('u.user = :user')
+                ->orderBy('u.name', 'ASC')
                 ->setParameter('user', $user);
 
         return $query;

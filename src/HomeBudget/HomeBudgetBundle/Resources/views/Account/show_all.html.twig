@@ -1,13 +1,23 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}HBBundle:Account:showAll{% endblock %}
+{% block title %}Lista kont{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Account:showAll page</h1>
-
+<h2>Lista Twoich kont</h2>
+<ul>
 {% for account in accounts %}
-    {{account.name}} {{account.balance}} {{account.type.name}}<br>
+    <li>{{account.name}} {{account.balance}} {{account.type.name}}</li>
     {% endfor %}
+</ul>  
+    <br>
+    <a href="{{ path('new_Account') }}">Dodaj nowe konto</a>
+    <br>
+    <br>
     
+    <a href="{{ path('Panel') }}">Strona główna</a>
+    <br>
+    <br>
     <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+    
+    
 {% endblock %}

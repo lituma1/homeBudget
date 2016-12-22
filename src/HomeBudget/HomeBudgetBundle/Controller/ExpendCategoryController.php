@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class ExpendCategoryController extends Controller
 {
     /**
-     * @Route("/expendCategory/new")
+     * @Route("/expendCategory/new", name="new_exCategory")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */

@@ -1,11 +1,18 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}HBBundle:Expend:newExpend{% endblock %}
+{% block title %}Nowy wydatek{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Expend:newExpend page</h1>
+<h2>Wprowadź nowy wydatek</h2>
 
 {{ form_start(form) }}
 {{ form_widget(form) }}
 {{ form_end(form) }}
+
+<br>
+    <a href="{{ path('new_exCategory') }}">Dodaj nową kategorię</a>
+    <br>
+    <br>
+    
+    <a href="{{ path('Panel') }}">Strona główna</a>
 {% endblock %}

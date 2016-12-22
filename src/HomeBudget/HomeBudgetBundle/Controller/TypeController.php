@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class TypeController extends Controller
 {
     /**
-     * @Route("/type/new")
+     * @Route("/type/new", name="new_type")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
@@ -39,7 +39,7 @@ class TypeController extends Controller
             
             
             
-            return $this->redirectToRoute('show_allTypes');
+            return $this->redirectToRoute('new_Account');
         }
         return $this->render('HBBundle:Type:new.html.twig', array(
                     'form' => $form->createView()));

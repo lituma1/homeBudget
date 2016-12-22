@@ -13,7 +13,7 @@ use Doctrine\ORM\EntityRepository;
 class ExpendController extends Controller
 {
     /**
-     * @Route("/expend/new")
+     * @Route("/expend/new", name="new_expend")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */

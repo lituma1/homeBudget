@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class AccountController extends Controller {
 
     /**
-     * @Route("/account/new")
+     * @Route("/account/new", name="new_Account")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */

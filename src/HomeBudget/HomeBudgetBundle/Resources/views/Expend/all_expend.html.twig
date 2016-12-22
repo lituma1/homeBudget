@@ -1,16 +1,25 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}HBBundle:Expend:allExpend{% endblock %}
+{% block title %}Lista Wydatków{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Expend:allExpend page</h1>
+<h2>Twoje wydatki</h2>
 
-
+<ul>
 {% for expend in expends %}
-    {{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
-    {{expend.account.name}}<br>
+    <li>{{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
+    {{expend.account.name}}</li>
     {% endfor %}
+</ul>
     
+    <br>
+    <a href="{{ path('new_expend') }}">Dodaj nowy wydatek</a>
+    <br>
+    <br>
+    
+    <a href="{{ path('Panel') }}">Strona główna</a>
+    <br>
+    <br>
     <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 
 {% endblock %}
