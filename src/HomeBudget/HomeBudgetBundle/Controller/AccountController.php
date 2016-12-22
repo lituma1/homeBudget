@@ -53,7 +53,7 @@ class AccountController extends Controller {
     }
 
     /**
-     * @Route("/account/{id}/modify")
+     * @Route("/account/{id}/modify", name="modify_Account")
      * @Security("has_role('ROLE_USER')")
      */
     public function modifyAction($id) {
@@ -63,10 +63,12 @@ class AccountController extends Controller {
     }
 
     /**
-     * @Route("/account/{id}/delete")
+     * @Route("/account/{id}/delete", name="delete_Account")
      * @Security("has_role('ROLE_USER')")
      */
     public function deleteAction($id) {
+        
+        
         return $this->render('HBBundle:Account:delete.html.twig', array(
                         // ...
         ));

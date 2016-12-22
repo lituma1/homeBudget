@@ -5,12 +5,22 @@
 {% block body %}
 <h2>Twoje wydatki</h2>
 
-<ul>
+<table>
+    <th>Kategoria</th>
+    <th>Opis</th>
+    <th>Koszt</th>
+    <th>Data</th>
+    <th>Z konta</th>
 {% for expend in expends %}
-    <li>{{expend.expendCategory.name}} {{expend.description}} {{expend.amount}} {{ expend.expendDate|date("d/m/Y")}}
-    {{expend.account.name}}</li>
+<tr>
+    <td>{{expend.expendCategory.name}}</td>
+    <td>{{expend.description}}</td>
+    <td>{{expend.amount}}</td>
+    <td>{{ expend.expendDate|date("d/m/Y")}}</td>
+    <td>{{expend.account.name}}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
     
     <br>
     <a href="{{ path('new_expend') }}">Dodaj nowy wydatek</a>

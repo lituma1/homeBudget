@@ -5,13 +5,23 @@
 {% block body %}
 <h2>Twoje przychody</h2>
 
-<ul>
-
+<table>
+    <th>Kategoria</th>
+    <th>Opis</th>
+    <th>Wielkość</th>
+    <th>Data</th>
+    <th>Na konto</th>
 {% for income in incomes %}
-    <li>{{income.incomeCategory.name}} {{income.description}} {{income.amount}} {{ income.incomeDate|date("d/m/Y")}}
-        {{income.account.name}}</li>
+<tr>
+    
+    <td>{{income.incomeCategory.name}}</td> 
+    <td>{{income.description}}</td> 
+    <td>{{income.amount}}</td>
+    <td>{{ income.incomeDate|date("d/m/Y")}}</td>
+        <td>{{income.account.name}}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
     <br>
     <a href="{{ path('new_income') }}">Dodaj nowy przychód</a>
     <br>

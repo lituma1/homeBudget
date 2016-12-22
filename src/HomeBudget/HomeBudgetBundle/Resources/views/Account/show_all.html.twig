@@ -3,12 +3,21 @@
 {% block title %}Lista kont{% endblock %}
 
 {% block body %}
-<h2>Lista Twoich kont</h2>
-<ul>
-{% for account in accounts %}
-    <li>{{account.name}} {{account.balance}} {{account.type.name}}</li>
-    {% endfor %}
-</ul>  
+    <h2>Lista Twoich kont</h2>
+    <table>
+        <th>Nazwa</th>
+        <th>Saldo</th>
+        <th>Typ</th>
+        
+            {% for account in accounts %}
+            <tr>
+            <td><a href="{{ path('delete_Account', {"id" : account.id}) }}">usuń</a>
+                <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>  {{account.name}}</td> 
+            <td>{{account.balance}}</td> 
+            <td>{{account.type.name}}</td>
+            </tr>
+        {% endfor %}
+    </table>  
     <br>
     <a href="{{ path('new_Account') }}">Dodaj nowe konto</a>
     <br>
@@ -23,6 +32,6 @@
     <br>
     <br>
     <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
-    
-    
+
+
 {% endblock %}
