@@ -13,7 +13,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 class IncomeController extends Controller
 {
     /**
-     * @Route("/income/new")
+     * @Route("/income/new", name="new_income")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */

@@ -38,7 +38,7 @@ class ExpendCategoryController extends Controller
             
             
             
-            return $this->redirectToRoute('show_allExpendCategories');
+            return $this->redirectToRoute('new_expend');
         }
         return $this->render('HBBundle:ExpendCategory:new_exp_category.html.twig', array(
                     'form' => $form->createView()));

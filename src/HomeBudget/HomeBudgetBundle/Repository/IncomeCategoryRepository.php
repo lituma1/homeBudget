@@ -14,8 +14,9 @@ class IncomeCategoryRepository extends EntityRepository
 {
     public function queryOwnedBy($user) {
 
-        $query = $this->createQueryBuilder("u")
-                ->where('u.user = :user')
+        $query = $this->createQueryBuilder("i")
+                ->where('i.user = :user')
+                ->orderBy('i.name', 'ASC')
                 ->setParameter('user', $user);
 
         return $query;

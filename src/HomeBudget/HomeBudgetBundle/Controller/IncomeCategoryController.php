@@ -12,7 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class IncomeCategoryController extends Controller {
 
     /**
-     * @Route("/incomeCategory/new")
+     * @Route("/incomeCategory/new", name="new_inCategory")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
