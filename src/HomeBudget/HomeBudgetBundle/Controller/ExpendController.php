@@ -97,7 +97,7 @@ class ExpendController extends Controller {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
 
-        $expends = $repository->findByUser($user);
+        $expends = $repository->sortByDate($user);
 
         return $this->render('HBBundle:Expend:all_expend.html.twig', array(
                     'expends' => $expends

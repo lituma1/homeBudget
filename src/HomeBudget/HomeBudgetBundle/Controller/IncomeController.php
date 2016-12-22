@@ -91,8 +91,8 @@ class IncomeController extends Controller {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
 
-        $incomes = $repository->findByUser($user);
-
+        $incomes = $repository->sortByDate($user);
+        
         return $this->render('HBBundle:Income:all_income.html.twig', array(
                     'incomes' => $incomes
         ));

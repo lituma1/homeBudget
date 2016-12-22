@@ -12,4 +12,14 @@ use Doctrine\ORM\EntityRepository;
  */
 class IncomeRepository extends EntityRepository
 {
+    public function sortByDate($user){
+        
+        $incomes = $this->getEntityManager()->createQuery(
+                        'SELECT i FROM HBBundle:Income i '
+                . 'WHERE i.user = :User ORDER BY i.incomeDate DESC')
+                ->setParameter("User", $user)
+                ->getResult();
+        return $incomes;
+        
+    }
 }

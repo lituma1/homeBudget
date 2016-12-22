@@ -20,5 +20,16 @@ class ExpendRepository extends EntityRepository {
 
         return $query;
     }
+    
+    public function sortByDate($user){
+        
+        $expends = $this->getEntityManager()->createQuery(
+                        'SELECT e FROM HBBundle:Expend e '
+                . 'WHERE e.user = :User ORDER BY e.expendDate DESC')
+                ->setParameter("User", $user)
+                ->getResult();
+        return $expends;
+        
+    }
 
 }

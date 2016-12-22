@@ -21,15 +21,5 @@ class AccountRepository extends EntityRepository
 
         return $query;
     }
-    /**
-     * 
-     * @param type $amount
-     */
-    public function addMoney($amount){
-        
-        $balance = $this->getBalance();
-        
-        $balance += $amount;
-        $this->setBalance($balance);
-    }
+    
 }
