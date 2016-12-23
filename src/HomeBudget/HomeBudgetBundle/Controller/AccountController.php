@@ -146,7 +146,6 @@ class AccountController extends Controller {
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
         $form = $this->createFormBuilder()
-                
                 ->add('balance', 'number', array('label' => 'Stan konta'))
                 ->add('account', 'entity', array('class' => 'HBBundle:Account',
                     'query_builder' => function(EntityRepository $er) use ($user) {
@@ -157,7 +156,22 @@ class AccountController extends Controller {
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-              //$balance = $form['balance']->getData();
+            $amount = $form['balance']->getData();
+            if ($amount <= $account->getBalance()) {
+                $account->spendMoney($amount);
+                $accountToMove = $form['account']->getData();
+
+                $accountToMove->addMoney($amount);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($accountToMove);
+                $em->persist($account);
+
+                $em->flush();
+            }
+
+
+
+
 //            $account = $form->getData();
 //
 //            $em = $this->getDoctrine()->getManager();

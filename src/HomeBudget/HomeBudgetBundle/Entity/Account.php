@@ -264,7 +264,7 @@ class Account {
     }
 
     public function spendMoney($amount) {
-        if ($this->balance > $amount) {
+        if ($this->balance >= $amount) {
             $this->balance -= $amount;
             return true;
         }
