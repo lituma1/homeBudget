@@ -1,3 +1,19 @@
 {% extends "::base.html.twig" %}
 
 {% block title %}Przenoszenie środków{% endblock %}
+{% block body %}
+<h2>Wprowadź kwotę i podaj konto docelowe</h2>
+
+{{ form_start(form) }}
+{{ form_widget(form.balance, {"attr":{"placeholder":balance}}) }}
+{{ form_end(form) }}
+
+<br>
+<a href="{{ path('new_type') }}">Dodaj nowy typ</a>
+<br>
+<br>
+<a href="{{ path('Panel') }}">Strona główna</a>
+<br>
+<br>
+<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+{% endblock %}

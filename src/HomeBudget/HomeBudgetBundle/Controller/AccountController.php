@@ -100,7 +100,7 @@ class AccountController extends Controller {
             $em->persist($account);
             $em->flush();
         }
-        
+
 
         return $this->redirectToRoute('show_allAccounts');
     }
@@ -127,22 +127,47 @@ class AccountController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
 
         $accounts = $repository->findByUserAndStatus($user);
-        
+
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts
         ));
     }
-    
+
     /**
      * @Route("/account/{id}/moveMoney", name="move_Money")
      * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
      */
-    public function moveMoneyAction($id){
-        
-        
+    public function moveMoneyAction(Request $request, $id) {
+
+
+        $user = $this->container->get('security.context')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
+        $account = $repo->findOneById($id);
+        $balance = $account->getBalance();
+        $form = $this->createFormBuilder()
+                
+                ->add('balance', 'number', array('label' => 'Stan konta'))
+                ->add('account', 'entity', array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Na konto'))
+                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+              //$balance = $form['balance']->getData();
+//            $account = $form->getData();
+//
+//            $em = $this->getDoctrine()->getManager();
+//            $em->persist($account);
+//
+//            $em->flush();
+            return $this->redirectToRoute('show_allAccounts');
+        }
         return $this->render('HBBundle:Account:move_money.html.twig', array(
-                    'id' => $id
-        ));
+                    'form' => $form->createView(), 'balance' => $balance));
     }
 
 }
