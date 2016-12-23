@@ -32,7 +32,7 @@ class ExpendCategory
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="expendCategory")
      */
    
-    private $expendes;
+    private $expends;
     
     /**
      *@ORM\ManyToOne(targetEntity="User", inversedBy="expendCategories")
@@ -133,5 +133,38 @@ class ExpendCategory
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Add expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     * @return ExpendCategory
+     */
+    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends[] = $expends;
+
+        return $this;
+    }
+
+    /**
+     * Remove expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     */
+    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends->removeElement($expends);
+    }
+
+    /**
+     * Get expends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpends()
+    {
+        return $this->expends;
     }
 }

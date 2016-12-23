@@ -35,7 +35,7 @@ class Type
     private $accounts;
     
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="type")
+     *@ORM\ManyToOne(targetEntity="User", inversedBy="types")
      * @var type 
      */
     private $user;

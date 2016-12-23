@@ -63,7 +63,7 @@ class Account {
     /**
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="account")
      */
-    private $expendes;
+    private $expends;
 
     /**
      * @ORM\OneToMany(targetEntity="Income", mappedBy="account")
@@ -293,5 +293,38 @@ class Account {
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Add expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     * @return Account
+     */
+    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends[] = $expends;
+
+        return $this;
+    }
+
+    /**
+     * Remove expends
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
+     */
+    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
+    {
+        $this->expends->removeElement($expends);
+    }
+
+    /**
+     * Get expends
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpends()
+    {
+        return $this->expends;
     }
 }

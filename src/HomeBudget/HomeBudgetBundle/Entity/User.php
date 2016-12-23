@@ -60,7 +60,7 @@ class User extends BaseUser {
     /**
      * @ORM\OneToMany(targetEntity="ExpendCategory", mappedBy="user")
      */
-    private $expandCategories;
+    private $expendCategories;
     
     /**
      * @ORM\OneToMany(targetEntity="IncomeCategory", mappedBy="user")
@@ -277,5 +277,38 @@ class User extends BaseUser {
     public function getIncomeCategories()
     {
         return $this->incomeCategories;
+    }
+
+    /**
+     * Add expendCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories
+     * @return User
+     */
+    public function addExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories)
+    {
+        $this->expendCategories[] = $expendCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove expendCategories
+     *
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories
+     */
+    public function removeExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories)
+    {
+        $this->expendCategories->removeElement($expendCategories);
+    }
+
+    /**
+     * Get expendCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExpendCategories()
+    {
+        return $this->expendCategories;
     }
 }
