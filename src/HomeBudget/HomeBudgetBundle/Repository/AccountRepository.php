@@ -15,11 +15,21 @@ class AccountRepository extends EntityRepository
 {
     public function queryOwnedBy($user) {
 
-        $query = $this->createQueryBuilder("u")
-                ->where('u.user = :user')
+        $query = $this->createQueryBuilder("a")
+                ->where('a.user = :user')
+                ->andWhere('a.status = 1')
                 ->setParameter('user', $user);
 
         return $query;
     }
-    
+    public function findByUserAndStatus($user){
+        
+        $expends = $this->getEntityManager()->createQuery(
+                        'SELECT a FROM HBBundle:Account a '
+                . 'WHERE a.user = :User AND a.status = 1 ORDER BY a.name ASC')
+                ->setParameter("User", $user)
+                ->getResult();
+        return $expends;
+        
+    }
 }

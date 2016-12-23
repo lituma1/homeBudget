@@ -27,7 +27,14 @@ class Account {
      * @ORM\Column(name="balance", type="decimal", precision=10, scale=2)
      */
     private $balance;
-
+    
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
     /**
      * @var string
      *
@@ -264,4 +271,27 @@ class Account {
         return false;
     }
 
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return Account
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

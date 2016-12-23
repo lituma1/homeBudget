@@ -8,7 +8,9 @@
         <th></th>
         <th>Nazwa</th>
         <th>Saldo</th>
+         <th>Cel</th>
         <th>Typ</th>
+       
         
             {% for account in accounts %}
             <tr>
@@ -17,8 +19,13 @@
                     <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>
                 </td>
             <td>{{account.name}}</td> 
-            <td>{{account.balance}}</td> 
+            <td>{{account.balance}}
+                <a href="{{ path('move_Money', {"id" : account.id}) }}">Przenieś środki na inne konto</a>
+            </td>
+            
+            <td>{{account.aim}}</td>
             <td>{{account.type.name}}</td>
+            
             </tr>
         {% endfor %}
     </table>  

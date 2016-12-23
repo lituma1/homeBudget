@@ -96,7 +96,8 @@ class AccountController extends Controller {
         $account = $em->getRepository
                         ('HBBundle:Account')->find($id);
         if ($account) {
-            $em->remove($account);
+            $account->setStatus(false);
+            $em->persist($account);
             $em->flush();
         }
         
@@ -125,9 +126,22 @@ class AccountController extends Controller {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
 
-        $accounts = $repository->findByUser($user);
+        $accounts = $repository->findByUserAndStatus($user);
+        
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts
+        ));
+    }
+    
+    /**
+     * @Route("/account/{id}/moveMoney", name="move_Money")
+     * @Security("has_role('ROLE_USER')")
+     */
+    public function moveMoneyAction($id){
+        
+        
+        return $this->render('HBBundle:Account:move_money.html.twig', array(
+                    'id' => $id
         ));
     }
 

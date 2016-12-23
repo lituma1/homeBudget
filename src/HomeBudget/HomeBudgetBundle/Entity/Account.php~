@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="account")
  * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\AccountRepository")
  */
-class Account
-{
+class Account {
+
     /**
      * @var int
      *
@@ -20,7 +20,7 @@ class Account
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
+
     /**
      * @var string
      *
@@ -29,48 +29,53 @@ class Account
     private $balance;
     
     /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string")
      */
     private $name;
-    
+
     /**
      * @var string
      *
      * @ORM\Column(name="aim", type="string", length=255)
      */
     private $aim;
-    
+
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="accounts")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="accounts")
      */
     private $user;
-    
+
     /**
-     *@ORM\ManyToOne(targetEntity="Type", inversedBy="accounts")
+     * @ORM\ManyToOne(targetEntity="Type", inversedBy="accounts")
      * @var type 
      */
     private $type;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="account")
      */
-   
     private $expendes;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Income", mappedBy="account")
      */
-   
     private $incomes;
+
     /**
      * Get id
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -80,8 +85,7 @@ class Account
      * @param string $balance
      * @return Account
      */
-    public function setBalance($balance)
-    {
+    public function setBalance($balance) {
         $this->balance = $balance;
 
         return $this;
@@ -92,8 +96,7 @@ class Account
      *
      * @return string 
      */
-    public function getBalance()
-    {
+    public function getBalance() {
         return $this->balance;
     }
 
@@ -103,8 +106,7 @@ class Account
      * @param string $aim
      * @return Account
      */
-    public function setAim($aim)
-    {
+    public function setAim($aim) {
         $this->aim = $aim;
 
         return $this;
@@ -115,8 +117,7 @@ class Account
      *
      * @return string 
      */
-    public function getAim()
-    {
+    public function getAim() {
         return $this->aim;
     }
 
@@ -126,8 +127,7 @@ class Account
      * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
      * @return Account
      */
-    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null)
-    {
+    public function setUser(\HomeBudget\HomeBudgetBundle\Entity\User $user = null) {
         $this->user = $user;
 
         return $this;
@@ -138,8 +138,7 @@ class Account
      *
      * @return \HomeBudget\HomeBudgetBundle\Entity\User 
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
 
@@ -149,8 +148,7 @@ class Account
      * @param \HomeBudget\HomeBudgetBundle\Entity\Type $type
      * @return Account
      */
-    public function setType(\HomeBudget\HomeBudgetBundle\Entity\Type $type = null)
-    {
+    public function setType(\HomeBudget\HomeBudgetBundle\Entity\Type $type = null) {
         $this->type = $type;
 
         return $this;
@@ -161,8 +159,7 @@ class Account
      *
      * @return \HomeBudget\HomeBudgetBundle\Entity\Type 
      */
-    public function getType()
-    {
+    public function getType() {
         return $this->type;
     }
 
@@ -172,8 +169,7 @@ class Account
      * @param string $name
      * @return Account
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -184,15 +180,14 @@ class Account
      *
      * @return string 
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
+
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->expendes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -202,8 +197,7 @@ class Account
      * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
      * @return Account
      */
-    public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
-    {
+    public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes) {
         $this->expendes[] = $expendes;
 
         return $this;
@@ -214,8 +208,7 @@ class Account
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
      */
-    public function removeExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
-    {
+    public function removeExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes) {
         $this->expendes->removeElement($expendes);
     }
 
@@ -224,8 +217,7 @@ class Account
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExpendes()
-    {
+    public function getExpendes() {
         return $this->expendes;
     }
 
@@ -235,8 +227,7 @@ class Account
      * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
      * @return Account
      */
-    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
-    {
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes) {
         $this->incomes[] = $incomes;
 
         return $this;
@@ -247,8 +238,7 @@ class Account
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
      */
-    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
-    {
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes) {
         $this->incomes->removeElement($incomes);
     }
 
@@ -257,19 +247,28 @@ class Account
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIncomes()
-    {
+    public function getIncomes() {
         return $this->incomes;
     }
+
     /**
      * 
      * @param type $amount
      */
-    public function addMoney($amount){
-        
+    public function addMoney($amount) {
+
         $balance = $this->getBalance();
-        
+
         $balance += $amount;
         $this->setBalance($balance);
     }
+
+    public function spendMoney($amount) {
+        if ($this->balance > $amount) {
+            $this->balance -= $amount;
+            return true;
+        }
+        return false;
+    }
+
 }
