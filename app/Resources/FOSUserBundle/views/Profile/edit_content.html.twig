@@ -1,8 +1,23 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
 {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
-    {{ form_widget(form) }}
+<h2>Edytuj swoje dane</h2>
+{{ form_widget(form.username)}}<br>
+{{ form_widget(form.email)}}<br>
+{{ form_widget(form.cellPhone, {"attr":{"placeholder":"Telefon"}}) }}<br>
+{{ form_widget(form.current_password, {"attr":{"placeholder":"wpisz hasło"}}) }}<br>
+
+
+
+
     <div>
-        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" />
+        <input type="submit" value="{{ 'Potwierdź'|trans }}" />
     </div>
 {{ form_end(form) }}
+
+<br>
+<br>
+<a href="{{ path('Panel') }}">Strona główna</a>
+<br>
+<br>
+<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
