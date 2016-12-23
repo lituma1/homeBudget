@@ -1,18 +1,22 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}HBBundle:Account:modify{% endblock %}
+{% block title %}Modyfikacja konta{% endblock %}
 
 {% block body %}
-<h1>Welcome to the Account:modify page</h1>
+<h2>Wprowadź nowe dane</h2>
 
 {{ form_start(form) }}
 {{ form_widget(form) }}
 {{ form_end(form) }}
 
 <br>
+<a href="{{ path('show_allAccounts') }}">Powrót na poprzednią stronę</a>
+<br>
+<br>
 <a href="{{ path('new_type') }}">Dodaj nowy typ</a>
 <br>
 <br>
+
 <a href="{{ path('Panel') }}">Strona główna</a>
 <br>
 <br>

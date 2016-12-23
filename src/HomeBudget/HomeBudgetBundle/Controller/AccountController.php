@@ -146,7 +146,7 @@ class AccountController extends Controller {
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
         $form = $this->createFormBuilder()
-                ->add('balance', 'number', array('label' => 'Stan konta'))
+                ->add('amount', 'number')
                 ->add('account', 'entity', array('class' => 'HBBundle:Account',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
@@ -156,7 +156,7 @@ class AccountController extends Controller {
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
-            $amount = $form['balance']->getData();
+            $amount = $form['amount']->getData();
             if ($amount <= $account->getBalance()) {
                 $account->spendMoney($amount);
                 $accountToMove = $form['account']->getData();
@@ -181,7 +181,7 @@ class AccountController extends Controller {
             return $this->redirectToRoute('show_allAccounts');
         }
         return $this->render('HBBundle:Account:move_money.html.twig', array(
-                    'form' => $form->createView(), 'balance' => $balance));
+                    'form' => $form->createView(), 'balance' => 'max kwota  '.$balance));
     }
 
 }
