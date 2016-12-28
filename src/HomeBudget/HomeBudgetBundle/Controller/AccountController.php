@@ -7,9 +7,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use HomeBudget\HomeBudgetBundle\Entity\Account;
 use Symfony\Component\HttpFoundation\Request;
-use HomeBudget\HomeBudgetBundle\Entity\Type;
 use Doctrine\ORM\EntityRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class AccountController extends Controller {
 
@@ -19,19 +21,19 @@ class AccountController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+         $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $account = new Account($user);
         $form = $this->createFormBuilder($account)
                 ->add('name', 'text', array('label' => 'Nazwa konta'))
-                ->add('balance', 'number', array('label' => 'Stan konta'))
+                ->add('balance', NumberType::class, array('label' => 'Stan konta'))
                 ->add('aim', 'text', array('label' => 'cel konta'))
-                ->add('type', 'entity', array('class' => 'HBBundle:Type',
+                ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Typ konta'))
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -57,19 +59,19 @@ class AccountController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function modifyAction(Request $request, $id) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $form = $this->createFormBuilder($account)
                 ->add('name', 'text', array('label' => 'Nazwa konta'))
-                ->add('balance', 'number', array('label' => 'Stan konta'))
+                ->add('balance', NumberType::class, array('label' => 'Stan konta'))
                 ->add('aim', 'text', array('label' => 'cel konta'))
-                ->add('type', 'entity', array('class' => 'HBBundle:Type',
+                ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Typ konta'))
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -123,7 +125,7 @@ class AccountController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function showAllAction() {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
 
         $accounts = $repository->findByUserAndStatus($user);
@@ -141,18 +143,18 @@ class AccountController extends Controller {
     public function moveMoneyAction(Request $request, $id) {
 
 
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
         $form = $this->createFormBuilder()
-                ->add('amount', 'number')
-                ->add('account', 'entity', array('class' => 'HBBundle:Account',
+                ->add('amount', NumberType::class)
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Na konto'))
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -181,7 +183,7 @@ class AccountController extends Controller {
             return $this->redirectToRoute('show_allAccounts');
         }
         return $this->render('HBBundle:Account:move_money.html.twig', array(
-                    'form' => $form->createView(), 'balance' => 'max kwota  '.$balance));
+                    'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance));
     }
 
 }

@@ -19,10 +19,10 @@ class ExpendController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newExpendAction(Request $request) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $message = '';
 
-        $expend = new Expend($user);
+        $expend = new Expend();
         $form = $this->createFormBuilder($expend)
                 ->add('description', 'text', array('label' => 'Opis wydatku'))
                 ->add('amount', 'number', array('label' => 'Kwota'))
@@ -74,7 +74,7 @@ class ExpendController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function modifyExpendAction(Request $request, $id) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $message = '';
 
         $repo = $this->getDoctrine()->getRepository('HBBundle:Expend');
@@ -140,7 +140,7 @@ class ExpendController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function allExpendAction() {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
 
         $expends = $repository->sortByDate($user);

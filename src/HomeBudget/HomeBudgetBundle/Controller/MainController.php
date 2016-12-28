@@ -30,7 +30,7 @@ class MainController extends Controller {
         $linkOut['href'] = 'fos_user_security_logout';
         $linkOut['text'] = 'Wyloguj';
         $links[] = $linkOut;
-        $user = $this->container->get('security.context')->getToken()->getUser();
+
         return $this->render('HBBundle:Main:show_main_page.html.twig', array(
                     'links' => $links
         ));
@@ -42,7 +42,7 @@ class MainController extends Controller {
      */
     public function showMainPageAction() {
 
-        if ($this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('Panel');
         }
 
