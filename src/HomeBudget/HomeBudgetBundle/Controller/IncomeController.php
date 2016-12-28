@@ -10,6 +10,11 @@ use Doctrine\ORM\EntityRepository;
 use HomeBudget\HomeBudgetBundle\Entity\Income;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use HomeBudget\HomeBudgetBundle\Entity\Account;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class IncomeController extends Controller {
 
@@ -19,24 +24,24 @@ class IncomeController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newIncomeAction(Request $request) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
-        $income = new Income($user);
+        $income = new Income();
         $form = $this->createFormBuilder($income)
-                ->add('description', 'text', array('label' => 'Opis przychodu'))
-                ->add('amount', 'number', array('label' => 'Kwota'))
-                ->add('incomeDate', 'date', array('label' => 'Data'))
-                ->add('incomeCategory', 'entity', array('class' => 'HBBundle:IncomeCategory',
+                ->add('description', TextType::class, array('label' => 'Opis przychodu'))
+                ->add('amount', NumberType::class, array('label' => 'Kwota'))
+                ->add('incomeDate', DateType::class, array('label' => 'Data'))
+                ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Kategoria'))
-                ->add('account', 'entity', array('class' => 'HBBundle:Account',
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Zasilono: '))
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
@@ -88,7 +93,7 @@ class IncomeController extends Controller {
      * 
      */
     public function allIncomeAction() {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
 
         $incomes = $repository->sortByDate($user);

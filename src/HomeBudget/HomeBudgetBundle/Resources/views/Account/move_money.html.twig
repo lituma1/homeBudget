@@ -2,18 +2,22 @@
 
 {% block title %}Przenoszenie środków{% endblock %}
 {% block body %}
-<h2>Wprowadź kwotę i podaj konto docelowe</h2>
+    <h1>{{message}}</h1>
+    <h2>Wprowadź kwotę i podaj konto docelowe</h2>
 
-{{ form_start(form) }}
-{{ form_widget(form.amount, {"attr":{"placeholder":balance}}) }}
-{{ form_end(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form.amount, {"attr":{"placeholder":balance}}) }}
+    {{ form_end(form) }}
 
-<br>
-<a href="{{ path('new_type') }}">Dodaj nowy typ</a>
-<br>
-<br>
-<a href="{{ path('Panel') }}">Strona główna</a>
-<br>
-<br>
-<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+    <br>
+    <a href="{{ path('show_allAccounts') }}">Powrót na poprzednią stronę</a>
+    <br>
+    <br>
+    <a href="{{ path('new_type') }}">Dodaj nowy typ</a>
+    <br>
+    <br>
+    <a href="{{ path('Panel') }}">Strona główna</a>
+    <br>
+    <br>
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}

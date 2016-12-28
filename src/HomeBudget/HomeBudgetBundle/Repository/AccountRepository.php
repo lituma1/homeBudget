@@ -18,6 +18,17 @@ class AccountRepository extends EntityRepository
         $query = $this->createQueryBuilder("a")
                 ->where('a.user = :user')
                 ->andWhere('a.status = 1')
+                
+                ->setParameter('user', $user);
+
+        return $query;
+    }
+     public function queryOwnedByWithoutThisAccount($user, $id) {
+
+        $query = $this->createQueryBuilder("a")
+                ->where('a.user = :user')
+                ->andWhere('a.status = 1')
+                ->andWhere("a.id != $id")
                 ->setParameter('user', $user);
 
         return $query;

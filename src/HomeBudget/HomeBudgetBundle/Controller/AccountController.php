@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class AccountController extends Controller {
 
@@ -25,9 +26,9 @@ class AccountController extends Controller {
 
         $account = new Account($user);
         $form = $this->createFormBuilder($account)
-                ->add('name', 'text', array('label' => 'Nazwa konta'))
+                ->add('name', TextType::class, array('label' => 'Nazwa konta'))
                 ->add('balance', NumberType::class, array('label' => 'Stan konta'))
-                ->add('aim', 'text', array('label' => 'cel konta'))
+                ->add('aim', TextType::class, array('label' => 'cel konta'))
                 ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
@@ -63,9 +64,9 @@ class AccountController extends Controller {
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $form = $this->createFormBuilder($account)
-                ->add('name', 'text', array('label' => 'Nazwa konta'))
+                ->add('name', TextType::class, array('label' => 'Nazwa konta'))
                 ->add('balance', NumberType::class, array('label' => 'Stan konta'))
-                ->add('aim', 'text', array('label' => 'cel konta'))
+                ->add('aim', TextType::class, array('label' => 'cel konta'))
                 ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
@@ -142,7 +143,7 @@ class AccountController extends Controller {
      */
     public function moveMoneyAction(Request $request, $id) {
 
-
+        $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
@@ -150,8 +151,8 @@ class AccountController extends Controller {
         $form = $this->createFormBuilder()
                 ->add('amount', NumberType::class)
                 ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
+                    'query_builder' => function(EntityRepository $er) use ($user, $id) {
+                        return $er->queryOwnedByWithoutThisAccount($user, $id);
                     },
                     'choice_label' => 'name', 'label' => 'Na konto'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
@@ -169,21 +170,17 @@ class AccountController extends Controller {
                 $em->persist($account);
 
                 $em->flush();
+                return $this->redirectToRoute('show_allAccounts');
+            } else {
+                $message = 'Kwota do przeniesienia większa od salda';
             }
 
 
-
-
-//            $account = $form->getData();
-//
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($account);
-//
-//            $em->flush();
-            return $this->redirectToRoute('show_allAccounts');
+            
         }
         return $this->render('HBBundle:Account:move_money.html.twig', array(
-                    'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance));
+                    'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance,
+                'message' => $message));
     }
 
 }
