@@ -18,7 +18,7 @@ class AccountRepository extends EntityRepository
         $query = $this->createQueryBuilder("a")
                 ->where('a.user = :user')
                 ->andWhere('a.status = 1')
-                
+                ->orderBy('a.name', 'ASC')
                 ->setParameter('user', $user);
 
         return $query;
@@ -29,6 +29,7 @@ class AccountRepository extends EntityRepository
                 ->where('a.user = :user')
                 ->andWhere('a.status = 1')
                 ->andWhere("a.id != $id")
+                ->orderBy('a.name', 'ASC')
                 ->setParameter('user', $user);
 
         return $query;

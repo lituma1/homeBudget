@@ -327,4 +327,10 @@ class Account {
     {
         return $this->expends;
     }
+    /**
+     * 
+     */
+    public function __toString() {
+        return $this->getName().' aktualne saldo: '.$this->getBalance();
+    }
 }

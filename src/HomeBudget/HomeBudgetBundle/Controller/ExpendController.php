@@ -41,7 +41,7 @@ class ExpendController extends Controller {
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
-                    'choice_label' => 'name', 'label' => 'Zapłacono z: '))
+                     'label' => 'Zapłacono z: '))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
