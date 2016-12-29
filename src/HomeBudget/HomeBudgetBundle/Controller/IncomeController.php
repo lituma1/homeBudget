@@ -57,7 +57,7 @@ class IncomeController extends Controller {
             $account->addMoney($income->getAmount());
 
             $em->flush();
-            
+
 
 
 
@@ -68,7 +68,7 @@ class IncomeController extends Controller {
     }
 
     /**
-     * @Route("/income/{id}/modify")
+     * @Route("/income/{id}/modify", name="modify_income")
      * @Security("has_role('ROLE_USER')")
      */
     public function modifyIncomeAction($id) {
@@ -78,12 +78,46 @@ class IncomeController extends Controller {
     }
 
     /**
-     * @Route("/income/{id}/delete")
+     * @Route("/income/{id}/delete", name="delete_income")
      * @Security("has_role('ROLE_USER')")
      */
     public function deleteIncomeAction($id) {
-        return $this->render('HBBundle:Income:delete_income.html.twig', array(
-                        // ...
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $message = '';
+        $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
+        $income = $repository->find($id);
+        $em = $this->getDoctrine()->getManager();
+        if ($income) {
+            $em->remove($income);
+            $account = $income->getAccount();
+            $result = $account->spendMoney($income->getAmount());
+            if ($result) {
+                $em->persist($account);
+                $em->flush();
+            } else {
+                $message = 'nie można usunąć przychodu, saldo rachunku nie może być'
+                        . ' ujemne';
+                return $this->render('HBBundle:Income:submit.html.twig', array(
+                            'income' => $income, 'message' => $message
+                ));
+            }
+        }
+        $incomes = $repository->sortByDate($user);
+        return $this->render('HBBundle:Income:all_income.html.twig', array(
+                    'incomes' => $incomes
+        ));
+    }
+
+    /**
+     * @Route("/income/{id}/submit", name="submit_deleteIn")
+     * @Security("has_role('ROLE_USER')")
+     * @param type $id
+     */
+    public function submitAction($id) {
+        $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
+        $income = $repository->find($id);
+        return $this->render('HBBundle:Income:submit.html.twig', array(
+                    'income' => $income, 'message' => ''
         ));
     }
 
@@ -97,7 +131,7 @@ class IncomeController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
 
         $incomes = $repository->sortByDate($user);
-        
+
         return $this->render('HBBundle:Income:all_income.html.twig', array(
                     'incomes' => $incomes
         ));
