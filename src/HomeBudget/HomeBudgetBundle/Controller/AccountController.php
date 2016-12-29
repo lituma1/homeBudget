@@ -40,7 +40,7 @@ class AccountController extends Controller {
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
-
+            $account->setStatus(true);
 
             $account->setUser($user);
             $em = $this->getDoctrine()->getManager();
