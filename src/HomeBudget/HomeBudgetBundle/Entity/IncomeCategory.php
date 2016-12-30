@@ -50,7 +50,14 @@ class IncomeCategory
     {
         return $this->id;
     }
-
+    
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
     /**
      * Set name
      *
@@ -135,5 +142,28 @@ class IncomeCategory
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return IncomeCategory
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

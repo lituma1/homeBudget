@@ -39,6 +39,14 @@ class ExpendCategory
      * @var type 
      */
     private $user;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
     /**
      * Get id
      *
@@ -166,5 +174,28 @@ class ExpendCategory
     public function getExpends()
     {
         return $this->expends;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return ExpendCategory
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

@@ -39,6 +39,14 @@ class Type
      * @var type 
      */
     private $user;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
     /**
      * Get id
      *

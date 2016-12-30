@@ -39,6 +39,14 @@ class Type
      * @var type 
      */
     private $user;
+    
+    /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
     /**
      * Get id
      *
@@ -145,5 +153,28 @@ class Type
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return Type
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }

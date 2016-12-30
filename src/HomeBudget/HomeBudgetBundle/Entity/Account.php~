@@ -264,7 +264,7 @@ class Account {
     }
 
     public function spendMoney($amount) {
-        if ($this->balance > $amount) {
+        if ($this->balance >= $amount) {
             $this->balance -= $amount;
             return true;
         }
@@ -326,5 +326,11 @@ class Account {
     public function getExpends()
     {
         return $this->expends;
+    }
+    /**
+     * 
+     */
+    public function __toString() {
+        return $this->getName().' aktualne saldo: '.$this->getBalance();
     }
 }
