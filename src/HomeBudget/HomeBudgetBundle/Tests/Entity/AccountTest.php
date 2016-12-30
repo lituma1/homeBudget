@@ -12,6 +12,9 @@
  * @author pp
  */
 use HomeBudget\HomeBudgetBundle\Entity\Account;
+use HomeBudget\HomeBudgetBundle\Entity\User;
+use HomeBudget\HomeBudgetBundle\Entity\Type;
+
 
 class AccountTest extends \PHPUnit\Framework\TestCase {
 
@@ -36,5 +39,35 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     public function testSetBalance() {
         $this->testAccount->setBalance(400);
         $this->assertEquals(400, $this->testAccount->getBalance());
+    }
+    public function testGetAim() {
+        $this->assertEquals('', $this->testAccount->getAim());
+    }
+    public function testSetAim() {
+        $this->testAccount->setAim('wakacje');
+        $this->assertEquals('wakacje', $this->testAccount->getAim());
+    }
+    public function testGetUser() {
+        $this->assertEquals(null, $this->testAccount->getUser());
+    }
+    public function testSetUser() {
+        $user = new User();
+        $this->testAccount->setUser($user);
+        $this->assertEquals($user, $this->testAccount->getUser());
+    }
+    public function testGetType() {
+        $this->assertEquals(null, $this->testAccount->getType());
+    }
+    public function testSetType() {
+        $type = new Type();
+        $this->testAccount->setType($type);
+        $this->assertEquals($type, $this->testAccount->getType());
+    }
+    public function testGetName() {
+        $this->assertEquals('', $this->testAccount->getName());
+    }
+    public function testSetName() {
+        $this->testAccount->setName('Adam');
+        $this->assertEquals('Adam', $this->testAccount->getName());
     }
 }
