@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use HomeBudget\HomeBudgetBundle\Entity\IncomeCategory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class IncomeCategoryController extends Controller {
 
@@ -19,8 +21,8 @@ class IncomeCategoryController extends Controller {
     public function newIncCategoryAction(Request $request) {
         $inCategory = new IncomeCategory();
         $form = $this->createFormBuilder($inCategory)
-                ->add('name', 'text', array('label' => 'Nazwa'))
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {

@@ -8,6 +8,8 @@ use HomeBudget\HomeBudgetBundle\Entity\ExpendCategory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ExpendCategoryController extends Controller
 {
@@ -20,9 +22,9 @@ class ExpendCategoryController extends Controller
     {
         $exCategory = new ExpendCategory();
         $form = $this->createFormBuilder($exCategory)
-                ->add('name', 'text', array('label' => 'Nazwa'))
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
                 
-                ->add('save', 'submit', array('label' => 'Potwierdź'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
