@@ -175,4 +175,27 @@ class ExpendCategory
     {
         return $this->expends;
     }
+
+    /**
+     * Set status
+     *
+     * @param boolean $status
+     * @return ExpendCategory
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return boolean 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 }

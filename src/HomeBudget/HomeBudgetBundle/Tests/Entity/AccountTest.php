@@ -14,6 +14,7 @@
 use HomeBudget\HomeBudgetBundle\Entity\Account;
 use HomeBudget\HomeBudgetBundle\Entity\User;
 use HomeBudget\HomeBudgetBundle\Entity\Type;
+use HomeBudget\HomeBudgetBundle\Entity\Income;
 
 
 class AccountTest extends \PHPUnit\Framework\TestCase {
@@ -69,5 +70,19 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     public function testSetName() {
         $this->testAccount->setName('Adam');
         $this->assertEquals('Adam', $this->testAccount->getName());
+    }
+    public function testGetIncomes() {
+        $this->assertCount(0, $this->testAccount->getIncomes());
+    }
+    public function testAddIncome() {
+        $income = new Income();
+        $this->testAccount->addIncome($income);
+        $this->assertCount(1, $this->testAccount->getIncomes());
+    }
+    public function testRemoveIncome() {
+        $income = new Income();
+        $this->testAccount->addIncome($income);
+        $this->testAccount->removeIncome($income);
+        $this->assertCount(0, $this->testAccount->getIncomes());
     }
 }
