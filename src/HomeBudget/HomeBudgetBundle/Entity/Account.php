@@ -188,7 +188,7 @@ class Account {
      * Constructor
      */
     public function __construct() {
-        $this->expendes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expends = new \Doctrine\Common\Collections\ArrayCollection();
         $this->incomes = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
