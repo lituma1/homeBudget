@@ -81,7 +81,6 @@ class ExpendController extends Controller {
     public function modifyExpendAction(Request $request, $id) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $message = '';
-
         $repo = $this->getDoctrine()->getRepository('HBBundle:Expend');
         $expendToModify = $repo->findOneById($id);
         $amountToModify = $expendToModify->getAmount();

@@ -73,6 +73,7 @@ class IncomeController extends Controller {
      */
     public function modifyIncomeAction(Request $request, $id) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $message = '';
         $repo = $this->getDoctrine()->getRepository('HBBundle:Income');
         $incomeToModify = $repo->findOneById($id);
         $amountToModify = $incomeToModify->getAmount();
@@ -97,17 +98,37 @@ class IncomeController extends Controller {
         if ($form->isSubmitted()) {
 
             $income = $form->getData();
+            $account = $income->getAccount();
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($income);
-
-            $em->flush();
-            return $this->redirectToRoute('show_allIncomes');
+            if ($account->getId() == $accountToModify->getId()) {
+                if ($amountToModify != $income->getAmount()) {
+                    $amount = $amountToModify - $income->getAmount();
+                    $result = $account->spendMoney($amount);
+                    if ($result) {
+                        $em->flush();
+                        return $this->redirectToRoute('show_allIncomes');
+                    } else {
+                        $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
+                                . ' ujemne';
+                    }
+                }
+            } else {
+                $account->addMoney($income->getAmount());
+                $result = $accountToModify->spendMoney($amountToModify);
+                if ($result) {
+                    $em->flush();
+                    return $this->redirectToRoute('show_allIncomes');
+                } else {
+                    $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
+                                . ' ujemne';
+                }
+            }
         }
 
-        return $this->render('HBBundle:Account:modify.html.twig', array(
-                    'form' => $form->createView()));
-        
+        return $this->render('HBBundle:Income:modify_income.html.twig', array(
+                    'form' => $form->createView(), 'message' => $message));
     }
 
     /**
