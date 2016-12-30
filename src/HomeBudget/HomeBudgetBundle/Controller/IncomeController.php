@@ -71,10 +71,43 @@ class IncomeController extends Controller {
      * @Route("/income/{id}/modify", name="modify_income")
      * @Security("has_role('ROLE_USER')")
      */
-    public function modifyIncomeAction($id) {
-        return $this->render('HBBundle:Income:modify_income.html.twig', array(
-                        // ...
-        ));
+    public function modifyIncomeAction(Request $request, $id) {
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $repo = $this->getDoctrine()->getRepository('HBBundle:Income');
+        $incomeToModify = $repo->findOneById($id);
+        $amountToModify = $incomeToModify->getAmount();
+        $accountToModify = $incomeToModify->getAccount();
+        $form = $this->createFormBuilder($incomeToModify)
+                ->add('description', TextType::class, array('label' => 'Opis'))
+                ->add('amount', NumberType::class, array('label' => 'Wielkość'))
+                ->add('incomeDate', DateType::class, array('label' => 'Data'))
+                ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Kategoria'))
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Wpłacono na: '))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+
+            $income = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($income);
+
+            $em->flush();
+            return $this->redirectToRoute('show_allIncomes');
+        }
+
+        return $this->render('HBBundle:Account:modify.html.twig', array(
+                    'form' => $form->createView()));
+        
     }
 
     /**

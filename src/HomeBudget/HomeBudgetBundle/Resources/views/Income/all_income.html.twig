@@ -3,29 +3,30 @@
 {% block title %}Lista przychodów{% endblock %}
 
 {% block body %}
-<h2>Twoje przychody</h2>
+    <h2>Twoje przychody</h2>
 
-<table>
-    <th>Opis</th>
-    <th>Kategoria</th>
-    <th>Wielkość</th>
-    <th>Data</th>
-    <th>Na konto</th>
-{% for income in incomes %}
-<tr>
-    <td>
+    <table>
+        <th></th>
+        <th>Opis</th>
+        <th>Kategoria</th>
+        <th>Wielkość</th>
+        <th>Data</th>
+        <th>Na konto</th>
+            {% for income in incomes %}
+            <tr>
+                <td>
                     <a href="{{ path('submit_deleteIn', {"id" : income.id}) }}">usuń</a>
                     <a href="{{ path('modify_income', {"id" : income.id}) }}">modyfikuj</a>
-                    
+
                 </td>
-    <td>{{income.description}}</td> 
-    <td>{{income.incomeCategory.name}}</td> 
-    <td>{{income.amount}}</td>
-    <td>{{ income.incomeDate|date("d/m/Y")}}</td>
-        <td>{{income.account.name}}</td>
-    </tr>
-    {% endfor %}
-</table>
+                <td>{{income.description}}</td> 
+                <td>{{income.incomeCategory.name}}</td> 
+                <td>{{income.amount}}</td>
+                <td>{{ income.incomeDate|date("d/m/Y")}}</td>
+                <td>{{income.account.name}}</td>
+            </tr>
+        {% endfor %}
+    </table>
     <br>
     <a href="{{ path('new_income') }}">Dodaj nowy przychód</a>
     <br>
