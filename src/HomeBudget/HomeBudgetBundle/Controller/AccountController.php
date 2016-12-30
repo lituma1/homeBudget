@@ -22,7 +22,7 @@ class AccountController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newAction(Request $request) {
-         $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
         $account = new Account($user);
         $form = $this->createFormBuilder($account)
@@ -114,11 +114,21 @@ class AccountController extends Controller {
      * @param type $id
      */
     public function submitAction($id) {
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repository->find($id);
-        return $this->render('HBBundle:Account:submit.html.twig', array(
-                    'account' => $account
-        ));
+        if ($account->getBalance() > 0) {
+            $message = 'Przed usunięciem proszę przenieść środki na inne konto';
+            $balance = $user->balanceOfAccounts();
+             $accounts = $repository->findByUserAndStatus($user);
+            return $this->render('HBBundle:Account:show_all.html.twig', array(
+                        'accounts' => $accounts, 'balance' => $balance, 'message' => $message
+            ));
+        } else {
+            return $this->render('HBBundle:Account:submit.html.twig', array(
+                        'account' => $account
+            ));
+        }
     }
 
     /**
@@ -126,13 +136,14 @@ class AccountController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function showAllAction() {
+        $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
 
         $accounts = $repository->findByUserAndStatus($user);
         $balance = $user->balanceOfAccounts();
         return $this->render('HBBundle:Account:show_all.html.twig', array(
-                    'accounts' => $accounts, 'balance' => $balance
+                    'accounts' => $accounts, 'balance' => $balance, 'message' => $message
         ));
     }
 
@@ -174,13 +185,10 @@ class AccountController extends Controller {
             } else {
                 $message = 'Kwota do przeniesienia większa od salda';
             }
-
-
-            
         }
         return $this->render('HBBundle:Account:move_money.html.twig', array(
                     'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance,
-                'message' => $message));
+                    'message' => $message));
     }
 
 }
