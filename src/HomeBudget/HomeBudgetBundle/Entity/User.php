@@ -11,6 +11,7 @@
  *
  * @author pp
  */
+
 namespace HomeBudget\HomeBudgetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +22,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table(name="my_users")
  */
 class User extends BaseUser {
-    
+
     /**
      *
      * @ORM\Id
@@ -29,57 +30,55 @@ class User extends BaseUser {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /**
      * @ORM\Column(type="string", nullable=true)
      * 
      */
     private $cellPhone;
-    
+
     /**
-     *@ORM\OneToMany(targetEntity="Account", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="Account", mappedBy="user")
      * @var type 
      */
     private $accounts;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Expend", mappedBy="user")
      */
     private $expends;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Income", mappedBy="user")
      */
     private $incomes;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="Type", mappedBy="user")
      */
     private $types;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="ExpendCategory", mappedBy="user")
      */
     private $expendCategories;
-    
+
     /**
      * @ORM\OneToMany(targetEntity="IncomeCategory", mappedBy="user")
      */
     private $incomeCategories;
-    
+
     public function __construct() {
         parent::__construct();
     }
-    
+
     public function getCellPhone() {
         return $this->cellPhone;
     }
+
     public function setCellPhone($cellPhone) {
         $this->cellPhone = $cellPhone;
     }
-
-
-
 
     /**
      * Add accounts
@@ -87,8 +86,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      * @return User
      */
-    public function addAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
-    {
+    public function addAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts) {
         $this->accounts[] = $accounts;
 
         return $this;
@@ -99,8 +97,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
      */
-    public function removeAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts)
-    {
+    public function removeAccount(\HomeBudget\HomeBudgetBundle\Entity\Account $accounts) {
         $this->accounts->removeElement($accounts);
     }
 
@@ -109,9 +106,16 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getAccounts()
-    {
+    public function getAccounts() {
         return $this->accounts;
+    }
+
+    public function balanceOfAccounts() {
+        $balance = 0;
+        foreach ($this->accounts as $account) {
+            $balance += $account->getBalance();
+        }
+        return $balance;
     }
 
     /**
@@ -120,8 +124,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
      * @return User
      */
-    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
-    {
+    public function addExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends) {
         $this->expends[] = $expends;
 
         return $this;
@@ -132,8 +135,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expends
      */
-    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends)
-    {
+    public function removeExpend(\HomeBudget\HomeBudgetBundle\Entity\Expend $expends) {
         $this->expends->removeElement($expends);
     }
 
@@ -142,8 +144,7 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExpends()
-    {
+    public function getExpends() {
         return $this->expends;
     }
 
@@ -153,8 +154,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
      * @return User
      */
-    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
-    {
+    public function addIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes) {
         $this->incomes[] = $incomes;
 
         return $this;
@@ -165,8 +165,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Income $incomes
      */
-    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes)
-    {
+    public function removeIncome(\HomeBudget\HomeBudgetBundle\Entity\Income $incomes) {
         $this->incomes->removeElement($incomes);
     }
 
@@ -175,8 +174,7 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIncomes()
-    {
+    public function getIncomes() {
         return $this->incomes;
     }
 
@@ -186,8 +184,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\Type $types
      * @return User
      */
-    public function addType(\HomeBudget\HomeBudgetBundle\Entity\Type $types)
-    {
+    public function addType(\HomeBudget\HomeBudgetBundle\Entity\Type $types) {
         $this->types[] = $types;
 
         return $this;
@@ -198,8 +195,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\Type $types
      */
-    public function removeType(\HomeBudget\HomeBudgetBundle\Entity\Type $types)
-    {
+    public function removeType(\HomeBudget\HomeBudgetBundle\Entity\Type $types) {
         $this->types->removeElement($types);
     }
 
@@ -208,8 +204,7 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getTypes()
-    {
+    public function getTypes() {
         return $this->types;
     }
 
@@ -219,8 +214,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
      * @return User
      */
-    public function addExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories)
-    {
+    public function addExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories) {
         $this->expandCategories[] = $expandCategories;
 
         return $this;
@@ -231,8 +225,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
      */
-    public function removeExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories)
-    {
+    public function removeExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories) {
         $this->expandCategories->removeElement($expandCategories);
     }
 
@@ -241,8 +234,7 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExpandCategories()
-    {
+    public function getExpandCategories() {
         return $this->expandCategories;
     }
 
@@ -252,8 +244,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories
      * @return User
      */
-    public function addIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories)
-    {
+    public function addIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories) {
         $this->incomeCategories[] = $incomeCategories;
 
         return $this;
@@ -264,8 +255,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories
      */
-    public function removeIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories)
-    {
+    public function removeIncomeCategory(\HomeBudget\HomeBudgetBundle\Entity\IncomeCategory $incomeCategories) {
         $this->incomeCategories->removeElement($incomeCategories);
     }
 
@@ -274,8 +264,7 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getIncomeCategories()
-    {
+    public function getIncomeCategories() {
         return $this->incomeCategories;
     }
 
@@ -285,8 +274,7 @@ class User extends BaseUser {
      * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories
      * @return User
      */
-    public function addExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories)
-    {
+    public function addExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories) {
         $this->expendCategories[] = $expendCategories;
 
         return $this;
@@ -297,8 +285,7 @@ class User extends BaseUser {
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories
      */
-    public function removeExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories)
-    {
+    public function removeExpendCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expendCategories) {
         $this->expendCategories->removeElement($expendCategories);
     }
 
@@ -307,8 +294,8 @@ class User extends BaseUser {
      *
      * @return \Doctrine\Common\Collections\Collection 
      */
-    public function getExpendCategories()
-    {
+    public function getExpendCategories() {
         return $this->expendCategories;
     }
+
 }

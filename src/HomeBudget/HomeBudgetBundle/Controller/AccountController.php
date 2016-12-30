@@ -130,9 +130,9 @@ class AccountController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
 
         $accounts = $repository->findByUserAndStatus($user);
-
+        $balance = $user->balanceOfAccounts();
         return $this->render('HBBundle:Account:show_all.html.twig', array(
-                    'accounts' => $accounts
+                    'accounts' => $accounts, 'balance' => $balance
         ));
     }
 
