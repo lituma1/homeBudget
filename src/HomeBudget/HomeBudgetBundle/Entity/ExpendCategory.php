@@ -84,7 +84,7 @@ class ExpendCategory
      */
     public function __construct()
     {
-        $this->expendes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expends = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
