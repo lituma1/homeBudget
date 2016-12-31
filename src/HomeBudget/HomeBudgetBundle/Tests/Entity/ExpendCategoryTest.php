@@ -11,6 +11,28 @@
  *
  * @author pp
  */
-class ExpendCategoryTest {
-    //put your code here
+use HomeBudget\HomeBudgetBundle\Entity\ExpendCategory;
+
+class ExpendCategoryTest extends \PHPUnit\Framework\TestCase{
+    
+    protected function setUp() {
+        parent::setUp();
+        $this->testExCategory = new ExpendCategory();
+    }
+    
+    protected function tearDown() {
+        $this->testExCategory = null;
+        parent::tearDown();
+    }
+    
+    public function testGetId() {
+        $this->assertEquals(null, $this->testExCategory->getId());
+    }
+    public function testGetName() {
+        $this->assertEquals('', $this->testExCategory->getName());
+    }
+    public function testSetName() {
+        $this->testExCategory->setName('jedzenie');
+        $this->assertEquals('jedzenie', $this->testExCategory->getName());
+    }
 }
