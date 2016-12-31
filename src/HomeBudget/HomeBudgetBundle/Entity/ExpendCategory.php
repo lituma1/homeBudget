@@ -88,39 +88,6 @@ class ExpendCategory
     }
 
     /**
-     * Add expendes
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
-     * @return ExpendCategory
-     */
-    public function addExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
-    {
-        $this->expendes[] = $expendes;
-
-        return $this;
-    }
-
-    /**
-     * Remove expendes
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expendes
-     */
-    public function removeExpende(\HomeBudget\HomeBudgetBundle\Entity\Expend $expendes)
-    {
-        $this->expendes->removeElement($expendes);
-    }
-
-    /**
-     * Get expendes
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getExpendes()
-    {
-        return $this->expendes;
-    }
-
-    /**
      * Set user
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
