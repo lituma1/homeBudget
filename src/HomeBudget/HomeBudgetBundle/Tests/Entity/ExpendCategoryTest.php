@@ -13,6 +13,7 @@
  */
 use HomeBudget\HomeBudgetBundle\Entity\ExpendCategory;
 use HomeBudget\HomeBudgetBundle\Entity\User;
+use HomeBudget\HomeBudgetBundle\Entity\Expend;
 
 class ExpendCategoryTest extends \PHPUnit\Framework\TestCase {
 
@@ -48,7 +49,34 @@ class ExpendCategoryTest extends \PHPUnit\Framework\TestCase {
         $this->testExCategory->setUser($user);
         $this->assertEquals($user, $this->testExCategory->getUser());
     }
+
     public function testGetExpends() {
         $this->assertCount(0, $this->testExCategory->getExpends());
     }
+
+    public function testAddExpend() {
+        $expend = new Expend();
+        $this->testExCategory->addExpend($expend);
+        $this->assertCount(1, $this->testExCategory->getExpends());
+        $this->assertContains($expend, $this->testExCategory->getExpends());
+    }
+
+    public function testRemoveExpend() {
+        $expend = new Expend();
+        $this->testExCategory->addExpend($expend);
+        $this->testExCategory->removeExpend($expend);
+        $this->assertCount(0, $this->testExCategory->getExpends());
+    }
+
+    public function testGetStatus() {
+        $this->assertEquals(null, $this->testExCategory->getStatus());
+    }
+
+    public function testSetStatus() {
+        $this->testExCategory->setStatus(false);
+        $this->assertFalse($this->testExCategory->getStatus());
+        $this->testExCategory->setStatus(true);
+        $this->assertTrue($this->testExCategory->getStatus());
+    }
+
 }
