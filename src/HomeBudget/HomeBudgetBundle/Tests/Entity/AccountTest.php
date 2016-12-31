@@ -22,10 +22,19 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     protected function setUp() {
         parent::setUp();
         $this->testAccount = new Account();
+        $this->testUser = new User();
+        $this->testType = new Type();
+        $this->testIncome = new Income();
+        $this->testExpend = new Expend();
     }
 
     protected function tearDown() {
         $this->testAccount = null;
+        $this->testUser = null;
+        $this->testType = null;
+        $this->testIncome = null;
+        $this->testExpend = null;
+
         parent::tearDown();
     }
 
@@ -56,9 +65,9 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testSetUser() {
-        $user = new User();
-        $this->testAccount->setUser($user);
-        $this->assertEquals($user, $this->testAccount->getUser());
+
+        $this->testAccount->setUser($this->testUser);
+        $this->assertEquals($this->testUser, $this->testAccount->getUser());
     }
 
     public function testGetType() {
@@ -66,9 +75,8 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testSetType() {
-        $type = new Type();
-        $this->testAccount->setType($type);
-        $this->assertEquals($type, $this->testAccount->getType());
+        $this->testAccount->setType($this->testType);
+        $this->assertEquals($this->testType, $this->testAccount->getType());
     }
 
     public function testGetName() {
@@ -85,16 +93,16 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testAddIncome() {
-        $income = new Income();
-        $this->testAccount->addIncome($income);
+        
+        $this->testAccount->addIncome($this->testIncome);
         $this->assertCount(1, $this->testAccount->getIncomes());
-        $this->assertContains($income, $this->testAccount->getIncomes());
+        $this->assertContains($this->testIncome, $this->testAccount->getIncomes());
     }
 
     public function testRemoveIncome() {
-        $income = new Income();
-        $this->testAccount->addIncome($income);
-        $this->testAccount->removeIncome($income);
+       
+        $this->testAccount->addIncome($this->testIncome);
+        $this->testAccount->removeIncome($this->testIncome);
         $this->assertCount(0, $this->testAccount->getIncomes());
     }
 
@@ -126,21 +134,23 @@ class AccountTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testAddExpend() {
-        $expend = new Expend();
-        $this->testAccount->addExpend($expend);
+        
+        $this->testAccount->addExpend($this->testExpend);
         $this->assertCount(1, $this->testAccount->getExpends());
-        $this->assertContains($expend, $this->testAccount->getExpends());
+        $this->assertContains($this->testExpend, $this->testAccount->getExpends());
     }
 
     public function testRemoveExpend() {
-        $epend = new Expend();
-        $this->testAccount->addExpend($epend);
-        $this->testAccount->removeExpend($epend);
+        
+        $this->testAccount->addExpend($this->testExpend);
+        $this->testAccount->removeExpend($this->testExpend);
         $this->assertCount(0, $this->testAccount->getExpends());
     }
+
     public function testToString() {
         $this->testAccount->setBalance(100);
         $this->testAccount->setName('ING');
         $this->assertEquals('ING aktualne saldo: 100', $this->testAccount->__toString());
     }
+
 }
