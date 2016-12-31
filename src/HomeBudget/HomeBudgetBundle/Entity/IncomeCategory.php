@@ -42,6 +42,14 @@ class IncomeCategory
     private $user;
     
     /**
+     *
+     * @var type 
+     * @ORM\Column(name="status", type="boolean")
+     * 
+     */
+    private $status;
+    
+    /**
      * Get id
      *
      * @return integer 
@@ -51,13 +59,7 @@ class IncomeCategory
         return $this->id;
     }
     
-    /**
-     *
-     * @var type 
-     * @ORM\Column(name="status", type="boolean")
-     * 
-     */
-    private $status;
+    
     /**
      * Set name
      *
