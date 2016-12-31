@@ -70,6 +70,12 @@ class User extends BaseUser {
 
     public function __construct() {
         parent::__construct();
+        $this->accounts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expends = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incomes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->types = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->incomeCategories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->expendCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getCellPhone() {
@@ -206,36 +212,6 @@ class User extends BaseUser {
      */
     public function getTypes() {
         return $this->types;
-    }
-
-    /**
-     * Add expandCategories
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
-     * @return User
-     */
-    public function addExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories) {
-        $this->expandCategories[] = $expandCategories;
-
-        return $this;
-    }
-
-    /**
-     * Remove expandCategories
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories
-     */
-    public function removeExpandCategory(\HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $expandCategories) {
-        $this->expandCategories->removeElement($expandCategories);
-    }
-
-    /**
-     * Get expandCategories
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getExpandCategories() {
-        return $this->expandCategories;
     }
 
     /**
