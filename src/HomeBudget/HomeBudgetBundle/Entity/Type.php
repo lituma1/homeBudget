@@ -117,20 +117,8 @@ class Type
      */
     public function getAccounts()
     {
-        return $this->acounts;
+        return $this->accounts;
     }
-
-    /**
-     * Add accounts
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accounts
-     * @return Type
-     */
-    
-
-    
-
-    
 
     /**
      * Set user
