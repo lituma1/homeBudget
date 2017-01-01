@@ -56,8 +56,8 @@ class IncomeTest extends \PHPUnit\Framework\TestCase{
         $this->assertEquals(null, $this->testIncome->getDescription());
     }
     public function testSetDescription() {
-        $this->testIncome->setDescription('owoce na rynku');
-        $this->assertEquals('owoce na rynku', $this->testIncome->getDescription());
+        $this->testIncome->setDescription('trójka');
+        $this->assertEquals('trójka', $this->testIncome->getDescription());
     }
     public function testGetUser() {
         $this->assertEquals(null, $this->testIncome->getUser());
