@@ -20,10 +20,14 @@ class IncomeCategoryTest extends \PHPUnit\Framework\TestCase {
     protected function setUp() {
         parent::setUp();
         $this->testInCategory = new IncomeCategory();
+        $this->testUser = new User();
+        $this->testIncome = new Income();
     }
 
     protected function tearDown() {
         $this->testInCategory = null;
+        $this->testUser = null;
+        $this->testIncome = null;
         parent::tearDown();
     }
 
@@ -45,16 +49,16 @@ class IncomeCategoryTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testAddIncome() {
-        $income = new Income();
-        $this->testInCategory->addIncome($income);
+        
+        $this->testInCategory->addIncome($this->testIncome);
         $this->assertCount(1, $this->testInCategory->getIncomes());
-        $this->assertContains($income, $this->testInCategory->getIncomes());
+        $this->assertContains($this->testIncome, $this->testInCategory->getIncomes());
     }
 
     public function testRemoveIncome() {
-        $income = new Income();
-        $this->testInCategory->addIncome($income);
-        $this->testInCategory->removeIncome($income);
+        
+        $this->testInCategory->addIncome($this->testIncome);
+        $this->testInCategory->removeIncome($this->testIncome);
         $this->assertCount(0, $this->testInCategory->getIncomes());
     }
 
@@ -63,9 +67,9 @@ class IncomeCategoryTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testSetUser() {
-        $user = new User();
-        $this->testInCategory->setUser($user);
-        $this->assertEquals($user, $this->testInCategory->getUser());
+        
+        $this->testInCategory->setUser($this->testUser);
+        $this->assertEquals($this->testUser, $this->testInCategory->getUser());
     }
 
     public function testGetStatus() {

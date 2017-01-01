@@ -20,10 +20,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase {
     protected function setUp() {
         parent::setUp();
         $this->testType = new Type();
+        $this->testAccount = new Account();
+        $this->testUser = new User();
     }
 
     protected function tearDown() {
         $this->testType = null;
+        $this->testAccount = null;
+        $this->testUser = null;
         parent::tearDown();
     }
 
@@ -45,16 +49,16 @@ class TypeTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testAddAccount() {
-        $account = new Account();
-        $this->testType->addAccount($account);
+        
+        $this->testType->addAccount($this->testAccount);
         $this->assertCount(1, $this->testType->getAccounts());
-        $this->assertContains($account, $this->testType->getAccounts());
+        $this->assertContains($this->testAccount, $this->testType->getAccounts());
     }
 
     public function testRemoveAccount() {
-        $account = new Account();
-        $this->testType->addAccount($account);
-        $this->testType->removeAccount($account);
+        
+        $this->testType->addAccount($this->testAccount);
+        $this->testType->removeAccount($this->testAccount);
         $this->assertCount(0, $this->testType->getAccounts());
         
     }
@@ -64,9 +68,9 @@ class TypeTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testSetUser() {
-        $user = new User();
-        $this->testType->setUser($user);
-        $this->assertEquals($user, $this->testType->getUser($user));
+       
+        $this->testType->setUser($this->testUser);
+        $this->assertEquals($this->testUser, $this->testType->getUser($this->testUser));
     }
     
     public function testGetStatus() {

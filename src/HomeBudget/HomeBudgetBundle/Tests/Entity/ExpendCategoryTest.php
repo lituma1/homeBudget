@@ -20,10 +20,14 @@ class ExpendCategoryTest extends \PHPUnit\Framework\TestCase {
     protected function setUp() {
         parent::setUp();
         $this->testExCategory = new ExpendCategory();
+        $this->testExpend = new Expend();
+        $this->testUser = new User();
     }
 
     protected function tearDown() {
         $this->testExCategory = null;
+        $this->testExpend = null;
+        $this->testUser = null;
         parent::tearDown();
     }
 
@@ -45,9 +49,9 @@ class ExpendCategoryTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testSetUser() {
-        $user = new User();
-        $this->testExCategory->setUser($user);
-        $this->assertEquals($user, $this->testExCategory->getUser());
+       
+        $this->testExCategory->setUser($this->testUser);
+        $this->assertEquals($this->testUser, $this->testExCategory->getUser());
     }
 
     public function testGetExpends() {
@@ -55,16 +59,16 @@ class ExpendCategoryTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testAddExpend() {
-        $expend = new Expend();
-        $this->testExCategory->addExpend($expend);
+        
+        $this->testExCategory->addExpend($this->testExpend);
         $this->assertCount(1, $this->testExCategory->getExpends());
-        $this->assertContains($expend, $this->testExCategory->getExpends());
+        $this->assertContains($this->testExpend, $this->testExCategory->getExpends());
     }
 
     public function testRemoveExpend() {
-        $expend = new Expend();
-        $this->testExCategory->addExpend($expend);
-        $this->testExCategory->removeExpend($expend);
+       
+        $this->testExCategory->addExpend($this->testExpend);
+        $this->testExCategory->removeExpend($this->testExpend);
         $this->assertCount(0, $this->testExCategory->getExpends());
     }
 
