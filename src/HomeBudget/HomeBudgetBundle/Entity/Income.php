@@ -159,29 +159,6 @@ class Income
     }
 
     /**
-     * Set category
-     *
-     * @param \HomeBudget\HomeBudgetBundle\Entity\incomeCategory $category
-     * @return Income
-     */
-    public function setCategory(\HomeBudget\HomeBudgetBundle\Entity\incomeCategory $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \HomeBudget\HomeBudgetBundle\Entity\incomeCategory 
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
      * Set incomeCategory
      *
      * @param \HomeBudget\HomeBudgetBundle\Entity\incomeCategory $incomeCategory
