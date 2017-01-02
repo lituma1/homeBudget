@@ -36,12 +36,12 @@ class AccountRepository extends EntityRepository
     }
     public function findByUserAndStatus($user){
         
-        $expends = $this->getEntityManager()->createQuery(
+        $accounts = $this->getEntityManager()->createQuery(
                         'SELECT a FROM HBBundle:Account a '
                 . 'WHERE a.user = :User AND a.status = 1 ORDER BY a.name ASC')
                 ->setParameter("User", $user)
                 ->getResult();
-        return $expends;
+        return $accounts;
         
     }
 }
