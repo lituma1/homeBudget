@@ -4,13 +4,28 @@ namespace HomeBudget\HomeBudgetBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class AccountControllerTest extends WebTestCase
-{
-    public function testNew()
-    {
-        $client = static::createClient();
+class AccountControllerTest extends WebTestCase {
 
-        $crawler = $client->request('GET', '/new');
+    private $client;
+
+    protected function setUp() {
+        $this->client = static::createClient(array(), array(
+                    'PHP_AUTH_USER' => 'Janek',
+                    'PHP_AUTH_PW' => '123123',
+        ));
+    }
+
+    public function testNew() {
+
+
+
+        $crawler = $this->client->request('GET', '/account/new', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Podaj dane dla nowego konta")')->count()
+        );
     }
 
     public function testModify()
@@ -27,11 +42,16 @@ class AccountControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/{id}/delete');
     }
 
-    public function testShowall()
-    {
-        $client = static::createClient();
+    public function testShowall() {
 
-        $crawler = $client->request('GET', '/showAll');
+
+        $crawler = $this->client->request('GET', '/account/showAll', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Suma środków na Twoich kontach")')->count()
+        );
     }
 
 }

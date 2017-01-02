@@ -11,6 +11,11 @@ class IncomeCategoryControllerTest extends WebTestCase
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/incomeCategory/new');
+        
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('html:contains("kategorię dla wydatku")')->count()
+        );
     }
 
     public function testModifyinccategory()

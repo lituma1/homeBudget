@@ -10,7 +10,7 @@ class MainControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/main');
+        $crawler = $client->request('GET', '/Panel');
     }
 
 }
