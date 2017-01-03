@@ -21,4 +21,14 @@ class IncomeCategoryRepository extends EntityRepository
 
         return $query;
     }
+    public function findByUserAndStatus($user){
+        
+        $inCategories = $this->getEntityManager()->createQuery(
+                        'SELECT c FROM HBBundle:IncomeCategory c '
+                . 'WHERE c.user = :User AND c.status = 1 ORDER BY c.name ASC')
+                ->setParameter("User", $user)
+                ->getResult();
+        return $inCategories;
+        
+    }
 }

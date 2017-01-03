@@ -19,6 +19,9 @@ class IncomeCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newIncCategoryAction(Request $request) {
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
+        $inCategories = $repository->findByUserAndStatus($user);
         $inCategory = new IncomeCategory();
         $form = $this->createFormBuilder($inCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
@@ -28,7 +31,7 @@ class IncomeCategoryController extends Controller {
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
-            $user = $this->container->get('security.context')->getToken()->getUser();
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
 
             $inCategory->setUser($user);
             $inCategory->setStatus(true);
@@ -42,7 +45,7 @@ class IncomeCategoryController extends Controller {
             return $this->redirectToRoute('new_income');
         }
         return $this->render('HBBundle:IncomeCategory:new_inc_category.html.twig', array(
-                    'form' => $form->createView()));
+                    'form' => $form->createView(), 'inCategories' => $inCategories));
     }
 
     /**
@@ -55,17 +58,5 @@ class IncomeCategoryController extends Controller {
         ));
     }
 
-    /**
-     * @Route("/incomeCategory/all", name="show_allIncomeCategories")
-     * @Security("has_role('ROLE_USER')")
-     */
-    public function showAllIncCategoryAction() {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
-        $inCategories = $repository->findByUser($user);
-        return $this->render('HBBundle:IncomeCategory:show_all_inc_category.html.twig', array(
-                    'inCategories' => $inCategories
-        ));
-    }
 
 }

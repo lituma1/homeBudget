@@ -19,7 +19,7 @@ class ExpendCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newExpCategoryAction(Request $request) {
-        $user = $this->container->get('security.context')->getToken()->getUser();
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
         $exCategories = $repository->findByUserAndStatus($user);
         $exCategory = new ExpendCategory();
@@ -31,7 +31,7 @@ class ExpendCategoryController extends Controller {
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
-            $user = $this->container->get('security.context')->getToken()->getUser();
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
             $exCategory->setUser($user);
             $exCategory->setStatus(true);
             $em = $this->getDoctrine()->getManager();
