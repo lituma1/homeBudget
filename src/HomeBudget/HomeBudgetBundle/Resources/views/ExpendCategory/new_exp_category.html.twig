@@ -3,20 +3,24 @@
 {% block title %}Nowa kategoria{% endblock %}
 
 {% block body %}
-<h2>Wprowadź nową kategorię dla wydatku</h2>
+    <h2>Lista Twoich kategorii</h2>
+    {% for exCategory in exCategories %}
+        {{exCategory.name}}<br>
+    {% endfor %}
+    <h2>Wprowadź nową kategorię dla wydatku</h2>
 
 
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
 
 
-<br>
-<a href="{{ path('new_expend') }}">Powrót na poprzednią stronę</a>
-<br>
-<br>
-<a href="{{ path('Panel') }}">Strona główna</a>
-<br>
-<br>
-<a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
+    <br>
+    <a href="{{ path('new_expend') }}">Powrót na poprzednią stronę</a>
+    <br>
+    <br>
+    <a href="{{ path('Panel') }}">Strona główna</a>
+    <br>
+    <br>
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}

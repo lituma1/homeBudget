@@ -34,10 +34,4 @@ class ExpendCategoryControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/expendCategory/{id}/modify');
     }
 
-    public function testShowallexpcategory()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/expendCategory/all');
-    }
 }
