@@ -31,6 +31,7 @@ class IncomeCategoryController extends Controller {
             $user = $this->container->get('security.context')->getToken()->getUser();
 
             $inCategory->setUser($user);
+            $inCategory->setStatus(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($inCategory);
 

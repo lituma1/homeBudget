@@ -31,8 +31,8 @@ class ExpendCategoryController extends Controller
 
             $exCategory = $form->getData();
             $user = $this->container->get('security.context')->getToken()->getUser();
-            
             $exCategory->setUser($user);
+            $exCategory->setStatus(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($exCategory);
 
