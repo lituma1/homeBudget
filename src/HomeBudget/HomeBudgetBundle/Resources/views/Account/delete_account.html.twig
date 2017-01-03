@@ -8,9 +8,9 @@
     <p>Nazwa: {{account.name}}</p> 
     <p>Saldo: {{account.balance}}</p>
     <p>Typ: {{account.type.name}}</p>
-
-    <a href="{{ path('delete_Account', {"id" : account.id}) }}"><button>Potwierdź</button></a>
-    <br>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
     <br>
     <a href="{{ path('new_Account') }}">Dodaj nowe konto</a>
     <br>

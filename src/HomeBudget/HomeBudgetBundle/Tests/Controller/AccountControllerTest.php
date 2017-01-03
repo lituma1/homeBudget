@@ -28,18 +28,27 @@ class AccountControllerTest extends WebTestCase {
         );
     }
 
-    public function testModify()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/{id}/modify');
+    public function testModify() {
+        
+        $crawler = $this->client->request('GET', '/account/{id}/modify', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+         $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Wprowadź nowe dane")')->count()
+        );
     }
+    
+    public function testDelete() {
+        
 
-    public function testDelete()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/{id}/delete');
+        $crawler = $this->client->request('GET', '/account/3/delete', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("to the Expend:deleteExpend")')->count()
+        );
     }
 
     public function testShowall() {

@@ -93,40 +93,41 @@ class AccountController extends Controller {
     /**
      * @Route("/account/{id}/delete", name="delete_Account")
      * @Security("has_role('ROLE_USER')")
-     */
-    public function deleteAction($id) {
-        $em = $this->getDoctrine()->getManager();
-        $account = $em->getRepository
-                        ('HBBundle:Account')->find($id);
-        if ($account) {
-            $account->setStatus(false);
-            $em->persist($account);
-            $em->flush();
-        }
-
-
-        return $this->redirectToRoute('show_allAccounts');
-    }
-
-    /**
-     * @Route("/account/{id}/submit", name="submit_delete")
-     * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
      * @param type $id
      */
-    public function submitAction($id) {
+    public function deleteAction(Request $request, $id) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repository->find($id);
         if ($account->getBalance() > 0) {
             $message = 'Przed usunięciem proszę przenieść środki na inne konto';
             $balance = $user->balanceOfAccounts();
-             $accounts = $repository->findByUserAndStatus($user);
+            $accounts = $repository->findByUserAndStatus($user);
             return $this->render('HBBundle:Account:show_all.html.twig', array(
                         'accounts' => $accounts, 'balance' => $balance, 'message' => $message
             ));
         } else {
-            return $this->render('HBBundle:Account:submit.html.twig', array(
-                        'account' => $account
+            $form = $this->createFormBuilder($account)
+                    ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                    ->getForm();
+            $form->handleRequest($request);
+            if ($form->isSubmitted()) {
+
+                $account = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                if ($account) {
+                    $account->setStatus(false);
+                    $em->persist($account);
+                    $em->flush();
+                }
+
+
+                return $this->redirectToRoute('show_allAccounts');
+            }
+            return $this->render('HBBundle:Account:delete_account.html.twig', array(
+                        'form' => $form->createView(), 'account' => $account
             ));
         }
     }
