@@ -71,11 +71,13 @@ class UserTest extends \PHPUnit\Framework\TestCase {
     }
 
     public function testBalanceOfAccounts() {
+        $this->testAccount->setStatus(false);
+        $this->testAccount2->setStatus(true);
         $this->testAccount->setBalance(25);
         $this->testAccount2->setBalance(38);
         $this->testUser->addAccount($this->testAccount);
         $this->testUser->addAccount($this->testAccount2);
-        $this->assertEquals(63, $this->testUser->balanceOfAccounts());
+        $this->assertEquals(38, $this->testUser->balanceOfAccounts());
     }
 
     public function testGetExpends() {
