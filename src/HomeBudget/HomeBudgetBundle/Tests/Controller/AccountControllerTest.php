@@ -47,7 +47,7 @@ class AccountControllerTest extends WebTestCase {
             'PHP_AUTH_PW' => '123123',
         ));
         $this->assertGreaterThan(
-                0, $crawler->filter('html:contains("to the Expend:deleteExpend")')->count()
+                0, $crawler->filter('html:contains("Potwierdź usunięcie poniższego konta")')->count()
         );
     }
 
@@ -60,6 +60,16 @@ class AccountControllerTest extends WebTestCase {
         ));
         $this->assertGreaterThan(
                 0, $crawler->filter('html:contains("Suma środków na Twoich kontach")')->count()
+        );
+    }
+    
+    public function testMoveMoney() {
+        $crawler = $this->client->request('GET', '/account/16/moveMoney', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("podaj konto docelowe")')->count()
         );
     }
 
