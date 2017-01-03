@@ -119,7 +119,10 @@ class User extends BaseUser {
     public function balanceOfAccounts() {
         $balance = 0;
         foreach ($this->accounts as $account) {
-            $balance += $account->getBalance();
+            if($account->getStatus() == 1){
+               $balance += $account->getBalance(); 
+            }
+            
         }
         return $balance;
     }
