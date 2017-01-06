@@ -150,34 +150,33 @@ class ExpendController extends Controller {
      * @Route("/expend/{id}/delete", name="delete_expend")
      * @Security("has_role('ROLE_USER')")
      */
-    public function deleteExpendAction($id) {
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+    public function deleteExpendAction(Request $request, $id) {
+       
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
         $expend = $repository->find($id);
-        $em = $this->getDoctrine()->getManager();
-        if ($expend) {
-            $em->remove($expend);
-            $account = $expend->getAccount();
-            $account->addMoney($expend->getAmount());
-            $em->persist($account);
-            $em->flush();
-        }
-        $expends = $repository->sortByDate($user);
-        return $this->render('HBBundle:Expend:all_expend.html.twig', array(
-                    'expends' => $expends
-        ));
-    }
-    /**
-     * @Route("/expend/{id}/submit", name="submit_deleteEx")
-     * @Security("has_role('ROLE_USER')")
-     * @param type $id
-     */
-    public function submitAction($id) {
-        $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
-        $expend = $repository->find($id);
-        return $this->render('HBBundle:Expend:submit.html.twig', array(
-                    'expend' => $expend
-        ));
+        
+        $form = $this->createFormBuilder($expend)
+                    ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                    ->getForm();
+            $form->handleRequest($request);
+            if ($form->isSubmitted()) {
+
+                $expend = $form->getData();
+
+                $em = $this->getDoctrine()->getManager();
+                if ($expend) {
+                    $em->remove($expend);
+                   
+                    $em->flush();
+                }
+
+
+                return $this->redirectToRoute('show_allExpends');
+            }
+            return $this->render('HBBundle:Expend:delete_expend.html.twig', array(
+                        'form' => $form->createView(), 'expend' => $expend
+            ));
+        
     }
 
     /**

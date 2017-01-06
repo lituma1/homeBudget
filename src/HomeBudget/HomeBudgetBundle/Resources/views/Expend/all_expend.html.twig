@@ -15,7 +15,7 @@
             {% for expend in expends %}
             <tr>
                 <td>
-                    <a href="{{ path('submit_deleteEx', {"id" : expend.id}) }}">usuń</a>
+                    <a href="{{ path('delete_expend', {"id" : expend.id}) }}">usuń</a>
                     <a href="{{ path('modify_expend', {"id" : expend.id}) }}">modyfikuj</a>
                     
                 </td>
