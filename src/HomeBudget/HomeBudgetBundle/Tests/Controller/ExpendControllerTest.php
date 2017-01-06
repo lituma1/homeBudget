@@ -29,7 +29,7 @@ class ExpendControllerTest extends WebTestCase
 
     public function testModifyexpend()
     {
-        $crawler = $this->client->request('GET', '/expend/21/modify', array(), array(), array(
+        $crawler = $this->client->request('GET', '/expend/22/modify', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
             'PHP_AUTH_PW' => '123123',
         ));
@@ -41,16 +41,26 @@ class ExpendControllerTest extends WebTestCase
 
     public function testDeleteexpend()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/expend/{id}/delete');
+         $crawler = $this->client->request('GET', '/expend/22/delete', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Potwierdź usunięcie poniższego wydatku")')->count()
+        );
+        
     }
 
     public function testAllexpend()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/expend/all');
+        
+        $crawler = $this->client->request('GET', '/expend/all', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Twoje wydatki")')->count()
+        );
     }
 
 }
