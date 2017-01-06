@@ -162,9 +162,11 @@ class ExpendController extends Controller {
             if ($form->isSubmitted()) {
 
                 $expend = $form->getData();
-
+                
                 $em = $this->getDoctrine()->getManager();
                 if ($expend) {
+                    $account = $expend->getAccount();
+                    $account->addMoney($expend->getAmount());
                     $em->remove($expend);
                    
                     $em->flush();
