@@ -21,6 +21,16 @@ class TypeRepository extends EntityRepository {
 
         return $query;
     }
+    public function findByUserAndStatus($user){
+        
+        $types = $this->getEntityManager()->createQuery(
+                        'SELECT t FROM HBBundle:Type t '
+                . 'WHERE t.user = :User AND t.status = 1 ORDER BY t.name ASC')
+                ->setParameter("User", $user)
+                ->getResult();
+        return $types;
+        
+    }
 
 
 

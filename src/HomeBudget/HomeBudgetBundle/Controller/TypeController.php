@@ -21,6 +21,9 @@ class TypeController extends Controller
      */
     public function newAction(Request $request)
     {   
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
+        $types = $repository->findByUserAndStatus($user);
         $type = new Type();
         $form = $this->createFormBuilder($type)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
@@ -45,7 +48,7 @@ class TypeController extends Controller
             return $this->redirectToRoute('new_Account');
         }
         return $this->render('HBBundle:Type:new.html.twig', array(
-                    'form' => $form->createView()));
+                    'form' => $form->createView(), 'types' => $types));
         
         
     }

@@ -3,7 +3,10 @@
 {% block title %}Nowy typ{% endblock %}
 
 {% block body %}
-
+<h2>Lista Twoich kategorii</h2>
+    {% for type in types %}
+        {{type.name}}<br>
+    {% endfor %}
 
 
 <h2>Wprowadź nowy typ konta</h2>

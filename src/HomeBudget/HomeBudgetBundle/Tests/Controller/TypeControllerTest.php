@@ -24,6 +24,9 @@ class TypeControllerTest extends WebTestCase
        $this->assertGreaterThan(
                 0, $crawler->filter('html:contains("Wprowadź nowy typ konta")')->count()
         );
+       $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Lista Twoich kategorii")')->count()
+        );
     }
 
     public function testModify()
