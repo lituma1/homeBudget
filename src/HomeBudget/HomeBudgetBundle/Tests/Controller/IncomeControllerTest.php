@@ -27,7 +27,7 @@ class IncomeControllerTest extends WebTestCase
 
     public function testModifyincome()
     {
-        $crawler = $this->client->request('GET', '/income/11/modify', array(), array(), array(
+        $crawler = $this->client->request('GET', '/income/5/modify', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
             'PHP_AUTH_PW' => '123123',
         ));
@@ -39,16 +39,26 @@ class IncomeControllerTest extends WebTestCase
 
     public function testDeleteincome()
     {
-        $client = static::createClient();
+       $crawler = $this->client->request('GET', '/income/5/delete', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
 
-        $crawler = $client->request('GET', '/income/{id}/delete');
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Potwierdź usunięcie poniższego przychodu")')->count()
+        );
     }
 
     public function testAllincome()
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/income/all', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
 
-        $crawler = $client->request('GET', '/income/all');
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Twoje przychody")')->count()
+        );
     }
 
 }
