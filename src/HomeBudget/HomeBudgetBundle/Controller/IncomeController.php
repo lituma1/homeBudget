@@ -122,7 +122,7 @@ class IncomeController extends Controller {
                     return $this->redirectToRoute('show_allIncomes');
                 } else {
                     $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
-                                . ' ujemne';
+                            . ' ujemne';
                 }
             }
         }
@@ -135,43 +135,37 @@ class IncomeController extends Controller {
      * @Route("/income/{id}/delete", name="delete_income")
      * @Security("has_role('ROLE_USER')")
      */
-    public function deleteIncomeAction($id) {
+    public function deleteIncomeAction(Request $request, $id) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $message = '';
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
         $income = $repository->find($id);
-        $em = $this->getDoctrine()->getManager();
-        if ($income) {
-            $em->remove($income);
-            $account = $income->getAccount();
-            $result = $account->spendMoney($income->getAmount());
-            if ($result) {
-                $em->persist($account);
-                $em->flush();
-            } else {
-                $message = 'nie można usunąć przychodu, saldo rachunku nie może być'
-                        . ' ujemne';
-                return $this->render('HBBundle:Income:submit.html.twig', array(
-                            'income' => $income, 'message' => $message
-                ));
+        $form = $this->createFormBuilder($income)
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+
+            $income = $form->getData();
+
+            $em = $this->getDoctrine()->getManager();
+            if ($income) {
+
+                $account = $income->getAccount();
+                $result = $account->spendMoney($income->getAmount());
+                if ($result) {
+                    $em->persist($account);
+                    $em->remove($income);
+                    $em->flush();
+                    return $this->redirectToRoute('show_allIncomes');
+                } else {
+                    $message = 'nie można usunąć przychodu, saldo rachunku nie może być'
+                            . ' ujemne';
+                }
             }
         }
-        $incomes = $repository->sortByDate($user);
-        return $this->render('HBBundle:Income:all_income.html.twig', array(
-                    'incomes' => $incomes
-        ));
-    }
-
-    /**
-     * @Route("/income/{id}/submit", name="submit_deleteIn")
-     * @Security("has_role('ROLE_USER')")
-     * @param type $id
-     */
-    public function submitAction($id) {
-        $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
-        $income = $repository->find($id);
-        return $this->render('HBBundle:Income:submit.html.twig', array(
-                    'income' => $income, 'message' => ''
+        return $this->render('HBBundle:Income:delete_income.html.twig', array(
+                    'form' => $form->createView(), 'income' => $income, 'message' => $message
         ));
     }
 

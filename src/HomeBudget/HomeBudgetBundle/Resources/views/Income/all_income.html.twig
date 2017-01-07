@@ -15,7 +15,7 @@
             {% for income in incomes %}
             <tr>
                 <td>
-                    <a href="{{ path('submit_deleteIn', {"id" : income.id}) }}">usuń</a>
+                    <a href="{{ path('delete_income', {"id" : income.id}) }}">usuń</a>
                     <a href="{{ path('modify_income', {"id" : income.id}) }}">modyfikuj</a>
 
                 </td>
