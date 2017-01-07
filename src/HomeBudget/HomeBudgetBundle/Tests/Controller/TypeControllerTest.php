@@ -6,11 +6,24 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class TypeControllerTest extends WebTestCase
 {
+    
+    private $client;
+
+    protected function setUp() {
+        $this->client = static::createClient(array(), array(
+                    'PHP_AUTH_USER' => 'Janek',
+                    'PHP_AUTH_PW' => '123123',
+        ));
+    }
     public function testNew()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/type/new');
+         $crawler = $this->client->request('GET', '/type/new', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+       $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Wprowadź nowy typ konta")')->count()
+        );
     }
 
     public function testModify()

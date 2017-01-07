@@ -25,6 +25,9 @@ class IncomeCategoryControllerTest extends WebTestCase
         $this->assertGreaterThan(
                 0, $crawler->filter('html:contains("Wprowadź nową kategorię dla przychodów")')->count()
         );
+         $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Lista Twoich kategorii")')->count()
+        );
     }
     
 
