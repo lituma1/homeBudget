@@ -34,6 +34,7 @@ class TypeController extends Controller
             $user = $this->container->get('security.context')->getToken()->getUser();
             
             $type->setUser($user);
+            $type->setStatus(true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($type);
 
