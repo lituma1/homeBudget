@@ -33,16 +33,14 @@ class IncomeCategoryControllerTest extends WebTestCase
 
     public function testModifyIncCategory()
     {
-        $client = static::createClient();
+        $crawler = $this->client->request('GET', '/incomeCategory/7/modify', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Wprowadź zmiany dla kategorii")')->count()
+        );
 
-        $crawler = $client->request('GET', '/incomeCategory/{id}/modify');
-    }
-
-    public function testShowallIncCategory()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/incomeCategory/all');
     }
 
 }

@@ -32,9 +32,13 @@ class ExpendCategoryControllerTest extends WebTestCase
 
     public function testModifyExpCategory()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('GET', '/expendCategory/{id}/modify');
+        $crawler = $this->client->request('GET', '/expendCategory/13/modify', array(), array(), array(
+            'PHP_AUTH_USER' => 'Janek',
+            'PHP_AUTH_PW' => '123123',
+        ));
+        $this->assertGreaterThan(
+                0, $crawler->filter('html:contains("Wprowadź zmiany dla kategorii")')->count()
+        );
     }
 
 }
