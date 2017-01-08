@@ -16,6 +16,7 @@ class ExpendCategoryRepository extends EntityRepository
 
         $query = $this->createQueryBuilder("u")
                 ->where('u.user = :user')
+                ->andWhere('u.status = 1')
                 ->orderBy('u.name', 'ASC')
                 ->setParameter('user', $user);
 

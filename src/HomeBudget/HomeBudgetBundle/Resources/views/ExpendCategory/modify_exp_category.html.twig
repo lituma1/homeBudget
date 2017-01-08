@@ -1,7 +1,11 @@
 {% extends "::base.html.twig" %}
 
-{% block title %}HBBundle:ExpandCategory:modifyExpCategory{% endblock %}
+{% block title %}Modyfikacja kategorii{% endblock %}
 
 {% block body %}
-<h1>Welcome to the ExpandCategory:modifyExpCategory page</h1>
+<h2>Wprowadź zmiany dla kategorii</h2>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
 {% endblock %}
