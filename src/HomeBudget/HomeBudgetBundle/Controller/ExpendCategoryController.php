@@ -75,16 +75,6 @@ class ExpendCategoryController extends Controller {
                     'form' => $form->createView(), ));
         
     }
-
-    /**
-     * @Route("/expandCategory/{id}/delete")
-     */
-    public function deleteExpCategoryAction($id) {
-        return $this->render('HBBundle:ExpendCategory:delete_exp_category.html.twig', array(
-                        // ...
-        ));
-    }
-    
             
             
 
