@@ -16,7 +16,7 @@ class ExpendCategoryControllerTest extends WebTestCase
         ));
     }
     
-    public function testNewexpcategory()
+    public function testNewExpCategory()
     {
         $crawler = $this->client->request('GET', '/expendCategory/new', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -30,7 +30,7 @@ class ExpendCategoryControllerTest extends WebTestCase
         );
     }
 
-    public function testModifyexpcategory()
+    public function testModifyExpCategory()
     {
         $client = static::createClient();
 

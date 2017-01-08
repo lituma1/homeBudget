@@ -51,7 +51,7 @@ class AccountControllerTest extends WebTestCase {
         );
     }
 
-    public function testShowall() {
+    public function testShowAll() {
 
 
         $crawler = $this->client->request('GET', '/account/showAll', array(), array(), array(

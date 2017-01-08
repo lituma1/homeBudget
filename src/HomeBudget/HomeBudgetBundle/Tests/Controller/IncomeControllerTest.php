@@ -14,7 +14,7 @@ class IncomeControllerTest extends WebTestCase
                     'PHP_AUTH_PW' => '123123',
         ));
     }
-    public function testNewincome()
+    public function testNewIncome()
     {
          $crawler = $this->client->request('GET', '/income/new', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -25,7 +25,7 @@ class IncomeControllerTest extends WebTestCase
         );
     }
 
-    public function testModifyincome()
+    public function testModifyIncome()
     {
         $crawler = $this->client->request('GET', '/income/5/modify', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -37,7 +37,7 @@ class IncomeControllerTest extends WebTestCase
         );
     }
 
-    public function testDeleteincome()
+    public function testDeleteIncome()
     {
        $crawler = $this->client->request('GET', '/income/5/delete', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -49,7 +49,7 @@ class IncomeControllerTest extends WebTestCase
         );
     }
 
-    public function testAllincome()
+    public function testAllIncome()
     {
         $crawler = $this->client->request('GET', '/income/all', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',

@@ -43,7 +43,7 @@ class TypeControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/type/{id}/delete');
     }
 
-    public function testShowall()
+    public function testShowAll()
     {
         $client = static::createClient();
 

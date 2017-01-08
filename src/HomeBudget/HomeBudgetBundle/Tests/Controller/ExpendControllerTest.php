@@ -16,7 +16,7 @@ class ExpendControllerTest extends WebTestCase
         ));
     }
     
-    public function testNewexpend()
+    public function testNewExpend()
     {
        $crawler = $this->client->request('GET', '/expend/new', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -27,7 +27,7 @@ class ExpendControllerTest extends WebTestCase
         );
     }
 
-    public function testModifyexpend()
+    public function testModifyExpend()
     {
         $crawler = $this->client->request('GET', '/expend/4/modify', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -39,7 +39,7 @@ class ExpendControllerTest extends WebTestCase
         );
     }
 
-    public function testDeleteexpend()
+    public function testDeleteExpend()
     {
          $crawler = $this->client->request('GET', '/expend/4/delete', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -51,7 +51,7 @@ class ExpendControllerTest extends WebTestCase
         
     }
 
-    public function testAllexpend()
+    public function testAllExpend()
     {
         
         $crawler = $this->client->request('GET', '/expend/all', array(), array(), array(

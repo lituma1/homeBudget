@@ -16,7 +16,7 @@ class IncomeCategoryControllerTest extends WebTestCase
         ));
     }
     
-    public function testNewinccategory()
+    public function testNewIncCategory()
     {
         $crawler = $this->client->request('GET', '/incomeCategory/new', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
@@ -31,14 +31,14 @@ class IncomeCategoryControllerTest extends WebTestCase
     }
     
 
-    public function testModifyinccategory()
+    public function testModifyIncCategory()
     {
         $client = static::createClient();
 
         $crawler = $client->request('GET', '/incomeCategory/{id}/modify');
     }
 
-    public function testShowallinccategory()
+    public function testShowallIncCategory()
     {
         $client = static::createClient();
 
