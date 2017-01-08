@@ -16,6 +16,7 @@ class IncomeCategoryRepository extends EntityRepository
 
         $query = $this->createQueryBuilder("i")
                 ->where('i.user = :user')
+                ->andWhere('i.status = 1')
                 ->orderBy('i.name', 'ASC')
                 ->setParameter('user', $user);
 
@@ -25,7 +26,7 @@ class IncomeCategoryRepository extends EntityRepository
         
         $inCategories = $this->getEntityManager()->createQuery(
                         'SELECT c FROM HBBundle:IncomeCategory c '
-                . 'WHERE c.user = :User AND c.status = 1 ORDER BY c.name ASC')
+                . 'WHERE c.user = :User ORDER BY c.name ASC')
                 ->setParameter("User", $user)
                 ->getResult();
         return $inCategories;

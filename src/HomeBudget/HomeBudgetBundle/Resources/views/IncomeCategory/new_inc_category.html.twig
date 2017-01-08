@@ -3,16 +3,36 @@
 {% block title %}Nowa kategoria przychodu{% endblock %}
 
 {% block body %}
-    <h2>Lista Twoich kategorii</h2>
-    {% for inCategory in inCategories %}
-        {{inCategory.name}} <br>
-    {% endfor %}
+    
+    
+   
     <h2>Wprowadź nową kategorię dla przychodów</h2>
 
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
+    <h2>Lista Twoich kategorii</h2>
+    <table>
+        <th></th>
+        <th>Nazwa</th>
+        <th>Status</th>
 
+        {% for inCategory in inCategories %}
+            <tr>
+                <td>
+                    <a href="{{ path('modify_inc_category', {"id" : inCategory.id}) }}">modyfikuj</a>
+                </td>
+                <td>{{inCategory.name}}</td>
+                <td>
+                    {% if inCategory.status == 1 %}
+                        aktywna
+                    {% else %}
+                        nieaktywna
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
     <br>
     <a href="{{ path('new_income') }}">Powrót na poprzednią stronę</a>
     <br>
