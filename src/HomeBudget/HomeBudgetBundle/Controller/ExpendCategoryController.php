@@ -22,7 +22,7 @@ class ExpendCategoryController extends Controller {
     public function newExpCategoryAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
-        $exCategories = $repository->findByUserAndStatus($user);
+        $exCategories = $repository->findByUser($user);
         $exCategory = new ExpendCategory();
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))

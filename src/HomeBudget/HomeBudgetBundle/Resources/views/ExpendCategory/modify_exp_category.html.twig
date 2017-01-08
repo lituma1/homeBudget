@@ -3,9 +3,19 @@
 {% block title %}Modyfikacja kategorii{% endblock %}
 
 {% block body %}
-<h2>Wprowadź zmiany dla kategorii</h2>
+    <h2>Wprowadź zmiany dla kategorii</h2>
 
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+
+    <br>
+    <a href="{{ path('new_expend') }}">Dodaj nowy wydatek</a>
+    <br>
+    <br>
+    <a href="{{ path('Panel') }}">Strona główna</a>
+    <br>
+    <br>
+    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}

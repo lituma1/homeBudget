@@ -23,11 +23,11 @@ class ExpendCategoryRepository extends EntityRepository
         return $query;
     }
     
-    public function findByUserAndStatus($user){
+    public function findByUser($user){
         
         $exCategories = $this->getEntityManager()->createQuery(
                         'SELECT c FROM HBBundle:ExpendCategory c '
-                . 'WHERE c.user = :User AND c.status = 1 ORDER BY c.name ASC')
+                . 'WHERE c.user = :User ORDER BY c.name ASC')
                 ->setParameter("User", $user)
                 ->getResult();
         return $exCategories;

@@ -3,11 +3,18 @@
 {% block title %}Nowa kategoria{% endblock %}
 
 {% block body %}
-    <h2>Lista Twoich aktywnych kategorii</h2>
+    <h2>Wprowadź nową kategorię dla wydatku</h2>
+
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <h2>Lista Twoich kategorii</h2>
     <table>
         <th></th>
         <th>Nazwa</th>
-        
+        <th>Status</th>
 
         {% for exCategory in exCategories %}
             <tr>
@@ -15,15 +22,17 @@
                     <a href="{{ path('modify_exp_category', {"id" : exCategory.id}) }}">modyfikuj</a>
                 </td>
                 <td>{{exCategory.name}}</td>
+                <td>
+                    {% if exCategory.status == 1 %}
+                        aktywna
+                    {% else %}
+                        nieaktywna
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>
-    <h2>Wprowadź nową kategorię dla wydatku</h2>
 
-
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
 
 
     <br>
