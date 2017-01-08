@@ -16,6 +16,7 @@ class TypeRepository extends EntityRepository {
 
         $query = $this->createQueryBuilder("u")
                 ->where('u.user = :user')
+                ->andWhere('u.status = 1')
                 ->orderBy('u.name', 'ASC')
                 ->setParameter('user', $user);
 
@@ -25,7 +26,7 @@ class TypeRepository extends EntityRepository {
         
         $types = $this->getEntityManager()->createQuery(
                         'SELECT t FROM HBBundle:Type t '
-                . 'WHERE t.user = :User AND t.status = 1 ORDER BY t.name ASC')
+                . 'WHERE t.user = :User ORDER BY t.name ASC')
                 ->setParameter("User", $user)
                 ->getResult();
         return $types;
