@@ -63,8 +63,8 @@ class AccountControllerTest extends WebTestCase {
         );
     }
     
-    public function testMoveMoney() {
-        $crawler = $this->client->request('GET', '/account/16/moveMoney', array(), array(), array(
+    public function testTransferMoney() {
+        $crawler = $this->client->request('GET', '/account/16/transferMoney', array(), array(), array(
             'PHP_AUTH_USER' => 'Janek',
             'PHP_AUTH_PW' => '123123',
         ));
