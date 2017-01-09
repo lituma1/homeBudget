@@ -23,25 +23,13 @@ class AccountController extends Controller {
      */
     public function newAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-
-        $account = new Account($user);
-        $form = $this->createFormBuilder($account)
-                ->add('name', TextType::class, array('label' => 'Nazwa konta'))
-                ->add('balance', NumberType::class, array('label' => 'Stan konta'))
-                ->add('aim', TextType::class, array('label' => 'cel konta'))
-                ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Typ konta'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $account = new Account();
+        $form = $this->creatingForm($account, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
             $account->setStatus(true);
-
             $account->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($account);
@@ -63,25 +51,13 @@ class AccountController extends Controller {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
-        $form = $this->createFormBuilder($account)
-                ->add('name', TextType::class, array('label' => 'Nazwa konta'))
-                ->add('balance', NumberType::class, array('label' => 'Stan konta'))
-                ->add('aim', TextType::class, array('label' => 'cel konta'))
-                ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Typ konta'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingForm($account, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
-
             $em = $this->getDoctrine()->getManager();
             $em->persist($account);
-
             $em->flush();
             return $this->redirectToRoute('show_allAccounts');
         }
@@ -140,35 +116,27 @@ class AccountController extends Controller {
         $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
-
         $accounts = $repository->findByUserAndStatus($user);
         $balance = $user->balanceOfAccounts();
+
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts, 'balance' => $balance, 'message' => $message
         ));
     }
 
     /**
-     * @Route("/account/{id}/moveMoney", name="move_Money")
+     * @Route("/account/{id}/transferMoney", name="transfer_Money")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
-    public function moveMoneyAction(Request $request, $id) {
+    public function transferMoneyAction(Request $request, $id) {
 
         $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
-        $form = $this->createFormBuilder()
-                ->add('amount', NumberType::class)
-                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user, $id) {
-                        return $er->queryOwnedByWithoutThisAccount($user, $id);
-                    },
-                    'choice_label' => 'name', 'label' => 'Na konto'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingFormForTransferingMoney($user, $id);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $amount = $form['amount']->getData();
@@ -187,9 +155,39 @@ class AccountController extends Controller {
                 $message = 'Kwota do przeniesienia większa od salda';
             }
         }
-        return $this->render('HBBundle:Account:move_money.html.twig', array(
+        return $this->render('HBBundle:Account:transfer_money.html.twig', array(
                     'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance,
                     'message' => $message));
+    }
+
+    private function creatingForm($account, $user) {
+
+        $form = $this->createFormBuilder($account)
+                ->add('name', TextType::class, array('label' => 'Nazwa konta'))
+                ->add('balance', NumberType::class, array('label' => 'Stan konta'))
+                ->add('aim', TextType::class, array('label' => 'cel konta'))
+                ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Typ konta'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+
+        return $form;
+    }
+
+    private function creatingFormForTransferingMoney($user, $id) {
+        $form = $this->createFormBuilder()
+                ->add('amount', NumberType::class)
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user, $id) {
+                        return $er->queryOwnedByWithoutThisAccount($user, $id);
+                    },
+                    'choice_label' => 'name', 'label' => 'Na konto'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        return $form;
     }
 
 }
