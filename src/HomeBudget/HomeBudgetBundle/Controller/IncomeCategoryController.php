@@ -24,11 +24,7 @@ class IncomeCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
         $inCategories = $repository->findByUserAndStatus($user);
         $inCategory = new IncomeCategory();
-        $form = $this->createFormBuilder($inCategory)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingForm($request, $inCategory);
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
@@ -58,12 +54,7 @@ class IncomeCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
         
         $inCategory = $repository->find($id);
-        $form = $this->createFormBuilder($inCategory)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('status', CheckboxType::class, array('label' => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingFormForModify($request, $inCategory);
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
@@ -79,5 +70,22 @@ class IncomeCategoryController extends Controller {
        
     }
 
-
+    private function creatingForm(Request $request, $inCategory){
+        $form = $this->createFormBuilder($inCategory)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
+    private function creatingFormForModify(Request $request, $inCategory){
+        $form = $this->createFormBuilder($inCategory)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('status', CheckboxType::class, array('label' 
+                    => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
 }
