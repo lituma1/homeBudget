@@ -24,11 +24,7 @@ class ExpendCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
         $exCategories = $repository->findByUser($user);
         $exCategory = new ExpendCategory();
-        $form = $this->createFormBuilder($exCategory)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingForm($request, $exCategory);
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
@@ -51,20 +47,14 @@ class ExpendCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function modifyExpCategoryAction(Request $request, $id) {
-        
+
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
-        
+
         $exCategory = $repository->find($id);
-        $form = $this->createFormBuilder($exCategory)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('status', CheckboxType::class, array('label' => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingFormForModify($request, $exCategory);
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
-            
             $em = $this->getDoctrine()->getManager();
             $em->persist($exCategory);
             $em->flush();
@@ -72,10 +62,27 @@ class ExpendCategoryController extends Controller {
             return $this->redirectToRoute('new_expend');
         }
         return $this->render('HBBundle:ExpendCategory:modify_exp_category.html.twig', array(
-                    'form' => $form->createView(), ));
-        
+                    'form' => $form->createView(),));
     }
-            
-            
+
+    private function creatingForm(Request $request, $exCategory) {
+        $form = $this->createFormBuilder($exCategory)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
+
+    private function creatingFormForModify(Request $request, $exCategory) {
+        $form = $this->createFormBuilder($exCategory)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('status', CheckboxType::class, array('label'
+                    => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
 
 }
