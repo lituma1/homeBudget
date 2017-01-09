@@ -24,8 +24,7 @@ class AccountController extends Controller {
     public function newAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $account = new Account();
-        $form = $this->creatingForm($account, $user);
-        $form->handleRequest($request);
+        $form = $this->creatingForm($request, $account, $user);
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
@@ -51,7 +50,7 @@ class AccountController extends Controller {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
-        $form = $this->creatingForm($account, $user);
+        $form = $this->creatingForm($request, $account, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -84,21 +83,10 @@ class AccountController extends Controller {
                         'accounts' => $accounts, 'balance' => $balance, 'message' => $message
             ));
         } else {
-            $form = $this->createFormBuilder($account)
-                    ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                    ->getForm();
-            $form->handleRequest($request);
+            $form = $this->creatingFormForDelete($request, $account);
+
             if ($form->isSubmitted()) {
-
-                $account = $form->getData();
-
-                $em = $this->getDoctrine()->getManager();
-                if ($account) {
-                    $account->setStatus(false);
-                    $em->persist($account);
-                    $em->flush();
-                }
-
+                $this->changeAccountStatus($form);
 
                 return $this->redirectToRoute('show_allAccounts');
             }
@@ -136,20 +124,13 @@ class AccountController extends Controller {
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
-        $form = $this->creatingFormForTransferingMoney($user, $id);
-        $form->handleRequest($request);
+        $form = $this->creatingFormForTransferingMoney($request, $user, $id);
         if ($form->isSubmitted()) {
             $amount = $form['amount']->getData();
+
             if ($amount <= $account->getBalance()) {
-                $account->spendMoney($amount);
-                $accountToMove = $form['account']->getData();
+                $this->transferMoney($amount, $account, $form);
 
-                $accountToMove->addMoney($amount);
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($accountToMove);
-                $em->persist($account);
-
-                $em->flush();
                 return $this->redirectToRoute('show_allAccounts');
             } else {
                 $message = 'Kwota do przeniesienia większa od salda';
@@ -160,7 +141,7 @@ class AccountController extends Controller {
                     'message' => $message));
     }
 
-    private function creatingForm($account, $user) {
+    private function creatingForm(Request $request, $account, $user) {
 
         $form = $this->createFormBuilder($account)
                 ->add('name', TextType::class, array('label' => 'Nazwa konta'))
@@ -173,11 +154,11 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Typ konta'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-
+        $form->handleRequest($request);
         return $form;
     }
 
-    private function creatingFormForTransferingMoney($user, $id) {
+    private function creatingFormForTransferingMoney(Request $request, $user, $id) {
         $form = $this->createFormBuilder()
                 ->add('amount', NumberType::class)
                 ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
@@ -187,6 +168,35 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Na konto'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
+
+    private function transferMoney($amount, $account, $form) {
+        $account->spendMoney($amount);
+        $accountToTransfer = $form['account']->getData();
+        $accountToTransfer->addMoney($amount);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($accountToTransfer);
+        $em->persist($account);
+        $em->flush();
+    }
+
+    private function changeAccountStatus($form) {
+        $account = $form->getData();
+        $em = $this->getDoctrine()->getManager();
+        if ($account) {
+            $account->setStatus(false);
+            $em->persist($account);
+            $em->flush();
+        }
+    }
+
+    private function creatingFormForDelete(Request $request, $account) {
+        $form = $this->createFormBuilder($account)
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
         return $form;
     }
 
