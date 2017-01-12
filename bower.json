@@ -1,0 +1,22 @@
+{
+  "name": "homeBudget",
+  "homepage": "https://github.com/lituma1/homeBudget",
+  "authors": [
+    "Piotr Popkiewicz <lituma1@gmail.com>"
+  ],
+  "description": "simple application",
+  "main": "",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
