@@ -37,6 +37,7 @@ class ExpendController extends Controller {
             $em->persist($expend);
             $account = $expend->getAccount();
             $result = $account->spendMoney($expend->getAmount());
+            
             if ($result) {
                 $em->flush();
                 return $this->redirectToRoute('show_allExpends');
@@ -64,44 +65,19 @@ class ExpendController extends Controller {
         if ($form->isSubmitted()) {
 
             $expend = $form->getData();
-
-
             $expend->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $account = $expend->getAccount();
             $em->persist($expend);
+            
             if ($account->getId() == $accountToModify->getId()) {
-                if ($expend->getAmount() != $amountToModify) {
-                    $amount = $expend->getAmount() - $amountToModify;
-
-
-                    $result = $account->spendMoney($amount);
-
-                    if ($result) {
-                        $em->flush();
-                        return $this->redirectToRoute('show_allExpends');
-                    } else {
-                        $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-                    }
-                } else {
-
-                    $em->flush();
-                    return $this->redirectToRoute('show_allExpends');
-                }
+                $this->modifyExpend($em, $expend, $amountToModify, $account, $message);
             } else {
-                $result = $account->spendMoney($expend->getAmount());
-                if ($result) {
-                    $accountToModify->addMoney($amountToModify);
-                    $em->flush();
-                    return $this->redirectToRoute('show_allExpends');
-                } else {
-                    $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-                }
+                $this->modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, $message);
             }
         }
         return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
-                    'form' => $form->createView(),
-                    'message' => $message
+                    'form' => $form->createView(),'message' => $message
         ));
     }
 
@@ -173,5 +149,35 @@ class ExpendController extends Controller {
                 ->getForm();
         $form->handleRequest($request);
         return $form;
+    }
+    private function modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, &$message){
+       
+        $result = $account->spendMoney($expend->getAmount());
+                if ($result) {
+                    $accountToModify->addMoney($amountToModify);
+                    $em->flush();
+                    return $this->redirectToRoute('show_allExpends');
+                } else {
+                    $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
+                    return $message;
+                }
+    }
+    private function modifyExpend($em, $expend, $amountToModify, $account, &$message){
+        if ($expend->getAmount() != $amountToModify) {
+                    $amount = $expend->getAmount() - $amountToModify;
+                    $result = $account->spendMoney($amount);
+
+                    if ($result) {
+                        $em->flush();
+                        return $this->redirectToRoute('show_allExpends');
+                    } else {
+                        $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
+                        return $message;
+                    }
+                } else {
+
+                    $em->flush();
+                    return $this->redirectToRoute('show_allExpends');
+                }
     }
 }
