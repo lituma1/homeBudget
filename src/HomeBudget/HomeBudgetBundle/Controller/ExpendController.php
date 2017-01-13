@@ -28,39 +28,15 @@ class ExpendController extends Controller {
         $message = '';
 
         $expend = new Expend();
-        $form = $this->createFormBuilder($expend)
-                ->add('description', TextType::class, array('label' => 'Opis wydatku'))
-                ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                ->add('expendDate', DateType::class, array('label' => 'Data'))
-                ->add('expendCategory', EntityType::class, array('class' => 'HBBundle:ExpendCategory',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Kategoria'))
-                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                     'label' => 'Zapłacono z: '))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingForm($request, $expend, $user);
         if ($form->isSubmitted()) {
 
             $expend = $form->getData();
-
-
             $expend->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($expend);
             $account = $expend->getAccount();
-
             $result = $account->spendMoney($expend->getAmount());
-
-
-
-
-
             if ($result) {
                 $em->flush();
                 return $this->redirectToRoute('show_allExpends');
@@ -69,8 +45,7 @@ class ExpendController extends Controller {
             }
         }
         return $this->render('HBBundle:Expend:new_expend.html.twig', array(
-                    'form' => $form->createView(),
-                    'message' => $message
+                    'form' => $form->createView(), 'message' => $message
         ));
     }
 
@@ -85,23 +60,7 @@ class ExpendController extends Controller {
         $expendToModify = $repo->findOneById($id);
         $amountToModify = $expendToModify->getAmount();
         $accountToModify = $expendToModify->getAccount();
-        $form = $this->createFormBuilder($expendToModify)
-                ->add('description', TextType::class, array('label' => 'Opis wydatku'))
-                ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                ->add('expendDate', DateType::class, array('label' => 'Data'))
-                ->add('expendCategory', EntityType::class, array('class' => 'HBBundle:ExpendCategory',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Kategoria'))
-                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Zapłacono z: '))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
-        $form->handleRequest($request);
+        $form = $this->creatingForm($request, $expendToModify, $user);
         if ($form->isSubmitted()) {
 
             $expend = $form->getData();
@@ -195,5 +154,24 @@ class ExpendController extends Controller {
                     'expends' => $expends
         ));
     }
-
+    private function creatingForm(Request $request, $expend, $user){
+        $form = $this->createFormBuilder($expend)
+                ->add('description', TextType::class, array('label' => 'Opis wydatku'))
+                ->add('amount', NumberType::class, array('label' => 'Kwota'))
+                ->add('expendDate', DateType::class, array('label' => 'Data'))
+                ->add('expendCategory', EntityType::class, array('class' => 'HBBundle:ExpendCategory',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Kategoria'))
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                     'label' => 'Zapłacono z: '))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        return $form;
+    }
 }
