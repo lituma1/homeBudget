@@ -24,7 +24,8 @@ class AccountController extends Controller {
     public function newAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $account = new Account();
-        $form = $this->creatingForm($request, $account, $user);
+        $form = $this->creatingForm($account, $user);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $account = $form->getData();
@@ -50,7 +51,7 @@ class AccountController extends Controller {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
-        $form = $this->creatingForm($request, $account, $user);
+        $form = $this->creatingForm($account, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -83,8 +84,8 @@ class AccountController extends Controller {
                         'accounts' => $accounts, 'balance' => $balance, 'message' => $message
             ));
         } else {
-            $form = $this->creatingFormForDelete($request, $account);
-
+            $form = $this->creatingFormForDelete($account);
+            $form->handleRequest($request);
             if ($form->isSubmitted()) {
                 $this->changeAccountStatus($form);
 
@@ -124,7 +125,8 @@ class AccountController extends Controller {
         $repo = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repo->findOneById($id);
         $balance = $account->getBalance();
-        $form = $this->creatingFormForTransferingMoney($request, $user, $id);
+        $form = $this->creatingFormForTransferingMoney($user, $id);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $amount = $form['amount']->getData();
 
@@ -141,7 +143,7 @@ class AccountController extends Controller {
                     'message' => $message));
     }
 
-    private function creatingForm(Request $request, $account, $user) {
+    private function creatingForm($account, $user) {
 
         $form = $this->createFormBuilder($account)
                 ->add('name', TextType::class, array('label' => 'Nazwa konta'))
@@ -154,11 +156,11 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Typ konta'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+       
         return $form;
     }
 
-    private function creatingFormForTransferingMoney(Request $request, $user, $id) {
+    private function creatingFormForTransferingMoney($user, $id) {
         $form = $this->createFormBuilder()
                 ->add('amount', NumberType::class)
                 ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
@@ -168,7 +170,7 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Na konto'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
 
@@ -192,11 +194,11 @@ class AccountController extends Controller {
         }
     }
 
-    private function creatingFormForDelete(Request $request, $account) {
+    private function creatingFormForDelete($account) {
         $form = $this->createFormBuilder($account)
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
 
