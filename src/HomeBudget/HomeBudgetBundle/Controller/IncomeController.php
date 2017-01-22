@@ -25,41 +25,18 @@ class IncomeController extends Controller {
      */
     public function newIncomeAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
-
         $income = new Income();
-        $form = $this->createFormBuilder($income)
-                ->add('description', TextType::class, array('label' => 'Opis przychodu'))
-                ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                ->add('incomeDate', DateType::class, array('label' => 'Data'))
-                ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Kategoria'))
-                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Zasilono: '))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingForm($request, $income, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $income = $form->getData();
-
-
             $income->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($income);
             $account = $income->getAccount();
-            //$repository = $this->getDoctrine()->getRepository('HBBundle:Account');
             $account->addMoney($income->getAmount());
-
             $em->flush();
-
-
-
 
             return $this->redirectToRoute('show_allIncomes');
         }
@@ -78,22 +55,7 @@ class IncomeController extends Controller {
         $incomeToModify = $repo->findOneById($id);
         $amountToModify = $incomeToModify->getAmount();
         $accountToModify = $incomeToModify->getAccount();
-        $form = $this->createFormBuilder($incomeToModify)
-                ->add('description', TextType::class, array('label' => 'Opis'))
-                ->add('amount', NumberType::class, array('label' => 'Wielkość'))
-                ->add('incomeDate', DateType::class, array('label' => 'Data'))
-                ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Kategoria'))
-                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
-                    'query_builder' => function(EntityRepository $er) use ($user) {
-                        return $er->queryOwnedBy($user);
-                    },
-                    'choice_label' => 'name', 'label' => 'Wpłacono na: '))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingForm($request, $incomeToModify, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -136,7 +98,7 @@ class IncomeController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function deleteIncomeAction(Request $request, $id) {
-        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        //$user = $this->container->get('security.token_storage')->getToken()->getUser();
         $message = '';
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
         $income = $repository->find($id);
@@ -184,5 +146,25 @@ class IncomeController extends Controller {
                     'incomes' => $incomes
         ));
     }
-
+    private function creatingForm(Request $request, $income, $user) {
+        $form = $this->createFormBuilder($income)
+                ->add('description', TextType::class, array('label' => 'Opis przychodu'))
+                ->add('amount', NumberType::class, array('label' => 'Kwota'))
+                ->add('incomeDate', DateType::class, array('label' => 'Data'))
+                ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Kategoria'))
+                ->add('account', EntityType::class, array('class' => 'HBBundle:Account',
+                    'query_builder' => function(EntityRepository $er) use ($user) {
+                        return $er->queryOwnedBy($user);
+                    },
+                    'choice_label' => 'name', 'label' => 'Zasilono: '))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        
+        return $form;
+    }
+    
 }
