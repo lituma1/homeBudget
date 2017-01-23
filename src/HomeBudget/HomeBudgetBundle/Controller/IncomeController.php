@@ -26,7 +26,7 @@ class IncomeController extends Controller {
     public function newIncomeAction(Request $request) {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $income = new Income();
-        $form = $this->creatingForm($request, $income, $user);
+        $form = $this->creatingForm($income, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -55,7 +55,7 @@ class IncomeController extends Controller {
         $incomeToModify = $repo->findOneById($id);
         $amountToModify = $incomeToModify->getAmount();
         $accountToModify = $incomeToModify->getAccount();
-        $form = $this->creatingForm($request, $incomeToModify, $user);
+        $form = $this->creatingForm($incomeToModify, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -146,7 +146,7 @@ class IncomeController extends Controller {
                     'incomes' => $incomes
         ));
     }
-    private function creatingForm(Request $request, $income, $user) {
+    private function creatingForm($income, $user) {
         $form = $this->createFormBuilder($income)
                 ->add('description', TextType::class, array('label' => 'Opis przychodu'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))

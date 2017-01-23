@@ -24,7 +24,8 @@ class ExpendCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
         $exCategories = $repository->findByUser($user);
         $exCategory = new ExpendCategory();
-        $form = $this->creatingForm($request, $exCategory);
+        $form = $this->creatingForm($exCategory);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
@@ -51,7 +52,8 @@ class ExpendCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
 
         $exCategory = $repository->find($id);
-        $form = $this->creatingFormForModify($request, $exCategory);
+        $form = $this->creatingFormForModify($exCategory);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
@@ -65,23 +67,23 @@ class ExpendCategoryController extends Controller {
                     'form' => $form->createView(),));
     }
 
-    private function creatingForm(Request $request, $exCategory) {
+    private function creatingForm($exCategory) {
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
 
-    private function creatingFormForModify(Request $request, $exCategory) {
+    private function creatingFormForModify($exCategory) {
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('status', CheckboxType::class, array('label'
                     => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
 

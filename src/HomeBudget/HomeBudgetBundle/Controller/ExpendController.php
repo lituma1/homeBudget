@@ -28,7 +28,8 @@ class ExpendController extends Controller {
         $message = '';
 
         $expend = new Expend();
-        $form = $this->creatingForm($request, $expend, $user);
+        $form = $this->creatingForm($expend, $user);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $expend = $form->getData();
@@ -61,7 +62,8 @@ class ExpendController extends Controller {
         $expendToModify = $repo->findOneById($id);
         $amountToModify = $expendToModify->getAmount();
         $accountToModify = $expendToModify->getAccount();
-        $form = $this->creatingForm($request, $expendToModify, $user);
+        $form = $this->creatingForm($expendToModify, $user);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $expend = $form->getData();
@@ -130,7 +132,7 @@ class ExpendController extends Controller {
                     'expends' => $expends
         ));
     }
-    private function creatingForm(Request $request, $expend, $user){
+    private function creatingForm($expend, $user){
         $form = $this->createFormBuilder($expend)
                 ->add('description', TextType::class, array('label' => 'Opis wydatku'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))
@@ -147,7 +149,7 @@ class ExpendController extends Controller {
                      'label' => 'Zapłacono z: '))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+       
         return $form;
     }
     private function modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, &$message){

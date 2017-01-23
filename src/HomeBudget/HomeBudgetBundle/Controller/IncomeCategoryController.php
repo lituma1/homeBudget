@@ -24,7 +24,8 @@ class IncomeCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
         $inCategories = $repository->findByUserAndStatus($user);
         $inCategory = new IncomeCategory();
-        $form = $this->creatingForm($request, $inCategory);
+        $form = $this->creatingForm($inCategory);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
@@ -54,7 +55,8 @@ class IncomeCategoryController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
         
         $inCategory = $repository->find($id);
-        $form = $this->creatingFormForModify($request, $inCategory);
+        $form = $this->creatingFormForModify($inCategory);
+        $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
@@ -70,22 +72,22 @@ class IncomeCategoryController extends Controller {
        
     }
 
-    private function creatingForm(Request $request, $inCategory){
+    private function creatingForm($inCategory){
         $form = $this->createFormBuilder($inCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
-    private function creatingFormForModify(Request $request, $inCategory){
+    private function creatingFormForModify($inCategory){
         $form = $this->createFormBuilder($inCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('status', CheckboxType::class, array('label' 
                     => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        $form->handleRequest($request);
+        
         return $form;
     }
 }
