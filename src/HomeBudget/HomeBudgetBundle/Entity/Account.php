@@ -3,6 +3,7 @@
 namespace HomeBudget\HomeBudgetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Account
@@ -25,6 +26,9 @@ class Account {
      * @var string
      *
      * @ORM\Column(name="balance", type="decimal", precision=10, scale=2)
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThanOrEqual(value = 0, message="Liczba musi być dodatnia")
+     * 
      */
     private $balance;
     

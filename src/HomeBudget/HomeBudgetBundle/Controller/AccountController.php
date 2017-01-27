@@ -26,7 +26,7 @@ class AccountController extends Controller {
         $account = new Account();
         $form = $this->creatingForm($account, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $account = $form->getData();
             $account->setStatus(true);
@@ -53,7 +53,7 @@ class AccountController extends Controller {
         $account = $repo->findOneById($id);
         $form = $this->creatingForm($account, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $account = $form->getData();
             $em = $this->getDoctrine()->getManager();
