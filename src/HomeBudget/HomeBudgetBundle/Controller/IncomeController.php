@@ -75,7 +75,9 @@ class IncomeController extends Controller {
                         $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
                                 . ' ujemne';
                     }
-                }
+                } 
+                $em->flush();
+                return $this->redirectToRoute('show_allIncomes');
             } else {
                 $account->addMoney($income->getAmount());
                 $result = $accountToModify->spendMoney($amountToModify);
