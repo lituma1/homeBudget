@@ -80,7 +80,7 @@ class ExpendCategoryController extends Controller {
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('status', CheckboxType::class, array('label'
-                    => 'Odznacz jeśli chcesz dezaktywować katagorię', 'required' => false,))
+                    => 'Zaznacz jeśli chcesz aktywować', 'required' => false,))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         
