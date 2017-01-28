@@ -136,7 +136,10 @@ class ExpendController extends Controller {
         $form = $this->createFormBuilder($expend)
                 ->add('description', TextType::class, array('label' => 'Opis wydatku'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                ->add('expendDate', DateType::class, array('label' => 'Data'))
+                ->add('expendDate', DateType::class, array('widget' => 'single_text',
+                    'attr' => ['class' => 'js-datepicker'],
+                    'html5' => false,
+                    'label' => 'Data'))
                 ->add('expendCategory', EntityType::class, array('class' => 'HBBundle:ExpendCategory',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);

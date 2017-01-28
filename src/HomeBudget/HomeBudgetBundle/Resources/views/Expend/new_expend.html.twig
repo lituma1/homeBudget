@@ -23,4 +23,19 @@
     <br>
     <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 
+    
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        
+        jQuery(document).ready(function() {
+            
+            $('.js-datepicker').datepicker({ 
+                format: 'yyyy-mm-dd',
+                startDate: '-300d'
+            });
+        });
+    </script>
+{% endblock %}
+
