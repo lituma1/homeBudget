@@ -5,25 +5,29 @@
 {% block body %}
     <h2>Twoje przychody</h2>
 
-    <table>
-        <th></th>
-        <th>Opis</th>
-        <th>Kategoria</th>
-        <th>Wielkość</th>
-        <th>Data</th>
-        <th>Na konto</th>
+    <table class="table table-hover table-condensed table-striped table-bordered">
+        
+        <th class="text-center">Opis</th>
+        <th class="text-center">Kategoria</th>
+        <th class="text-center">Wielkość</th>
+        <th class="text-center">Data</th>
+        <th class="text-center">Na konto</th>
+        <th class="text-center">Usunięcie</th>
+        <th class="text-center">Modyfikacja</th>
             {% for income in incomes %}
-            <tr>
-                <td>
-                    <a href="{{ path('delete_income', {"id" : income.id}) }}">usuń</a>
-                    <a href="{{ path('modify_income', {"id" : income.id}) }}">modyfikuj</a>
-
-                </td>
+            <tr class="text-center">
+                
                 <td>{{income.description}}</td> 
                 <td>{{income.incomeCategory.name}}</td> 
                 <td>{{income.amount}}</td>
                 <td>{{ income.incomeDate|date("d/m/Y")}}</td>
                 <td>{{income.account.name}}</td>
+                <td>
+                    <a href="{{ path('delete_income', {"id" : income.id}) }}">usuń</a>
+                </td>  
+                <td>
+                    <a href="{{ path('modify_income', {"id" : income.id}) }}">modyfikuj</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

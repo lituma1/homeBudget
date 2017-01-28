@@ -11,16 +11,13 @@
     {{ form_end(form) }}
 
     <h2>Lista Twoich kategorii</h2>
-    <table>
-        <th></th>
-        <th>Nazwa</th>
-        <th>Status</th>
-
+    <table class="table table-hover table-condensed table-striped table-bordered">
+        
+        <th class="text-center">Nazwa</th>
+        <th class="text-center">Status</th>
+        <th class="text-center">Modyfikacja</th>
         {% for exCategory in exCategories %}
-            <tr>
-                <td>
-                    <a href="{{ path('modify_exp_category', {"id" : exCategory.id}) }}">modyfikuj</a>
-                </td>
+            <tr class="text-center">
                 <td>{{exCategory.name}}</td>
                 <td>
                     {% if exCategory.status == 1 %}
@@ -28,6 +25,9 @@
                     {% else %}
                         nieaktywna
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('modify_exp_category', {"id" : exCategory.id}) }}">modyfikuj</a>
                 </td>
             </tr>
         {% endfor %}

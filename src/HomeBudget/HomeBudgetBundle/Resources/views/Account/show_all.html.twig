@@ -5,20 +5,18 @@
 {% block body %}
     <h1>{{message}}</h1>
     <h2>Lista Twoich kont</h2>
-    <table>
-        <th></th>
-        <th>Nazwa</th>
-        <th>Saldo</th>
-        <th>Cel</th>
-        <th>Typ</th>
-
+    <table class="table table-hover table-condensed table-striped table-bordered">
+        
+        <th class="text-center">Nazwa</th>
+        <th class="text-center">Saldo</th>
+        <th class="text-center">Cel</th>
+        <th class="text-center">Typ</th>
+        <th class="text-center">Usunięcie</th>
+        <th class="text-center">Modyfikacja</th>
 
         {% for account in accounts %}
-            <tr>
-                <td>
-                    <a href="{{ path('delete_Account', {"id" : account.id}) }}">usuń</a>
-                    <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>
-                </td>
+            <tr class="text-center">
+                
                 <td>{{account.name}}</td> 
                 <td>{{account.balance}}
                     <a href="{{ path('transfer_Money', {"id" : account.id}) }}">Przenieś środki na inne konto</a>
@@ -26,11 +24,16 @@
 
                 <td>{{account.aim}}</td>
                 <td>{{account.type.name}}</td>
-
+                <td>
+                    <a href="{{ path('delete_Account', {"id" : account.id}) }}">usuń</a>
+                </td>
+                <td>
+                    <a href="{{ path('modify_Account', {"id" : account.id}) }}">modyfikuj</a>
+                </td>
             </tr>
         {% endfor %}
     </table>  
-    <h3>Suma środków na Twoich kontach: {{balance}}PLN</h3>
+    <h3>Suma środków na Twoich kontach: {{balance}} PLN</h3>
     <br>
     <a href="{{ path('new_Account') }}">Dodaj nowe konto</a>
     <br>

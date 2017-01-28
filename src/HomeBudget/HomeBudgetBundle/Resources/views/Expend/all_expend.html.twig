@@ -5,26 +5,29 @@
 {% block body %}
     <h2>Twoje wydatki</h2>
 
-    <table>
-        <th></th>
-        <th>Opis</th>
-        <th>Kategoria</th>
-        <th>Koszt</th>
-        <th>Data</th>
-        <th>Z konta</th>
+    <table class="table table-hover table-condensed table-striped table-bordered">
+        
+        <th class="text-center">Opis</th>
+        <th class="text-center">Kategoria</th>
+        <th class="text-center">Koszt</th>
+        <th class="text-center">Data</th>
+        <th class="text-center">Z konta</th>
+        <th class="text-center">Usunięcie</th>
+        <th class="text-center">Modyfikacja</th>
             {% for expend in expends %}
-            <tr>
-                <td>
-                    <a href="{{ path('delete_expend', {"id" : expend.id}) }}">usuń</a>
-                    <a href="{{ path('modify_expend', {"id" : expend.id}) }}">modyfikuj</a>
-                    
-                </td>
+            <tr class="text-center">
                 
                 <td>{{expend.description}}</td>
                 <td>{{expend.expendCategory.name}}</td>
                 <td>{{expend.amount}}</td>
                 <td>{{ expend.expendDate|date("d/m/Y")}}</td>
                 <td>{{expend.account.name}}</td>
+                <td>
+                    <a href="{{ path('delete_expend', {"id" : expend.id}) }}">usuń</a>
+                </td>
+                <td>
+                    <a href="{{ path('modify_expend', {"id" : expend.id}) }}">modyfikuj</a>
+                </td>
             </tr>
         {% endfor %}
     </table>

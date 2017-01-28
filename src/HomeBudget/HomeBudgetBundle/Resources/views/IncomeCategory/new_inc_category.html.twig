@@ -12,16 +12,15 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
     <h2>Lista Twoich kategorii</h2>
-    <table>
-        <th></th>
-        <th>Nazwa</th>
-        <th>Status</th>
+    <table class="table table-hover table-condensed table-striped table-bordered">
+        
+        <th class="text-center">Nazwa</th>
+        <th class="text-center">Status</th>
+        <th class="text-center">Modyfikacja</th>
 
         {% for inCategory in inCategories %}
-            <tr>
-                <td>
-                    <a href="{{ path('modify_inc_category', {"id" : inCategory.id}) }}">modyfikuj</a>
-                </td>
+            <tr class="text-center">
+                
                 <td>{{inCategory.name}}</td>
                 <td>
                     {% if inCategory.status == 1 %}
@@ -29,6 +28,9 @@
                     {% else %}
                         nieaktywna
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('modify_inc_category', {"id" : inCategory.id}) }}">modyfikuj</a>
                 </td>
             </tr>
         {% endfor %}
