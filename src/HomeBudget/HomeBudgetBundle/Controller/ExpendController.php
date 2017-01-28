@@ -77,6 +77,7 @@ class ExpendController extends Controller {
             } else {
                 $this->modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, $message);
             }
+            return $this->redirectToRoute('show_allExpends');
         }
         return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
                     'form' => $form->createView(),'message' => $message
