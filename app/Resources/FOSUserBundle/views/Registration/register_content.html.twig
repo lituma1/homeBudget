@@ -2,7 +2,7 @@
 <h2>Wprowadź dane</h2>
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
 
-{{ form_widget(form.username, {"attr":{"placeholder":"Imię"}}) }}<br>
+{{ form_widget(form.username, {"attr":{"placeholder":"Login"}}) }}<br>
 {{ form_widget(form.email, {"attr":{"placeholder":"Email"}}) }}<br>
 {{ form_widget(form.plainPassword.first, {"attr":{"placeholder":"Hasło"}}) }}<br>
 {{ form_widget(form.plainPassword.second, {"attr":{"placeholder":"Potwierdź hasło"}}) }}<br>
