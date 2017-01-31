@@ -30,7 +30,7 @@ class ExpendController extends Controller {
         $expend = new Expend();
         $form = $this->creatingForm($expend, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $expend = $form->getData();
             $expend->setUser($user);
@@ -64,7 +64,7 @@ class ExpendController extends Controller {
         $accountToModify = $expendToModify->getAccount();
         $form = $this->creatingForm($expendToModify, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $expend = $form->getData();
             $expend->setUser($user);

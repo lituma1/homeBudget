@@ -3,6 +3,7 @@
 namespace HomeBudget\HomeBudgetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Expend
@@ -25,6 +26,8 @@ class Expend
      * @var string
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
+     * @Assert\Type(type="float")
+     * @Assert\GreaterThan(value = 0, message="Kwota musi być dodatnia")
      */
     private $amount;
 
