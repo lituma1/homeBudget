@@ -1,19 +1,12 @@
 {% extends "::base.html.twig" %}
 
-
-
-
-
 {% block body %}
 <h1>Aplikacja budżet domowy</h1>
 
 {% for link in links %}
     <a href="{{path(link.href)}}">{{link.text}}</a>
     <br>
-    <br>
-    
-    
-    
+    <br>   
 {%endfor%}
 
 {% endblock %}
