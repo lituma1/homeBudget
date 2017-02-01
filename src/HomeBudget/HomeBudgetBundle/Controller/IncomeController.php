@@ -28,7 +28,7 @@ class IncomeController extends Controller {
         $income = new Income();
         $form = $this->creatingForm($income, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $income = $form->getData();
             $income->setUser($user);
@@ -57,7 +57,7 @@ class IncomeController extends Controller {
         $accountToModify = $incomeToModify->getAccount();
         $form = $this->creatingForm($incomeToModify, $user);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
 
             $income = $form->getData();
             $account = $income->getAccount();
