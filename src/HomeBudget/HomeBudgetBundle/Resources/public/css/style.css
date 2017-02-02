@@ -8,13 +8,9 @@ and open the template in the editor.
     Author     : pp
 */
 
-table, th, tr, td {
-    border: solid 1px;
-    border-collapse: collapse;
-}
-body {
-    background-color: #ffff99;
-}
-td {
-    padding: 5px;
-}
+
+.carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 70%;
+      margin: auto;
+  }

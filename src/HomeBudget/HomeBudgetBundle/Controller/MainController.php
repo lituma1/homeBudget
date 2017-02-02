@@ -48,10 +48,10 @@ class MainController extends Controller {
 
         $links = [];
         $linkLog['href'] = 'fos_user_security_login';
-        $linkLog['text'] = "Przejdź do strony logowania";
+        $linkLog['text'] = "Logowanie";
         $links[] = $linkLog;
         $linkReg['href'] = 'fos_user_registration_register';
-        $linkReg['text'] = "Przejdź do strony rejestracji";
+        $linkReg['text'] = "Rejestracja";
 
         $links[] = $linkReg;
 
