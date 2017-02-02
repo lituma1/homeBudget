@@ -31,7 +31,7 @@ class MainController extends Controller {
         $linkOut['text'] = 'Wyloguj';
         $links[] = $linkOut;
 
-        return $this->render('HBBundle:Main:show_main_page.html.twig', array(
+        return $this->render('HBBundle:Main:show_main_page2.html.twig', array(
                     'links' => $links
         ));
     }
