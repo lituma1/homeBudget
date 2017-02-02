@@ -1,12 +1,5 @@
-{% extends "::base.html.twig" %}
+{% extends "::base2.html.twig" %}
 
 {% block body %}
-
-
-{% for link in links %}
-    <a href="{{path(link.href)}}">{{link.text}}</a>
-    <br>
-    <br>   
-{%endfor%}
 
 {% endblock %}

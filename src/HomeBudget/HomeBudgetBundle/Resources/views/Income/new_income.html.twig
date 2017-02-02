@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "::base2.html.twig" %}
 
 {% block title %}Nowy przychód{% endblock %}
 
@@ -10,17 +10,6 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    <br>
-    <a href="{{ path('new_inCategory') }}">Dodaj nową lub modifikuj kategorię</a>
-    <br>
-    <br>
-    <a href="{{ path('show_allIncomes') }}">Powrót na poprzednią stronę</a>
-    <br>
-    <br>
-    <a href="{{ path('Panel') }}">Strona główna</a>
-    <br>
-    <br>
-    <a href="{{ path('fos_user_security_logout') }}">Wyloguj</a>
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
