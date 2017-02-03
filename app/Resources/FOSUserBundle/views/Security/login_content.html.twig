@@ -1,8 +1,6 @@
 {% trans_default_domain 'FOSUserBundle' %}
 
-{% if error %}
-    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-{% endif %}
+
 
 <div class="container">
 
@@ -16,7 +14,9 @@
         
         <label for="inputPassword" class="sr-only">Password</label>
         <input class="form-control" type="password" id="password" name="_password" placeholder="Hasło" required="required" /> 
-
+        {% if error %}
+            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
         <div class="checkbox">
             <label>
                 <input type="checkbox" id="remember_me" name="_remember_me" value="on"> Zapamiętaj mnie
