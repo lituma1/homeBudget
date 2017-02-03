@@ -13,9 +13,10 @@ class MainController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function showMainPageAfterLoginAction() {
-       
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $userName = $user->getUserName();
         return $this->render('HBBundle:Main:show_main_page2.html.twig', array(
-                    
+                    'userName' => $userName
         ));
     }
 
