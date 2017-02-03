@@ -3,7 +3,9 @@
 {{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit' } }) }}
 <h2>Edytuj swoje dane</h2>
 {{ form_widget(form.username)}}<br>
+{{ form_errors(form.username) }}
 {{ form_widget(form.email)}}<br>
+{{ form_errors(form.email) }}
 {{ form_widget(form.cellPhone, {"attr":{"placeholder":"Telefon"}}) }}<br>
 {{ form_widget(form.current_password, {"attr":{"placeholder":"wpisz hasło"}}) }}<br>
 

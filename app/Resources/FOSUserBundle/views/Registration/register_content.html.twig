@@ -3,10 +3,13 @@
 {{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'fos_user_registration_register'}}) }}
 
 {{ form_widget(form.username, {"attr":{"placeholder":"Login"}}) }}<br>
+{{ form_errors(form.username) }}
 {{ form_widget(form.email, {"attr":{"placeholder":"Email"}}) }}<br>
+{{ form_errors(form.email) }}
 {{ form_widget(form.plainPassword.first, {"attr":{"placeholder":"Hasło"}}) }}<br>
 {{ form_widget(form.plainPassword.second, {"attr":{"placeholder":"Potwierdź hasło"}}) }}<br>
-{{ form_widget(form.cellPhone, {"attr":{"placeholder":"Telefon"}}) }}<br>
+{{ form_errors(form.plainPassword.first) }}
+{{ form_widget(form.cellPhone, {"attr":{"placeholder":"Telefon dla chętnych"}}) }}<br>
    
     <div>
         <input type="submit" value="Zarejestruj się" />
