@@ -55,9 +55,13 @@ body {
     border-top-right-radius: 0;
 }
 body {
-  
-  padding-top: 70px;
+
+    padding-top: 70px;
 }
 #main {
     padding-top: 30px;
 }
+#chartdiv {
+    width: 100%;
+    height: 300px;
+}		

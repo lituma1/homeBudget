@@ -117,12 +117,13 @@ class AccountController extends Controller {
         $encoder = new JsonEncoder();
         $normalizer->setIgnoredAttributes(array('id', 'aim', 'user', 'type', 'status', 'expends', 'incomes'));
         $serializer = new Serializer(array($normalizer), array($encoder));
-
-        $data = [];
-        foreach ($accounts as $account) {
-
-            $data[] = $serializer->serialize($account, 'json');
-        }
+        $data = $serializer->serialize($accounts, 'json');
+        
+//        $data = [];
+//        foreach ($accounts as $account) {
+//
+//            $data[] = $serializer->serialize($account, 'json');
+//        }
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
                     'json' => $data

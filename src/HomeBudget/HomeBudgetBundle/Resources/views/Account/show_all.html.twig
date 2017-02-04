@@ -6,7 +6,7 @@
     <h1>{{message}}</h1>
     <h2>Lista Twoich kont</h2>
     <table class="table table-hover table-condensed table-striped table-bordered">
-        
+
         <th class="text-center">Nazwa</th>
         <th class="text-center">Saldo</th>
         <th class="text-center">Cel</th>
@@ -16,7 +16,7 @@
 
         {% for account in accounts %}
             <tr class="text-center">
-                
+
                 <td>{{account.name}}</td> 
                 <td>{{account.balance}}
                     <a href="{{ path('transfer_Money', {"id" : account.id}) }}">Przenieś środki na inne konto</a>
@@ -35,5 +35,35 @@
     </table>  
     <h3>Suma środków na Twoich kontach: {{balance}} PLN</h3>
 
+
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+    <!-- Chart code -->
+
+    <script>
+        {% autoescape false %}
+            var json = {{ json }};
+        {% endautoescape %}
+            var chart = AmCharts.makeChart("chartdiv", {
+                "type": "pie",
+                "theme": "light",
+                "dataProvider": json,
+                "valueField": "balance",
+                "titleField": "name",
+                "balloon": {
+                    "fixedPosition": true
+                },
+                "export": {
+                    "enabled": false
+                }
+            });
+
+    </script>
+
+    <div id="chartdiv"></div>
 
 {% endblock %}
