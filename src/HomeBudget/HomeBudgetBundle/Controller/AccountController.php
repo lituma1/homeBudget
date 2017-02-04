@@ -13,6 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class AccountController extends Controller {
 
@@ -102,14 +106,26 @@ class AccountController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function showAllAction() {
+
         $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $accounts = $repository->findByUserAndStatus($user);
         $balance = $user->balanceOfAccounts();
+        $normalizer = new ObjectNormalizer();
 
+        $encoder = new JsonEncoder();
+        $normalizer->setIgnoredAttributes(array('id', 'aim', 'user', 'type', 'status', 'expends', 'incomes'));
+        $serializer = new Serializer(array($normalizer), array($encoder));
+
+        $data = [];
+        foreach ($accounts as $account) {
+
+            $data[] = $serializer->serialize($account, 'json');
+        }
         return $this->render('HBBundle:Account:show_all.html.twig', array(
-                    'accounts' => $accounts, 'balance' => $balance, 'message' => $message
+                    'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
+                    'json' => $data
         ));
     }
 
@@ -156,7 +172,7 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Typ konta'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-       
+
         return $form;
     }
 
@@ -170,7 +186,7 @@ class AccountController extends Controller {
                     'choice_label' => 'name', 'label' => 'Na konto'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
 
@@ -198,7 +214,7 @@ class AccountController extends Controller {
         $form = $this->createFormBuilder($account)
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
 
