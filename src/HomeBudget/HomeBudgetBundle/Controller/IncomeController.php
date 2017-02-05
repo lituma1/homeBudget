@@ -154,10 +154,7 @@ class IncomeController extends Controller {
         $form = $this->createFormBuilder($income)
                 ->add('description', TextType::class, array('label' => 'Opis przychodu'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                ->add('incomeDate', DateType::class, array('widget' => 'single_text',
-                    'attr' => ['class' => 'js-datepicker'],
-                    'html5' => false,
-                    'label' => 'Data'))
+                
                 ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
@@ -168,6 +165,10 @@ class IncomeController extends Controller {
                         return $er->queryOwnedBy($user);
                     },
                     'choice_label' => 'name', 'label' => 'Zasilono: '))
+                ->add('incomeDate', DateType::class, array('widget' => 'single_text',
+                    'attr' => ['class' => 'js-datepicker'],
+                    'html5' => false,
+                    'label' => 'Data'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         
