@@ -13,10 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 
 class AccountController extends Controller {
 
@@ -112,21 +109,12 @@ class AccountController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $accounts = $repository->findByUserAndStatus($user);
         $balance = $user->balanceOfAccounts();
-        $normalizer = new ObjectNormalizer();
-
-        $encoder = new JsonEncoder();
-        $normalizer->setIgnoredAttributes(array('id', 'aim', 'user', 'type', 'status', 'expends', 'incomes'));
-        $serializer = new Serializer(array($normalizer), array($encoder));
-        $data = $serializer->serialize($accounts, 'json');
-        
-//        $data = [];
-//        foreach ($accounts as $account) {
-//
-//            $data[] = $serializer->serialize($account, 'json');
-//        }
+        $arrayOfAccounts = $this->createArrayOfAccounts($accounts);
+        $arrayForChart = $this->creatingArrayForChart($arrayOfAccounts);
+        $data = json_encode($arrayForChart);
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
-                    'json' => $data
+                    'data' => $data
         ));
     }
 
@@ -217,6 +205,32 @@ class AccountController extends Controller {
                 ->getForm();
 
         return $form;
+    }
+    private function createArrayOfAccounts($accounts) {
+        $arrayOfAccounts = [];
+        foreach ($accounts as $account) {
+            $name = $account->getName();
+            $arrayOfAccounts["$name"] = $account->getBalance();
+            
+        }
+        
+        return $arrayOfAccounts;
+    }
+
+    private function creatingArrayForChart($array) {
+        $arrayForChart = [];
+        foreach ($array as $key => $value) {
+            $array2 = [];
+            $array2['name'] = $key;
+            $array2['balance'] = $value;
+            $arrayForChart[] = $array2;
+        }
+        foreach ($arrayForChart as $key => $row) {
+            $name[$key] = $row['name'];
+            $amount[$key] = $row['balance'];
+        }
+        array_multisort($amount, SORT_DESC, $name, SORT_ASC, $arrayForChart);
+        return $arrayForChart;
     }
 
 }

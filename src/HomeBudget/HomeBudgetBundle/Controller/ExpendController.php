@@ -38,7 +38,7 @@ class ExpendController extends Controller {
             $em->persist($expend);
             $account = $expend->getAccount();
             $result = $account->spendMoney($expend->getAmount());
-            
+
             if ($result) {
                 $em->flush();
                 return $this->redirectToRoute('show_allExpends');
@@ -71,7 +71,7 @@ class ExpendController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $account = $expend->getAccount();
             $em->persist($expend);
-            
+
             if ($account->getId() == $accountToModify->getId()) {
                 $this->modifyExpend($em, $expend, $amountToModify, $account, $message);
             } else {
@@ -80,7 +80,7 @@ class ExpendController extends Controller {
             return $this->redirectToRoute('show_allExpends');
         }
         return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
-                    'form' => $form->createView(),'message' => $message
+                    'form' => $form->createView(), 'message' => $message
         ));
     }
 
@@ -89,34 +89,33 @@ class ExpendController extends Controller {
      * @Security("has_role('ROLE_USER')")
      */
     public function deleteExpendAction(Request $request, $id) {
-       
+
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
         $expend = $repository->find($id);
-        
+
         $form = $this->createFormBuilder($expend)
-                    ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                    ->getForm();
-            $form->handleRequest($request);
-            if ($form->isSubmitted()) {
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
 
-                $expend = $form->getData();
-                
-                $em = $this->getDoctrine()->getManager();
-                if ($expend) {
-                    $account = $expend->getAccount();
-                    $account->addMoney($expend->getAmount());
-                    $em->remove($expend);
-                   
-                    $em->flush();
-                }
+            $expend = $form->getData();
 
+            $em = $this->getDoctrine()->getManager();
+            if ($expend) {
+                $account = $expend->getAccount();
+                $account->addMoney($expend->getAmount());
+                $em->remove($expend);
 
-                return $this->redirectToRoute('show_allExpends');
+                $em->flush();
             }
-            return $this->render('HBBundle:Expend:delete_expend.html.twig', array(
-                        'form' => $form->createView(), 'expend' => $expend
-            ));
-        
+
+
+            return $this->redirectToRoute('show_allExpends');
+        }
+        return $this->render('HBBundle:Expend:delete_expend.html.twig', array(
+                    'form' => $form->createView(), 'expend' => $expend
+        ));
     }
 
     /**
@@ -128,12 +127,15 @@ class ExpendController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
 
         $expends = $repository->sortByDate($user);
-
+        $categoriesAndAmounts = $this->sumOfExpendsByCategory($expends);
+        $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
+        $data = json_encode($arrayForChart);
         return $this->render('HBBundle:Expend:all_expend.html.twig', array(
-                    'expends' => $expends
+                    'expends' => $expends, 'data' => $data
         ));
     }
-    private function creatingForm($expend, $user){
+
+    private function creatingForm($expend, $user) {
         $form = $this->createFormBuilder($expend)
                 ->add('description', TextType::class, array('label' => 'Opis wydatku'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))
@@ -150,40 +152,74 @@ class ExpendController extends Controller {
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
                     },
-                     'label' => 'Zapłacono z: '))
+                    'label' => 'Zapłacono z: '))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-       
+
         return $form;
     }
-    private function modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, &$message){
-       
+
+    private function modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, &$message) {
+
         $result = $account->spendMoney($expend->getAmount());
-                if ($result) {
-                    $accountToModify->addMoney($amountToModify);
-                    $em->flush();
-                    return $this->redirectToRoute('show_allExpends');
-                } else {
-                    $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-                    return $message;
-                }
+        if ($result) {
+            $accountToModify->addMoney($amountToModify);
+            $em->flush();
+            return $this->redirectToRoute('show_allExpends');
+        } else {
+            $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
+            return $message;
+        }
     }
-    private function modifyExpend($em, $expend, $amountToModify, $account, &$message){
+
+    private function modifyExpend($em, $expend, $amountToModify, $account, &$message) {
         if ($expend->getAmount() != $amountToModify) {
-                    $amount = $expend->getAmount() - $amountToModify;
-                    $result = $account->spendMoney($amount);
+            $amount = $expend->getAmount() - $amountToModify;
+            $result = $account->spendMoney($amount);
 
-                    if ($result) {
-                        $em->flush();
-                        return $this->redirectToRoute('show_allExpends');
-                    } else {
-                        $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-                        return $message;
-                    }
-                } else {
+            if ($result) {
+                $em->flush();
+                return $this->redirectToRoute('show_allExpends');
+            } else {
+                $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
+                return $message;
+            }
+        } else {
 
-                    $em->flush();
-                    return $this->redirectToRoute('show_allExpends');
-                }
+            $em->flush();
+            return $this->redirectToRoute('show_allExpends');
+        }
     }
+
+    private function sumOfExpendsByCategory($expends) {
+        $arrayWithCategoryAndAmounts = [];
+        foreach ($expends as $expend) {
+            $category = $expend->getExpendCategory()->getName();
+            if (array_key_exists($category, $arrayWithCategoryAndAmounts)) {
+                $arrayWithCategoryAndAmounts["$category"] += $expend->getAmount();
+            } else {
+                $arrayWithCategoryAndAmounts["$category"] = $expend->getAmount();
+            }
+        }
+
+
+        return $arrayWithCategoryAndAmounts;
+    }
+
+    private function creatingArrayForChart($array) {
+        $arrayForChart = [];
+        foreach ($array as $key => $value) {
+            $array2 = [];
+            $array2['name'] = $key;
+            $array2['amount'] = $value;
+            $arrayForChart[] = $array2;
+        }
+        foreach ($arrayForChart as $key => $row) {
+            $name[$key] = $row['name'];
+            $amount[$key] = $row['amount'];
+        }
+        array_multisort($amount, SORT_DESC, $name, SORT_ASC, $arrayForChart);
+        return $arrayForChart;
+    }
+
 }

@@ -1,10 +1,87 @@
 {% extends "::base2.html.twig" %}
 
 {% block title %}Lista kont{% endblock %}
+{% block sylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
+{% endblock %}
 
 {% block body %}
-    <h1>{{message}}</h1>
-    <h2>Lista Twoich kont</h2>
+    <h2>{{message}}</h2>
+
+    <h3>Suma środków na Twoich kontach: {{balance}} PLN</h3>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+
+
+    <!-- Chart code -->
+
+    <script>
+        {% autoescape false %}
+            var data
+            = {{ data }};
+        {% endautoescape %}
+                    var chart = AmCharts.makeChart("chartdiv", {
+                        "type": "pie",
+                        "startDuration": 0,
+                        "theme": "light",
+                        "addClassNames": true,
+                        "legend": {
+                            "position": "right",
+                            "marginRight": 100,
+                            "autoMargins": false
+                        },
+                        "innerRadius": "30%",
+                        "defs": {
+                            "filter": [{
+                                    "id": "shadow",
+                                    "width": "200%",
+                                    "height": "200%",
+                                    "feOffset": {
+                                        "result": "offOut",
+                                        "in": "SourceAlpha",
+                                        "dx": 0,
+                                        "dy": 0
+                                    },
+                                    "feGaussianBlur": {
+                                        "result": "blurOut",
+                                        "in": "offOut",
+                                        "stdDeviation": 5
+                                    },
+                                    "feBlend": {
+                                        "in": "SourceGraphic",
+                                        "in2": "blurOut",
+                                        "mode": "normal"
+                                    }
+                                }]
+                        },
+                        "dataProvider": data,
+                        "valueField": "balance",
+                        "titleField": "name",
+                        "export": {
+                            "enabled": false
+                        }
+                    });
+
+            chart.addListener("init", handleInit);
+
+            chart.addListener("rollOverSlice", function (e) {
+                handleRollOver(e);
+            });
+
+            function handleInit() {
+                chart.legend.addListener("rollOverItem", handleRollOver);
+            }
+
+            function handleRollOver(e) {
+                var wedge = e.dataItem.wedge.node;
+                wedge.parentNode.appendChild(wedge);
+            }
+    </script>
+
+    <div id="chartdiv"></div>
     <table class="table table-hover table-condensed table-striped table-bordered">
 
         <th class="text-center">Nazwa</th>
@@ -33,37 +110,10 @@
             </tr>
         {% endfor %}
     </table>  
-    <h3>Suma środków na Twoich kontach: {{balance}} PLN</h3>
 
 
-    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
-    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
-    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
-    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" />
-    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
 
-    <!-- Chart code -->
 
-    <script>
-        {% autoescape false %}
-            var json = {{ json }};
-        {% endautoescape %}
-            var chart = AmCharts.makeChart("chartdiv", {
-                "type": "pie",
-                "theme": "light",
-                "dataProvider": json,
-                "valueField": "balance",
-                "titleField": "name",
-                "balloon": {
-                    "fixedPosition": true
-                },
-                "export": {
-                    "enabled": false
-                }
-            });
-
-    </script>
-
-    <div id="chartdiv"></div>
 
 {% endblock %}
+

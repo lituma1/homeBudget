@@ -143,9 +143,11 @@ class IncomeController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
 
         $incomes = $repository->sortByDate($user);
-
+        $categoriesAndAmounts = $this->sumOfIncomesByCategory($incomes);
+        $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
+        $data = json_encode($arrayForChart);
         return $this->render('HBBundle:Income:all_income.html.twig', array(
-                    'incomes' => $incomes
+                    'incomes' => $incomes, 'data' => $data
         ));
     }
     private function creatingForm($income, $user) {
@@ -170,6 +172,36 @@ class IncomeController extends Controller {
                 ->getForm();
         
         return $form;
+    }
+    private function sumOfIncomesByCategory($incomes) {
+        $arrayWithCategoryAndAmounts = [];
+        foreach ($incomes as $income) {
+            $category = $income->getIncomeCategory()->getName();
+            if (array_key_exists($category, $arrayWithCategoryAndAmounts)) {
+                $arrayWithCategoryAndAmounts["$category"] += $income->getAmount();
+            } else {
+                $arrayWithCategoryAndAmounts["$category"] = $income->getAmount();
+            }
+        }
+
+
+        return $arrayWithCategoryAndAmounts;
+    }
+
+    private function creatingArrayForChart($array) {
+        $arrayForChart = [];
+        foreach ($array as $key => $value) {
+            $array2 = [];
+            $array2['name'] = $key;
+            $array2['amount'] = $value;
+            $arrayForChart[] = $array2;
+        }
+        foreach ($arrayForChart as $key => $row) {
+            $name[$key] = $row['name'];
+            $amount[$key] = $row['amount'];
+        }
+        array_multisort($amount, SORT_DESC, $name, SORT_ASC, $arrayForChart);
+        return $arrayForChart;
     }
     
 }
