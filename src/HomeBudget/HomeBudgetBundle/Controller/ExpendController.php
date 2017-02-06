@@ -73,11 +73,10 @@ class ExpendController extends Controller {
             $em->persist($expend);
 
             if ($account->getId() == $accountToModify->getId()) {
-                $this->modifyExpend($em, $expend, $amountToModify, $account, $message);
+                return $this->modifyExpend($form, $em, $expend, $amountToModify, $account);
             } else {
-                $this->modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, $message);
+                return $this->modifyExpendAndAccounts($form, $em, $expend, $account, $amountToModify, $accountToModify);
             }
-            return $this->redirectToRoute('show_allExpends');
         }
         return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
                     'form' => $form->createView(), 'message' => $message
@@ -149,7 +148,7 @@ class ExpendController extends Controller {
                         return $er->queryOwnedBy($user);
                     },
                     'label' => 'Zapłacono z: '))
-                    ->add('expendDate', DateType::class, array('widget' => 'single_text',
+                ->add('expendDate', DateType::class, array('widget' => 'single_text',
                     'attr' => ['class' => 'js-datepicker'],
                     'html5' => false,
                     'label' => 'Data'))
@@ -159,7 +158,7 @@ class ExpendController extends Controller {
         return $form;
     }
 
-    private function modifyExpendAndAccounts($em, $expend, $account, $amountToModify, $accountToModify, &$message) {
+    private function modifyExpendAndAccounts($form, $em, $expend, $account, $amountToModify, $accountToModify) {
 
         $result = $account->spendMoney($expend->getAmount());
         if ($result) {
@@ -168,11 +167,13 @@ class ExpendController extends Controller {
             return $this->redirectToRoute('show_allExpends');
         } else {
             $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-            return $message;
+            return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
+                        'form' => $form->createView(), 'message' => $message
+            ));
         }
     }
 
-    private function modifyExpend($em, $expend, $amountToModify, $account, &$message) {
+    private function modifyExpend($form, $em, $expend, $amountToModify, $account) {
         if ($expend->getAmount() != $amountToModify) {
             $amount = $expend->getAmount() - $amountToModify;
             $result = $account->spendMoney($amount);
@@ -182,7 +183,9 @@ class ExpendController extends Controller {
                 return $this->redirectToRoute('show_allExpends');
             } else {
                 $message = 'Wydatek większy od salda, nie udało się go zmodyfikować';
-                return $message;
+                return $this->render('HBBundle:Expend:modify_expend.html.twig', array(
+                            'form' => $form->createView(), 'message' => $message
+                ));
             }
         } else {
 

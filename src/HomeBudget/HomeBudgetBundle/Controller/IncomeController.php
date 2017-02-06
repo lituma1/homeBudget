@@ -65,7 +65,7 @@ class IncomeController extends Controller {
             $em = $this->getDoctrine()->getManager();
             $em->persist($income);
             if ($account->getId() == $accountToModify->getId()) {
-                if ($amountToModify != $income->getAmount()) {
+                if ($amountToModify !== $income->getAmount()) {
                     $amount = $amountToModify - $income->getAmount();
                     $result = $account->spendMoney($amount);
                     if ($result) {
