@@ -116,17 +116,6 @@ class User extends BaseUser {
         return $this->accounts;
     }
 
-    public function balanceOfAccounts() {
-        $balance = 0;
-        foreach ($this->accounts as $account) {
-            if($account->getStatus() == 1){
-               $balance += $account->getBalance(); 
-            }
-            
-        }
-        return $balance;
-    }
-
     /**
      * Add expends
      *
@@ -276,5 +265,29 @@ class User extends BaseUser {
     public function getExpendCategories() {
         return $this->expendCategories;
     }
-
+    
+    public function balanceOfAccounts() {
+        $balance = 0;
+        foreach ($this->accounts as $account) {
+            if($account->getStatus() == 1){
+               $balance += $account->getBalance(); 
+            }
+            
+        }
+        return $balance;
+    }
+    public function sumOfExpends(){
+        $sum = 0;
+        foreach ($this->expends as $expend){
+            $sum += $expend->getAmount();
+        }
+        return $sum;
+    }
+    public function sumOfIncomes(){
+        $sum = 0;
+        foreach ($this->incomes as $income){
+            $sum += $income->getAmount();
+        }
+        return $sum;
+    }
 }
