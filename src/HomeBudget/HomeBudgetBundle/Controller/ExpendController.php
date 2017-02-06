@@ -124,13 +124,17 @@ class ExpendController extends Controller {
     public function allExpendAction() {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Expend');
-
+        $sumOfExpends = $user->sumOfExpends();
         $expends = $repository->sortByDate($user);
-        $categoriesAndAmounts = $this->sumOfExpendsByCategory($expends);
-        $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
-        $data = json_encode($arrayForChart);
+        $data = null;
+        if($expends){
+            $categoriesAndAmounts = $this->sumOfExpendsByCategory($expends);
+            $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
+            $data = json_encode($arrayForChart);
+        }
+        
         return $this->render('HBBundle:Expend:all_expend.html.twig', array(
-                    'expends' => $expends, 'data' => $data
+                    'expends' => $expends, 'data' => $data, 'sum' => $sumOfExpends
         ));
     }
 

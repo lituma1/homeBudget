@@ -112,9 +112,14 @@ class AccountController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $accounts = $repository->findByUserAndStatus($user);
         $balance = $user->balanceOfAccounts();
-        $arrayOfAccounts = $this->createArrayOfAccounts($accounts);
-        $arrayForChart = $this->creatingArrayForChart($arrayOfAccounts);
-        $data = json_encode($arrayForChart);
+        $data = null;
+        if($accounts){
+            $arrayOfAccounts = $this->createArrayOfAccounts($accounts);
+            $arrayForChart = $this->creatingArrayForChart($arrayOfAccounts);
+            $data = json_encode($arrayForChart);
+        }
+       
+        
         return $this->render('HBBundle:Account:show_all.html.twig', array(
                     'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
                     'data' => $data

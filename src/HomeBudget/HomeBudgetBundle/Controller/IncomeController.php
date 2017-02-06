@@ -141,13 +141,17 @@ class IncomeController extends Controller {
     public function allIncomeAction() {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Income');
-
         $incomes = $repository->sortByDate($user);
-        $categoriesAndAmounts = $this->sumOfIncomesByCategory($incomes);
-        $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
-        $data = json_encode($arrayForChart);
+        $sumOfIncomes = $user->sumOfIncomes();
+        $data = null;
+        if($incomes){
+            $categoriesAndAmounts = $this->sumOfIncomesByCategory($incomes);
+            $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
+            $data = json_encode($arrayForChart);
+        }
+        
         return $this->render('HBBundle:Income:all_income.html.twig', array(
-                    'incomes' => $incomes, 'data' => $data
+                    'incomes' => $incomes, 'data' => $data, 'sum' => $sumOfIncomes
         ));
     }
     private function creatingForm($income, $user) {
