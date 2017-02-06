@@ -21,7 +21,7 @@ class MainControllerTest extends WebTestCase {
             'PHP_AUTH_PW' => '123123',
         ));
         $this->assertGreaterThan(
-                0, $crawler->filter('html:contains("Aplikacja budżet domowy")')->count()
+                0, $crawler->filter('html:contains("Budżet domowy")')->count()
         );
     }
     public function testShowEditPage() {
