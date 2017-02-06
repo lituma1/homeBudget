@@ -14,7 +14,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-
 class AccountController extends Controller {
 
     /**
@@ -81,8 +80,12 @@ class AccountController extends Controller {
             $message = 'Przed usunięciem proszę przenieść środki na inne konto';
             $balance = $user->balanceOfAccounts();
             $accounts = $repository->findByUserAndStatus($user);
+            $arrayOfAccounts = $this->createArrayOfAccounts($accounts);
+            $arrayForChart = $this->creatingArrayForChart($arrayOfAccounts);
+            $data = json_encode($arrayForChart);
             return $this->render('HBBundle:Account:show_all.html.twig', array(
-                        'accounts' => $accounts, 'balance' => $balance, 'message' => $message
+                        'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
+                'data' => $data
             ));
         } else {
             $form = $this->creatingFormForDelete($account);
@@ -206,14 +209,14 @@ class AccountController extends Controller {
 
         return $form;
     }
+
     private function createArrayOfAccounts($accounts) {
         $arrayOfAccounts = [];
         foreach ($accounts as $account) {
             $name = $account->getName();
             $arrayOfAccounts["$name"] = $account->getBalance();
-            
         }
-        
+
         return $arrayOfAccounts;
     }
 
