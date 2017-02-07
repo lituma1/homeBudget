@@ -7,8 +7,9 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Type
  *
- * @ORM\Table(name="type")
+ * 
  * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\TypeRepository")
+ * @ORM\Table(name="type",uniqueConstraints={@ORM\UniqueConstraint(name="type", columns={"name", "user_id"})})
  */
 class Type
 {

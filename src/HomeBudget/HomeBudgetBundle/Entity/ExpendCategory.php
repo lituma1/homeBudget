@@ -7,8 +7,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ExpendCategory
  *
- * @ORM\Table(name="expend_category")
+ *
+ * 
  * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\ExpendCategoryRepository")
+ * @ORM\Table(name="expend_category",uniqueConstraints={@ORM\UniqueConstraint(name="expend_category", columns={"name", "user_id"})})
  */
 class ExpendCategory
 {

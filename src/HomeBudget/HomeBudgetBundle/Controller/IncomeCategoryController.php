@@ -20,6 +20,7 @@ class IncomeCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newIncCategoryAction(Request $request) {
+        $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
         $inCategories = $repository->findByUserAndStatus($user);
@@ -33,17 +34,22 @@ class IncomeCategoryController extends Controller {
 
             $inCategory->setUser($user);
             $inCategory->setStatus(true);
+            $categoryName = $inCategory->getName();
             $em = $this->getDoctrine()->getManager();
-            $em->persist($inCategory);
+            if (!$this->existCategoryNameInDatabase($user, $categoryName)) {
+                $em->persist($inCategory);
+                $em->flush();
+                return $this->redirectToRoute('new_inCategory');
+            } else {
+                $message = 'Kategoria o takiej nazwie już istnieje';
+               
+            }
 
-            $em->flush();
-
-
-
-            return $this->redirectToRoute('new_income');
         }
         return $this->render('HBBundle:IncomeCategory:new_inc_category.html.twig', array(
-                    'form' => $form->createView(), 'inCategories' => $inCategories));
+                    'form' => $form->createView(),
+                    'message' => $message,
+                    'inCategories' => $inCategories));
     }
 
     /**
@@ -53,41 +59,54 @@ class IncomeCategoryController extends Controller {
      */
     public function modifyIncCategoryAction(Request $request, $id) {
         $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
-        
+
         $inCategory = $repository->find($id);
         $form = $this->creatingFormForModify($inCategory);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $inCategory = $form->getData();
-            
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($inCategory);
             $em->flush();
 
-            return $this->redirectToRoute('new_income');
+            return $this->redirectToRoute('new_inCategory');
         }
         return $this->render('HBBundle:IncomeCategory:modify_inc_category.html.twig', array(
-                    'form' => $form->createView(), ));
-       
+                    'form' => $form->createView(),));
     }
 
-    private function creatingForm($inCategory){
+    private function creatingForm($inCategory) {
         $form = $this->createFormBuilder($inCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
-    private function creatingFormForModify($inCategory){
+
+    private function creatingFormForModify($inCategory) {
         $form = $this->createFormBuilder($inCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('status', CheckboxType::class, array('label' 
+                ->add('status', CheckboxType::class, array('label'
                     => 'Zaznacz jeśli chcesz aktywować', 'required' => false,))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
+
+    private function existCategoryNameInDatabase($user, $categoryName) {
+        $repository = $this->getDoctrine()->getRepository('HBBundle:IncomeCategory');
+        $inCategories = $repository->findByUserAndStatus($user);
+        $result = false;
+        foreach ($inCategories as $inCategory) {
+            if ($inCategory->getName() === $categoryName) {
+                $result = true;
+            }
+        }
+        return $result;
+    }
+
 }

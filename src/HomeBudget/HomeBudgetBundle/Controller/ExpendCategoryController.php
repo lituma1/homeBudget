@@ -20,6 +20,7 @@ class ExpendCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function newExpCategoryAction(Request $request) {
+        $message = '';
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
         $exCategories = $repository->findByUser($user);
@@ -32,14 +33,20 @@ class ExpendCategoryController extends Controller {
             $user = $this->container->get('security.token_storage')->getToken()->getUser();
             $exCategory->setUser($user);
             $exCategory->setStatus(true);
+            $categoryName = $exCategory->getName();
             $em = $this->getDoctrine()->getManager();
-            $em->persist($exCategory);
-            $em->flush();
-
-            return $this->redirectToRoute('new_expend');
+            if (!$this->existCategoryNameInDatabase($user, $categoryName)) {
+                $em->persist($exCategory);
+                $em->flush();
+                return $this->redirectToRoute('new_exCategory');
+            } else {
+                $message = 'Kategoria o takiej nazwie już istnieje';
+            }
         }
         return $this->render('HBBundle:ExpendCategory:new_exp_category.html.twig', array(
-                    'form' => $form->createView(), 'exCategories' => $exCategories));
+                    'form' => $form->createView(),
+                    'message' => $message,
+                    'exCategories' => $exCategories));
     }
 
     /**
@@ -61,7 +68,7 @@ class ExpendCategoryController extends Controller {
             $em->persist($exCategory);
             $em->flush();
 
-            return $this->redirectToRoute('new_expend');
+            return $this->redirectToRoute('new_exCategory');
         }
         return $this->render('HBBundle:ExpendCategory:modify_exp_category.html.twig', array(
                     'form' => $form->createView(),));
@@ -72,7 +79,7 @@ class ExpendCategoryController extends Controller {
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
 
@@ -83,8 +90,20 @@ class ExpendCategoryController extends Controller {
                     => 'Zaznacz jeśli chcesz aktywować', 'required' => false,))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
+    }
+
+    private function existCategoryNameInDatabase($user, $categoryName) {
+        $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
+        $exCategories = $repository->findByUser($user);
+        $result = false;
+        foreach ($exCategories as $exCategory) {
+            if ($exCategory->getName() === $categoryName) {
+                $result = true;
+            }
+        }
+        return $result;
     }
 
 }

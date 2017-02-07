@@ -9,6 +9,16 @@
     <h2>Wprowadź nową kategorię dla przychodów</h2>
 
     {{ form_start(form) }}
+    {% if message %}
+        <span class="help-block">    
+            <ul class="list-unstyled">
+                <li>
+                    <span class="warning glyphicon glyphicon-exclamation-sign"></span> 
+                    <span class="warning">{{  message }}</span>
+                </li>
+            </ul>
+        </span>
+    {% endif %}
     {{ form_widget(form) }}
     {{ form_end(form) }}
     <h2>Lista Twoich kategorii</h2>

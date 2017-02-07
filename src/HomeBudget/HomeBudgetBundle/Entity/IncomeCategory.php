@@ -6,9 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * IncomeCategory
- *
- * @ORM\Table(name="income_category")
+ * 
  * @ORM\Entity(repositoryClass="HomeBudget\HomeBudgetBundle\Repository\IncomeCategoryRepository")
+ * @ORM\Table(name="income_category",uniqueConstraints={@ORM\UniqueConstraint(name="income_category", columns={"name", "user_id"})})
+ *  
  */
 class IncomeCategory
 {
