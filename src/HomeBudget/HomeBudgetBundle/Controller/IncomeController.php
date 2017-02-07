@@ -67,7 +67,7 @@ class IncomeController extends Controller {
             if ($account->getId() == $accountToModify->getId()) {
                 if ($amountToModify !== $income->getAmount()) {
                     $amount = $amountToModify - $income->getAmount();
-                    $result = $account->spendMoney($amount);
+                    $result = $accountToModify->spendMoney($amount);
                     if ($result) {
                         $em->flush();
                         return $this->redirectToRoute('show_allIncomes');
@@ -75,9 +75,11 @@ class IncomeController extends Controller {
                         $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
                                 . ' ujemne';
                     }
+                } else {
+                    $em->flush();
+                    return $this->redirectToRoute('show_allIncomes');
                 } 
-                $em->flush();
-                return $this->redirectToRoute('show_allIncomes');
+                
             } else {
                 $account->addMoney($income->getAmount());
                 $result = $accountToModify->spendMoney($amountToModify);
