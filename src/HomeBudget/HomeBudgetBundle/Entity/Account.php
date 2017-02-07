@@ -26,7 +26,6 @@ class Account {
      * @var string
      *
      * @ORM\Column(name="balance", type="decimal", precision=10, scale=2)
-     * @Assert\Type(type="float")
      * @Assert\GreaterThanOrEqual(value = 0, message="Liczba musi być dodatnia")
      * 
      */

@@ -26,7 +26,6 @@ class Income
      * @var string
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=2)
-     * @Assert\Type(type="float")
      * @Assert\GreaterThan(value = 0, message="Kwota musi być dodatnia")
      */
     private $amount;

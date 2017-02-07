@@ -2,10 +2,20 @@
 
 {% block title %}Przenoszenie środków{% endblock %}
 {% block body %}
-    <h1>{{message}}</h1>
-    <h2>Wprowadź kwotę i podaj konto docelowe</h2>
+    
+    <h3>Wprowadź kwotę i podaj konto docelowe</h3>
 
     {{ form_start(form) }}
+    {% if message %}
+            <span class="help-block">    
+                <ul class="list-unstyled">
+                    <li>
+                        <span class="warning glyphicon glyphicon-exclamation-sign"></span> 
+                        <span class="warning">{{  message }}</span>
+                    </li>
+                </ul>
+            </span>
+        {% endif %}
     {{ form_widget(form.amount, {"attr":{"placeholder":balance}}) }}
     {{ form_end(form) }}
 

@@ -3,18 +3,28 @@
 {% block title %}Potwierdzenie{% endblock %}
 
 {% block body %}
-    <h1>{{message}}</h1>
-    <h2>Potwierdź usunięcie poniższego przychodu</h2>
+   
+    <h3>Potwierdź usunięcie poniższego przychodu</h3>
 
     <p>Opis: {{income.description}}</p> 
     <p>Kategoria: {{income.incomeCategory.name}}</p>
     <p>Kwota: {{income.amount}}</p>
     <p>Data: {{income.incomeDate|date("d/m/Y")}}</p> 
     <p>Na konto: {{income.account.name}}</p>
-
+    {% if message %}
+        <span class="help-block">    
+            <ul class="list-unstyled">
+                <li>
+                    <span class="warning glyphicon glyphicon-exclamation-sign"></span> 
+                    <span class="warning">{{  message }}</span>
+                </li>
+            </ul>
+        </span>
+    {% endif %}
     {{ form_start(form) }}
+    
     {{ form_widget(form) }}
     {{ form_end(form) }}
-    
+
 {% endblock %}
 

@@ -79,4 +79,8 @@ body {
 .amcharts-pie-slice:hover {
   transform: scale(1.1);
   filter: url(#shadow);
-}		
+}	
+.warning {
+    color: red;
+   
+}
