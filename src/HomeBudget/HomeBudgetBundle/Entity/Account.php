@@ -61,6 +61,7 @@ class Account {
     /**
      * @ORM\ManyToOne(targetEntity="Type", inversedBy="accounts")
      * @var type 
+     * @Assert\NotNull(message="Proszę zdefiniować typy kont, w zakładce konta")
      */
     private $type;
 

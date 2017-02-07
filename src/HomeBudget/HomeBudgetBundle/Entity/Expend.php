@@ -52,12 +52,14 @@ class Expend
     
     /**
      *@ORM\ManyToOne(targetEntity="Account", inversedBy="expends")
+     * @Assert\NotNull(message="Proszę dodać jakieś konto, w zakładce konta")
      */
     private $account;
     
     
     /**
      * @ORM\ManyToOne(targetEntity="ExpendCategory", inversedBy="expends")
+     * @Assert\NotNull(message="Proszę zdefiniować kategorie wydatków, w zakładce wydatki")
      */
     private $expendCategory;
     /**

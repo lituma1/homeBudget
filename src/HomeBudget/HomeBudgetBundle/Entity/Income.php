@@ -52,11 +52,13 @@ class Income
     
     /**
      * @ORM\ManyToOne(targetEntity="IncomeCategory", inversedBy="incomes")
+     * @Assert\NotNull(message="Proszę zdefiniować kategorie przychodów, w zakładce przychody")
      */
     private $incomeCategory;
     
     /**
      *@ORM\ManyToOne(targetEntity="Account", inversedBy="incomes")
+     * @Assert\NotNull(message="Proszę dodać jakieś konto, w zakładce konta")
      */
     private $account;
     /**
