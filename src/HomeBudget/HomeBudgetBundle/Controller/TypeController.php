@@ -33,22 +33,18 @@ class TypeController extends Controller {
         if ($form->isSubmitted()) {
 
             $type = $form->getData();
-
-            $user = $this->container->get('security.context')->getToken()->getUser();
-
             $type->setUser($user);
             $type->setStatus(true);
-            
+
             $typeName = $type->getName();
             $em = $this->getDoctrine()->getManager();
-            if(!$this->existTypeNameInDatabase($user, $typeName)){
+            if (!$this->existTypeNameInDatabase($types, $typeName)) {
                 $em->persist($type);
                 $em->flush();
                 return $this->redirectToRoute('new_type');
             } else {
                 $message = 'Typ o takiej nazwie już istnieje';
             }
-            
         }
         return $this->render('HBBundle:Type:new.html.twig', array(
                     'form' => $form->createView(), 'types' => $types,
@@ -61,38 +57,58 @@ class TypeController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function modifyAction(Request $request, $id) {
+        $message = '';
         $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
-
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $types = $repository->findByUserAndStatus($user);
         $type = $repository->find($id);
+        $arrayWithTypeNames = $this->createArrayWithTypeNames($types, $type->getName());
+        
         $form = $this->createFormBuilder($type)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('status', CheckboxType::class, array('label' =>
-                    'Zaznacz jeśli chcesz aktywować', 'required' => false,))
+                    'Zaznacz jeśli chcesz aktywować', 'required' => false))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
+        
         if ($form->isSubmitted()) {
-
             $type = $form->getData();
+            $typeName = $type->getName();
+            $result = in_array($typeName, $arrayWithTypeNames);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($type);
-            $em->flush();
-
-            return $this->redirectToRoute('new_type');
+            if (!$result) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($type);
+                $em->flush();
+                return $this->redirectToRoute('new_type');
+            } else {
+                $message = 'Typ o takiej nazwie już istnieje';
+            }
         }
         return $this->render('HBBundle:Type:modify.html.twig', array(
-                    'form' => $form->createView(),));
+                    'form' => $form->createView(), 'message' => $message));
     }
-    private function existTypeNameInDatabase($user, $typeName){
-        $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
-        $types = $repository->findByUserAndStatus($user);
+
+    private function existTypeNameInDatabase($types, $typeName) {
+
         $result = false;
         foreach ($types as $type) {
-            if($type->getName() === $typeName){
-               $result = true;
+            if ($type->getName() === $typeName) {
+                $result = true;
             }
-        } 
+        }
         return $result;
     }
+
+    private function createArrayWithTypeNames($types, $string){
+        $array = [];
+        foreach ($types as $type){
+            if($type->getName() !== $string){
+                $array[] = $type->getName();
+            } 
+        }
+        return $array;
+    }
+
 }

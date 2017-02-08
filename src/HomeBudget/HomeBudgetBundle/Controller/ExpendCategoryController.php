@@ -30,12 +30,11 @@ class ExpendCategoryController extends Controller {
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
-            $user = $this->container->get('security.token_storage')->getToken()->getUser();
             $exCategory->setUser($user);
             $exCategory->setStatus(true);
             $categoryName = $exCategory->getName();
             $em = $this->getDoctrine()->getManager();
-            if (!$this->existCategoryNameInDatabase($user, $categoryName)) {
+            if (!$this->existCategoryNameInDatabase($exCategories, $categoryName)) {
                 $em->persist($exCategory);
                 $em->flush();
                 return $this->redirectToRoute('new_exCategory');
@@ -55,23 +54,33 @@ class ExpendCategoryController extends Controller {
      * @Method({"GET", "POST"})
      */
     public function modifyExpCategoryAction(Request $request, $id) {
-
+        $message = '';
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
-
         $exCategory = $repository->find($id);
+        $exCategories = $repository->findByUser($user);
+        $arrayWithCategoryNames = $this->createArrayWithCategoryNames($exCategories, $exCategory->getName());
         $form = $this->creatingFormForModify($exCategory);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
             $exCategory = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($exCategory);
-            $em->flush();
+            $categoryName = $exCategory->getName();
+            
+            $result = in_array($categoryName, $arrayWithCategoryNames);
+           
 
-            return $this->redirectToRoute('new_exCategory');
+            if (!$result) {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($exCategory);
+                $em->flush();
+                return $this->redirectToRoute('new_exCategory');
+            } else {
+                $message = 'Kategoria o takiej nazwie już istnieje';
+            }
         }
         return $this->render('HBBundle:ExpendCategory:modify_exp_category.html.twig', array(
-                    'form' => $form->createView(),));
+                    'form' => $form->createView(), 'message' => $message));
     }
 
     private function creatingForm($exCategory) {
@@ -94,16 +103,24 @@ class ExpendCategoryController extends Controller {
         return $form;
     }
 
-    private function existCategoryNameInDatabase($user, $categoryName) {
-        $repository = $this->getDoctrine()->getRepository('HBBundle:ExpendCategory');
-        $exCategories = $repository->findByUser($user);
+     private function existCategoryNameInDatabase($categories, $typeName) {
+
         $result = false;
-        foreach ($exCategories as $exCategory) {
-            if ($exCategory->getName() === $categoryName) {
+        foreach ($categories as $type) {
+            if ($type->getName() === $typeName) {
                 $result = true;
             }
         }
         return $result;
+    }
+    private function createArrayWithCategoryNames($categories, $string){
+        $array = [];
+        foreach ($categories as $category){
+            if($category->getName() !== $string){
+                $array[] = $category->getName();
+            } 
+        }
+        return $array;
     }
 
 }

@@ -4,9 +4,19 @@
 
 {% block body %}
 
-<h2>Wprowadź zmiany dla typu konta</h2>
-
+    <h2>Wprowadź zmiany dla typu konta</h2>
+    
     {{ form_start(form) }}
+    {% if message %}
+        <span class="help-block">    
+            <ul class="list-unstyled">
+                <li>
+                    <span class="warning glyphicon glyphicon-exclamation-sign"></span> 
+                    <span class="warning">{{  message }}</span>
+                </li>
+            </ul>
+        </span>
+    {% endif %}
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
