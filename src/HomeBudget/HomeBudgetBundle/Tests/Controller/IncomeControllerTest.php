@@ -57,7 +57,7 @@ class IncomeControllerTest extends WebTestCase
         ));
 
         $this->assertGreaterThan(
-                0, $crawler->filter('html:contains("Twoje przychody")')->count()
+                0, $crawler->filter('html:contains("Suma Twoich przychodów")')->count()
         );
     }
 

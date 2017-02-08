@@ -59,7 +59,7 @@ class ExpendControllerTest extends WebTestCase
             'PHP_AUTH_PW' => '123123',
         ));
         $this->assertGreaterThan(
-                0, $crawler->filter('html:contains("Twoje wydatki")')->count()
+                0, $crawler->filter('html:contains("Suma Twoich wydatków")')->count()
         );
     }
 
