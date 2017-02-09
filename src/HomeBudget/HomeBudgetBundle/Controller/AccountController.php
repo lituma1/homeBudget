@@ -161,7 +161,7 @@ class AccountController extends Controller {
         $form = $this->createFormBuilder($account)
                 ->add('name', TextType::class, array('label' => 'Nazwa konta'))
                 ->add('balance', NumberType::class, array('label' => 'Stan konta'))
-                ->add('aim', TextType::class, array('label' => 'cel konta'))
+                ->add('aim', TextType::class, array('label' => 'Cel konta'))
                 ->add('type', EntityType::class, array('class' => 'HBBundle:Type',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
