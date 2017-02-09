@@ -4,9 +4,9 @@
 
 
 {% block body %}
-    <h2>Rejestracja przebiegła pomyślnie zapraszamy na stronę główną</h2>
-    {% if targetUrl %}
-    <p><a href="{{ targetUrl }}">{{ 'registration.back'|trans }}</a></p>
-    {% endif %}
-    
+
+    <div class="alert alert-success" role="alert">
+        <strong>Gratulacje!</strong> Zarejstrowałeś swoje konto.
+    </div>
+
 {% endblock body %}
