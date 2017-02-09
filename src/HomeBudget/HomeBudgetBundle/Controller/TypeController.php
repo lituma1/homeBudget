@@ -15,6 +15,36 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class TypeController extends Controller {
 
     /**
+     * @Route("/type/addTypes", name="add_new_types")
+     * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
+     */
+    public function addTypesAction(Request $request) {
+        $types = ['Rachunek bieżący', 'Konto USD', 'Konto EUR',
+            'Fundusz inwestycyjny', 'Rachunek maklerski',
+            'Rachunek oszczędnościowy', 'Gotówka'];
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $form = $this->createFormBuilder()
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            foreach ($types as $typeName) {
+                $type = new Type();
+                $type->setStatus(true);
+                $type->setName($typeName);
+                $type->setUser($user);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($type);
+            }
+            $em->flush();
+            return $this->redirectToRoute('new_type');
+        }
+        return $this->render('HBBundle:Type:add_types.html.twig', array(
+                    'form' => $form->createView()));
+    }
+
+    /**
      * @Route("/type/new", name="new_type")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -63,7 +93,7 @@ class TypeController extends Controller {
         $types = $repository->findByUserAndStatus($user);
         $type = $repository->find($id);
         $arrayWithTypeNames = $this->createArrayWithTypeNames($types, $type->getName());
-        
+
         $form = $this->createFormBuilder($type)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
                 ->add('status', CheckboxType::class, array('label' =>
@@ -71,7 +101,7 @@ class TypeController extends Controller {
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted()) {
             $type = $form->getData();
             $typeName = $type->getName();
@@ -101,12 +131,12 @@ class TypeController extends Controller {
         return $result;
     }
 
-    private function createArrayWithTypeNames($types, $string){
+    private function createArrayWithTypeNames($types, $string) {
         $array = [];
-        foreach ($types as $type){
-            if($type->getName() !== $string){
+        foreach ($types as $type) {
+            if ($type->getName() !== $string) {
                 $array[] = $type->getName();
-            } 
+            }
         }
         return $array;
     }

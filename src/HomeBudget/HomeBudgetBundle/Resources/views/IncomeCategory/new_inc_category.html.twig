@@ -3,10 +3,16 @@
 {% block title %}Nowa kategoria przychodu{% endblock %}
 
 {% block body %}
-    
+    {% if inCategories == false %}
+        <h3>Na początek możesz dodać najczęściej spotykane kategorie przychodów</h3>
+        <a href="{{ path('add_inc_categories')}}">
+            <button>Dodaj kategorie</button>
+        </a>
+
+    {% endif %}
     
    
-    <h2>Wprowadź nową kategorię dla przychodów</h2>
+    <h3>Wprowadź nową kategorię dla przychodów</h3>
 
     {{ form_start(form) }}
     {% if message %}

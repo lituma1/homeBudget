@@ -13,7 +13,37 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class ExpendCategoryController extends Controller {
-
+    
+    /**
+     * @Route("/incomeCategory/add", name="add_exp_categories")
+     * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
+     */
+    public function addExpCategoriesAction(Request $request) {
+        $expCategories = ['Rozrywak', 'Kultura', 'Ubrania', 'Jedzenie', 'Samochód',
+            'Wakacje', 'Edukacja dzieci', 'Prezenty', 'Środki czystości', 'Zwierzęta',
+            'Remont', 'Urządzenie mieszkania', 'Gaz', 'Prąd', 'Czynsz', 'Telewizja kablowa',
+            'Internet', 'Telefon'];
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $form = $this->createFormBuilder()
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            foreach ($expCategories as $expCategoryName) {
+                $incCategory = new ExpendCategory();
+                $incCategory->setStatus(true);
+                $incCategory->setName($expCategoryName);
+                $incCategory->setUser($user);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($incCategory);
+            }
+            $em->flush();
+            return $this->redirectToRoute('new_exCategory');
+        }
+        return $this->render('HBBundle:ExpendCategory:add_exp_categories.html.twig', array(
+                    'form' => $form->createView()));
+    }
     /**
      * @Route("/expendCategory/new", name="new_exCategory")
      * @Security("has_role('ROLE_USER')")

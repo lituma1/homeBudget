@@ -13,7 +13,35 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class IncomeCategoryController extends Controller {
-
+    
+    /**
+     * @Route("/incomeCategory/add", name="add_inc_categories")
+     * @Security("has_role('ROLE_USER')")
+     * @Method({"GET", "POST"})
+     */
+    public function addIncCategoriesAction(Request $request) {
+        $incCategories = ['Pensja', 'Najem', 'Lotto', 'Sprzedaż', 'Umowa o dzieło',
+            '500 plus', 'Umowa zlecenie', 'Zwrot podatku'];
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $form = $this->createFormBuilder()
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            foreach ($incCategories as $incCategoryName) {
+                $incCategory = new IncomeCategory();
+                $incCategory->setStatus(true);
+                $incCategory->setName($incCategoryName);
+                $incCategory->setUser($user);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($incCategory);
+            }
+            $em->flush();
+            return $this->redirectToRoute('new_inCategory');
+        }
+        return $this->render('HBBundle:IncomeCategory:add_inc_categories.html.twig', array(
+                    'form' => $form->createView()));
+    }
     /**
      * @Route("/incomeCategory/new", name="new_inCategory")
      * @Security("has_role('ROLE_USER')")

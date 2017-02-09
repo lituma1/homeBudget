@@ -3,7 +3,14 @@
 {% block title %}Nowa kategoria{% endblock %}
 
 {% block body %}
-    <h2>Wprowadź nową kategorię dla wydatku</h2>
+    {% if exCategories == false %}
+        <h3>Na początek możesz dodać najczęściej spotykane kategorie wydatków</h3>
+        <a href="{{ path('add_exp_categories')}}">
+            <button>Dodaj kategorie</button>
+        </a>
+
+    {% endif %}
+    <h3>Wprowadź nową kategorię dla wydatku</h3>
 
 
     {{ form_start(form) }}
@@ -22,11 +29,11 @@
 
     <h2>Lista Twoich kategorii</h2>
     <table class="table table-hover table-condensed table-striped table-bordered">
-        
+
         <th class="text-center">Nazwa</th>
         <th class="text-center">Status</th>
         <th class="text-center">Modyfikacja</th>
-        {% for exCategory in exCategories %}
+            {% for exCategory in exCategories %}
             <tr class="text-center">
                 <td>{{exCategory.name}}</td>
                 <td>
