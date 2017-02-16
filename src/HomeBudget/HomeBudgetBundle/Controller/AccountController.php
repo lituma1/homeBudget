@@ -17,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class AccountController extends Controller {
 
     /**
+     * Create new account and save in database
+     * 
      * @Route("/account/new", name="new_Account")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -43,6 +45,8 @@ class AccountController extends Controller {
     }
 
     /**
+     * Modify existing account and save changes
+     * 
      * @Route("/account/{id}/modify", name="modify_Account")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -67,6 +71,8 @@ class AccountController extends Controller {
     }
 
     /**
+     * Deleting account by changing its status and save changes
+     * 
      * @Route("/account/{id}/delete", name="delete_Account")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -76,6 +82,8 @@ class AccountController extends Controller {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $repository = $this->getDoctrine()->getRepository('HBBundle:Account');
         $account = $repository->find($id);
+        
+        // before deleting account balance should equal 0
         if ($account->getBalance() > 0) {
             $message = 'Przed usunięciem proszę przenieść środki na inne konto';
             $balance = $user->balanceOfAccounts();
@@ -87,6 +95,8 @@ class AccountController extends Controller {
                         'accounts' => $accounts, 'balance' => $balance, 'message' => $message,
                 'data' => $data
             ));
+            
+        // if balance equals 0
         } else {
             $form = $this->creatingFormForDelete($account);
             $form->handleRequest($request);
@@ -102,6 +112,8 @@ class AccountController extends Controller {
     }
 
     /**
+     * Show all user accounts and prepere data for chart
+     * 
      * @Route("/account/showAll", name="show_allAccounts")
      * @Security("has_role('ROLE_USER')")
      */
@@ -127,6 +139,8 @@ class AccountController extends Controller {
     }
 
     /**
+     * Transfer money from one to another account and save changes
+     * 
      * @Route("/account/{id}/transferMoney", name="transfer_Money")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -142,11 +156,12 @@ class AccountController extends Controller {
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             $amount = $form['amount']->getData();
-
+            
             if ($amount <= $account->getBalance()) {
                 $this->transferMoney($amount, $account, $form);
 
                 return $this->redirectToRoute('show_allAccounts');
+            // trying to transfer to much money
             } else {
                 $message = 'Kwota do przeniesienia większa od salda';
             }
@@ -155,7 +170,13 @@ class AccountController extends Controller {
                     'form' => $form->createView(), 'balance' => 'max kwota  ' . $balance,
                     'message' => $message));
     }
-
+    /**
+     * Create form for new account or for modifying existing account
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return $form
+     */
     private function creatingForm($account, $user) {
 
         $form = $this->createFormBuilder($account)
@@ -172,7 +193,14 @@ class AccountController extends Controller {
 
         return $form;
     }
-
+    
+    /**
+     * Create form for transfering money
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @param int
+     * @return $form
+     */
     private function creatingFormForTransferingMoney($user, $id) {
         $form = $this->createFormBuilder()
                 ->add('amount', NumberType::class)
@@ -186,7 +214,14 @@ class AccountController extends Controller {
 
         return $form;
     }
-
+    
+    /**
+     * Transfer money and save new balances in database
+     * 
+     * @param float
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @param $form
+     */
     private function transferMoney($amount, $account, $form) {
         $account->spendMoney($amount);
         $accountToTransfer = $form['account']->getData();
@@ -196,7 +231,12 @@ class AccountController extends Controller {
         $em->persist($account);
         $em->flush();
     }
-
+    
+    /**
+     * Change status of account for false and save changes in database
+     * 
+     * @param $form
+     */
     private function changeAccountStatus($form) {
         $account = $form->getData();
         $em = $this->getDoctrine()->getManager();
@@ -206,7 +246,13 @@ class AccountController extends Controller {
             $em->flush();
         }
     }
-
+    
+    /**
+     * Create form for deleting account
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @return $form
+     */
     private function creatingFormForDelete($account) {
         $form = $this->createFormBuilder($account)
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
@@ -214,7 +260,13 @@ class AccountController extends Controller {
 
         return $form;
     }
-
+    
+    /**
+     * Create array with account names as key and account balance as value;
+     * 
+     * @param type $accounts
+     * @return array 
+     */
     private function createArrayOfAccounts($accounts) {
         $arrayOfAccounts = [];
         foreach ($accounts as $account) {
@@ -224,7 +276,13 @@ class AccountController extends Controller {
 
         return $arrayOfAccounts;
     }
-
+    
+    /**
+     * Creating array for js charts
+     * 
+     * @param type $array
+     * @return array
+     */
     private function creatingArrayForChart($array) {
         $arrayForChart = [];
         foreach ($array as $key => $value) {

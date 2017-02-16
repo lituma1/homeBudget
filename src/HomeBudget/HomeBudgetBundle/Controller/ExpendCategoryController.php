@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class ExpendCategoryController extends Controller {
     
     /**
+     * Create a set of categories for new user and save in database
+     * 
      * @Route("/incomeCategory/add", name="add_exp_categories")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -45,6 +47,8 @@ class ExpendCategoryController extends Controller {
                     'form' => $form->createView()));
     }
     /**
+     * Create new expend category and save in database
+     * 
      * @Route("/expendCategory/new", name="new_exCategory")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -68,6 +72,7 @@ class ExpendCategoryController extends Controller {
                 $em->persist($exCategory);
                 $em->flush();
                 return $this->redirectToRoute('new_exCategory');
+            // if name of category exist
             } else {
                 $message = 'Kategoria o takiej nazwie już istnieje';
             }
@@ -79,6 +84,8 @@ class ExpendCategoryController extends Controller {
     }
 
     /**
+     * Modify category name and save changes
+     * 
      * @Route("/expendCategory/{id}/modify", name="modify_exp_category")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -96,15 +103,16 @@ class ExpendCategoryController extends Controller {
 
             $exCategory = $form->getData();
             $categoryName = $exCategory->getName();
-            
+            // checking if name of category exist 
             $result = in_array($categoryName, $arrayWithCategoryNames);
            
-
+            
             if (!$result) {
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($exCategory);
                 $em->flush();
                 return $this->redirectToRoute('new_exCategory');
+            //if name of category exist in database
             } else {
                 $message = 'Kategoria o takiej nazwie już istnieje';
             }
@@ -112,7 +120,13 @@ class ExpendCategoryController extends Controller {
         return $this->render('HBBundle:ExpendCategory:modify_exp_category.html.twig', array(
                     'form' => $form->createView(), 'message' => $message));
     }
-
+    
+    /**
+     * Create form for new category
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $exCategory
+     * @return $form
+     */
     private function creatingForm($exCategory) {
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
@@ -121,7 +135,13 @@ class ExpendCategoryController extends Controller {
 
         return $form;
     }
-
+    
+    /**
+     * Create form for modify 
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\ExpendCategory $exCategory
+     * @return $form
+     */
     private function creatingFormForModify($exCategory) {
         $form = $this->createFormBuilder($exCategory)
                 ->add('name', TextType::class, array('label' => 'Nazwa'))
@@ -132,21 +152,36 @@ class ExpendCategoryController extends Controller {
 
         return $form;
     }
-
-     private function existCategoryNameInDatabase($categories, $typeName) {
+    
+    /**
+     * Check if name category exist in database
+     * 
+     * @param array $categories
+     * @param string $categoryName
+     * @return boolean
+     */
+    private function existCategoryNameInDatabase($categories, $categoryName) {
 
         $result = false;
-        foreach ($categories as $type) {
-            if ($type->getName() === $typeName) {
+        foreach ($categories as $category) {
+            if ($category->getName() === $categoryName) {
                 $result = true;
             }
         }
         return $result;
     }
-    private function createArrayWithCategoryNames($categories, $string){
+    
+    /**
+     * Create array with names without name of category to modify
+     * 
+     * @param array $categories
+     * @param string $categoryName
+     * @return array 
+     */
+    private function createArrayWithCategoryNames($categories, $categoryName){
         $array = [];
         foreach ($categories as $category){
-            if($category->getName() !== $string){
+            if($category->getName() !== $categoryName){
                 $array[] = $category->getName();
             } 
         }
