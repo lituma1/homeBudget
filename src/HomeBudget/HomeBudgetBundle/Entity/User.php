@@ -77,13 +77,26 @@ class User extends BaseUser {
         $this->incomeCategories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->expendCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
+    /**
+     * Get cellPhone
+     * 
+     * @return string
+     */
     public function getCellPhone() {
         return $this->cellPhone;
     }
-
+    
+    /**
+     * Set cellPhone
+     * 
+     * @param string
+     * @return User
+     */
     public function setCellPhone($cellPhone) {
         $this->cellPhone = $cellPhone;
+        
+        return $this;
     }
 
     /**
@@ -266,6 +279,11 @@ class User extends BaseUser {
         return $this->expendCategories;
     }
     
+    /**
+     * Sum of user accounts balances
+     * 
+     * @return float
+     */
     public function balanceOfAccounts() {
         $balance = 0;
         foreach ($this->accounts as $account) {
@@ -276,6 +294,12 @@ class User extends BaseUser {
         }
         return $balance;
     }
+    
+    /**
+     * Sum of user expends
+     * 
+     * @return float
+     */
     public function sumOfExpends(){
         $sum = 0;
         foreach ($this->expends as $expend){
@@ -283,6 +307,11 @@ class User extends BaseUser {
         }
         return $sum;
     }
+    /**
+     * Sum of user incomes
+     * 
+     * @return float
+     */
     public function sumOfIncomes(){
         $sum = 0;
         foreach ($this->incomes as $income){

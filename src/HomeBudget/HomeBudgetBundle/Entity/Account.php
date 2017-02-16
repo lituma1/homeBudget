@@ -227,8 +227,10 @@ class Account {
     }
 
     /**
+     * Add amount of money to account
      * 
-     * @param type $amount
+     * @param float
+     * @return Account
      */
     public function addMoney($amount) {
 
@@ -236,8 +238,15 @@ class Account {
 
         $balance += $amount;
         $this->setBalance($balance);
+        return $this;
     }
-
+    
+    /**
+     * Spend amount of money from account
+     * 
+     * @param type $amount
+     * @return boolean
+     */
     public function spendMoney($amount) {
         if ($this->balance >= $amount) {
             $this->balance -= $amount;
@@ -302,8 +311,11 @@ class Account {
     {
         return $this->expends;
     }
+    
     /**
+     * Create string with name and balance of account
      * 
+     * @return string
      */
     public function __toString() {
         return $this->getName().' aktualne saldo: '.$this->getBalance();
