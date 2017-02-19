@@ -112,7 +112,7 @@ class AccountController extends Controller {
     }
 
     /**
-     * Show all user accounts and prepere data for chart
+     * Show all user accounts and prepare data for chart
      * 
      * @Route("/account/showAll", name="show_allAccounts")
      * @Security("has_role('ROLE_USER')")
@@ -262,7 +262,7 @@ class AccountController extends Controller {
     }
     
     /**
-     * Create array with account names as key and account balance as value;
+     * Create array with account names as key and account balance as value
      * 
      * @param type $accounts
      * @return array 

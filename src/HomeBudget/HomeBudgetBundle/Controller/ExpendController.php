@@ -19,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 class ExpendController extends Controller {
 
     /**
+     * Create new Expend and save in database
+     * 
      * @Route("/expend/new", name="new_expend")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -52,6 +54,8 @@ class ExpendController extends Controller {
     }
 
     /**
+     * Modify expend and save in database
+     * 
      * @Route("/expend/{id}/modify", name="modify_expend")
      * @Security("has_role('ROLE_USER')")
      */
@@ -84,6 +88,8 @@ class ExpendController extends Controller {
     }
 
     /**
+     * Delete expend and save changes in database
+     * 
      * @Route("/expend/{id}/delete", name="delete_expend")
      * @Security("has_role('ROLE_USER')")
      */
@@ -118,6 +124,8 @@ class ExpendController extends Controller {
     }
 
     /**
+     * Show all user expends and prepare data for js chart
+     * 
      * @Route("/expend/all", name="show_allExpends")
      * @Security("has_role('ROLE_USER')")
      */
@@ -137,7 +145,14 @@ class ExpendController extends Controller {
                     'expends' => $expends, 'data' => $data, 'sum' => $sumOfExpends
         ));
     }
-
+    
+    /**
+     * Create form for new expend or for modifying expend
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expend
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return $form
+     */
     private function creatingForm($expend, $user) {
         $form = $this->createFormBuilder($expend)
                 ->add('description', TextType::class, array('label' => 'Opis wydatku'))
@@ -161,7 +176,18 @@ class ExpendController extends Controller {
 
         return $form;
     }
-
+    
+    /**
+     * Modify Expend and balances of two accounts
+     * 
+     * @param type $form
+     * @param type $em
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expend
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @param float $amountToModify
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accountToModify
+     * 
+     */
     private function modifyExpendAndAccounts($form, $em, $expend, $account, $amountToModify, $accountToModify) {
 
         $result = $account->spendMoney($expend->getAmount());
@@ -176,7 +202,17 @@ class ExpendController extends Controller {
             ));
         }
     }
-
+    
+    /**
+     * Modify expend 
+     * 
+     * @param type $form
+     * @param type $em
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Expend $expend
+     * @param float $amountToModify
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * 
+     */
     private function modifyExpend($form, $em, $expend, $amountToModify, $account) {
         if ($expend->getAmount() != $amountToModify) {
             $amount = $expend->getAmount() - $amountToModify;
@@ -197,7 +233,13 @@ class ExpendController extends Controller {
             return $this->redirectToRoute('show_allExpends');
         }
     }
-
+    
+    /**
+     * Create array with sum of expends by category
+     * 
+     * @param type $expends
+     * @return array
+     */
     private function sumOfExpendsByCategory($expends) {
         $arrayWithCategoryAndAmounts = [];
         foreach ($expends as $expend) {
@@ -212,7 +254,13 @@ class ExpendController extends Controller {
 
         return $arrayWithCategoryAndAmounts;
     }
-
+    
+    /**
+     * Create array for js charts
+     * 
+     * @param type $array
+     * @return type
+     */
     private function creatingArrayForChart($array) {
         $arrayForChart = [];
         foreach ($array as $key => $value) {
