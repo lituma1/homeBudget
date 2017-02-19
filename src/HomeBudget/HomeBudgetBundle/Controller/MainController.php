@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 class MainController extends Controller {
 
     /**
+     * Show main page for logged user
+     * 
      * @Route("/panel", name="Panel")
      * @Security("has_role('ROLE_USER')")
      */
@@ -21,6 +23,8 @@ class MainController extends Controller {
     }
 
     /**
+     * Show main page
+     * 
      * @Route("/")
      * 
      */
