@@ -15,6 +15,8 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 class TypeController extends Controller {
 
     /**
+     * Create a set of types for new user and save in database
+     * 
      * @Route("/type/addTypes", name="add_new_types")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -45,6 +47,8 @@ class TypeController extends Controller {
     }
 
     /**
+     * Create new account type and save in database
+     * 
      * @Route("/type/new", name="new_type")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -55,10 +59,7 @@ class TypeController extends Controller {
         $repository = $this->getDoctrine()->getRepository('HBBundle:Type');
         $types = $repository->findByUserAndStatus($user);
         $type = new Type();
-        $form = $this->createFormBuilder($type)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingForm($type);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
@@ -82,6 +83,8 @@ class TypeController extends Controller {
     }
 
     /**
+     * Modify type name and save changes
+     * 
      * @Route("/type/{id}/modify", name="modify_type")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -94,17 +97,13 @@ class TypeController extends Controller {
         $type = $repository->find($id);
         $arrayWithTypeNames = $this->createArrayWithTypeNames($types, $type->getName());
 
-        $form = $this->createFormBuilder($type)
-                ->add('name', TextType::class, array('label' => 'Nazwa'))
-                ->add('status', CheckboxType::class, array('label' =>
-                    'Zaznacz jeśli chcesz aktywować', 'required' => false))
-                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
-                ->getForm();
+        $form = $this->creatingFormForModify($type);
         $form->handleRequest($request);
 
         if ($form->isSubmitted()) {
             $type = $form->getData();
             $typeName = $type->getName();
+            // checking if name of type exist 
             $result = in_array($typeName, $arrayWithTypeNames);
 
             if (!$result) {
@@ -112,6 +111,7 @@ class TypeController extends Controller {
                 $em->persist($type);
                 $em->flush();
                 return $this->redirectToRoute('new_type');
+            //if name of category exist in database
             } else {
                 $message = 'Typ o takiej nazwie już istnieje';
             }
@@ -119,7 +119,44 @@ class TypeController extends Controller {
         return $this->render('HBBundle:Type:modify.html.twig', array(
                     'form' => $form->createView(), 'message' => $message));
     }
-
+    
+    /**
+     * Create form for new type
+     * 
+     * @param HomeBudget\HomeBudgetBundle\Entity\Type $type
+     * @return $form
+     */
+    private function creatingForm($type){
+        $form = $this->createFormBuilder($type)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        return $form;
+    }
+    
+    /**
+     * Create form for modify type
+     * 
+     * @param HomeBudget\HomeBudgetBundle\Entity\Type $type
+     * @return $form
+     */
+    private function creatingFormForModify($type){
+        $form = $this->createFormBuilder($type)
+                ->add('name', TextType::class, array('label' => 'Nazwa'))
+                ->add('status', CheckboxType::class, array('label' =>
+                    'Zaznacz jeśli chcesz aktywować', 'required' => false))
+                ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
+                ->getForm();
+        return $form;
+    }
+    
+    /**
+     * Check if name type exist in database
+     * 
+     * @param array $types
+     * @param string $typeName
+     * @return boolean
+     */
     private function existTypeNameInDatabase($types, $typeName) {
 
         $result = false;
@@ -130,11 +167,18 @@ class TypeController extends Controller {
         }
         return $result;
     }
-
-    private function createArrayWithTypeNames($types, $string) {
+    
+    /**
+     * 
+     * 
+     * @param array $types
+     * @param string $typeName
+     * @return array
+     */
+    private function createArrayWithTypeNames($types, $typeName) {
         $array = [];
         foreach ($types as $type) {
-            if ($type->getName() !== $string) {
+            if ($type->getName() !== $typeName) {
                 $array[] = $type->getName();
             }
         }
