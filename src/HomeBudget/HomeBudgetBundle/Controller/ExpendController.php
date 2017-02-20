@@ -77,7 +77,7 @@ class ExpendController extends Controller {
             $em->persist($expend);
 
             if ($account->getId() == $accountToModify->getId()) {
-                return $this->modifyExpend($form, $em, $expend, $amountToModify, $account);
+                return $this->modifyExpendWithoutAccount($form, $em, $expend, $amountToModify, $account);
             } else {
                 return $this->modifyExpendAndAccounts($form, $em, $expend, $account, $amountToModify, $accountToModify);
             }
@@ -213,7 +213,7 @@ class ExpendController extends Controller {
      * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
      * 
      */
-    private function modifyExpend($form, $em, $expend, $amountToModify, $account) {
+    private function modifyExpendWithoutAccount($form, $em, $expend, $amountToModify, $account) {
         if ($expend->getAmount() != $amountToModify) {
             $amount = $expend->getAmount() - $amountToModify;
             $result = $account->spendMoney($amount);
