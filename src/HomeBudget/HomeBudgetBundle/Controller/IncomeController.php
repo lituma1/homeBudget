@@ -19,6 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 class IncomeController extends Controller {
 
     /**
+     * Create new income and save in database
+     * 
      * @Route("/income/new", name="new_income")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
@@ -45,6 +47,8 @@ class IncomeController extends Controller {
     }
 
     /**
+     * Modify income and save in database
+     * 
      * @Route("/income/{id}/modify", name="modify_income")
      * @Security("has_role('ROLE_USER')")
      */
@@ -61,35 +65,13 @@ class IncomeController extends Controller {
 
             $income = $form->getData();
             $account = $income->getAccount();
-
+            $income->setUser($user);
             $em = $this->getDoctrine()->getManager();
             $em->persist($income);
             if ($account->getId() == $accountToModify->getId()) {
-                if ($amountToModify !== $income->getAmount()) {
-                    $amount = $amountToModify - $income->getAmount();
-                    $result = $accountToModify->spendMoney($amount);
-                    if ($result) {
-                        $em->flush();
-                        return $this->redirectToRoute('show_allIncomes');
-                    } else {
-                        $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
-                                . ' ujemne';
-                    }
-                } else {
-                    $em->flush();
-                    return $this->redirectToRoute('show_allIncomes');
-                } 
-                
+                return $this->modifyIncomeWithoutAccount($form, $em, $income, $amountToModify, $accountToModify);
             } else {
-                $account->addMoney($income->getAmount());
-                $result = $accountToModify->spendMoney($amountToModify);
-                if ($result) {
-                    $em->flush();
-                    return $this->redirectToRoute('show_allIncomes');
-                } else {
-                    $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
-                            . ' ujemne';
-                }
+                return $this->modifyIncomeAndAccounts($form, $em, $income, $account, $amountToModify, $accountToModify);
             }
         }
 
@@ -98,6 +80,8 @@ class IncomeController extends Controller {
     }
 
     /**
+     * Delete income and save changes in database
+     * 
      * @Route("/income/{id}/delete", name="delete_income")
      * @Security("has_role('ROLE_USER')")
      */
@@ -136,6 +120,8 @@ class IncomeController extends Controller {
     }
 
     /**
+     * Show all user incomes and prepare data for js chart
+     * 
      * @Route("/income/all", name="show_allIncomes")
      * @Security("has_role('ROLE_USER')")
      * 
@@ -146,21 +132,28 @@ class IncomeController extends Controller {
         $incomes = $repository->sortByDate($user);
         $sumOfIncomes = $user->sumOfIncomes();
         $data = null;
-        if($incomes){
+        if ($incomes) {
             $categoriesAndAmounts = $this->sumOfIncomesByCategory($incomes);
             $arrayForChart = $this->creatingArrayForChart($categoriesAndAmounts);
             $data = json_encode($arrayForChart);
         }
-        
+
         return $this->render('HBBundle:Income:all_income.html.twig', array(
                     'incomes' => $incomes, 'data' => $data, 'sum' => $sumOfIncomes
         ));
     }
+    
+    /**
+     * Create form for new income or for modifying income
+     * 
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $income
+     * @param \HomeBudget\HomeBudgetBundle\Entity\User $user
+     * @return $form
+     */
     private function creatingForm($income, $user) {
         $form = $this->createFormBuilder($income)
                 ->add('description', TextType::class, array('label' => 'Opis przychodu'))
                 ->add('amount', NumberType::class, array('label' => 'Kwota'))
-                
                 ->add('incomeCategory', EntityType::class, array('class' => 'HBBundle:IncomeCategory',
                     'query_builder' => function(EntityRepository $er) use ($user) {
                         return $er->queryOwnedBy($user);
@@ -177,9 +170,72 @@ class IncomeController extends Controller {
                     'label' => 'Data'))
                 ->add('save', SubmitType::class, array('label' => 'Potwierdź'))
                 ->getForm();
-        
+
         return $form;
     }
+    
+    /**
+     * Modify income without changing account
+     * 
+     * @param type $form
+     * @param type $em
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $income
+     * @param float $amountToModify
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accountToModify
+     * 
+     */
+    private function modifyIncomeWithoutAccount($form, $em,  $income, $amountToModify, $accountToModify) {
+        if ($amountToModify !== $income->getAmount()) {
+            $amount = $amountToModify - $income->getAmount();
+            $result = $accountToModify->spendMoney($amount);
+            if ($result) {
+                $em->flush();
+                return $this->redirectToRoute('show_allIncomes');
+            } else {
+                $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
+                        . ' ujemne';
+                return $this->render('HBBundle:Income:modify_income.html.twig', array(
+                            'form' => $form->createView(), 'message' => $message
+                ));
+            }
+        } else {
+            $em->flush();
+            return $this->redirectToRoute('show_allIncomes');
+        }
+    }
+    
+    /**
+     * Modify income and balances of two accounts
+     * 
+     * @param type $form
+     * @param type $em
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Income $income
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $account
+     * @param float $amountToModify
+     * @param \HomeBudget\HomeBudgetBundle\Entity\Account $accountToModify
+     * 
+     */
+    private function modifyIncomeAndAccounts($form, $em, $income, $account, $amountToModify, $accountToModify) {
+        $account->addMoney($income->getAmount());
+        $result = $accountToModify->spendMoney($amountToModify);
+        if ($result) {
+            $em->flush();
+            return $this->redirectToRoute('show_allIncomes');
+        } else {
+            $message = 'nie można zmodyfikować przychodu, saldo rachunku nie może być'
+                    . ' ujemne';
+            return $this->render('HBBundle:Income:modify_income.html.twig', array(
+                        'form' => $form->createView(), 'message' => $message
+            ));
+        }
+    }
+
+    /**
+     * Create array with sum of incomes by category
+     * 
+     * @param array $incomes
+     * @return array
+     */
     private function sumOfIncomesByCategory($incomes) {
         $arrayWithCategoryAndAmounts = [];
         foreach ($incomes as $income) {
@@ -194,7 +250,13 @@ class IncomeController extends Controller {
 
         return $arrayWithCategoryAndAmounts;
     }
-
+    
+    /**
+     * Create array for js charts
+     * 
+     * @param type $array
+     * @return type
+     */
     private function creatingArrayForChart($array) {
         $arrayForChart = [];
         foreach ($array as $key => $value) {
@@ -210,5 +272,5 @@ class IncomeController extends Controller {
         array_multisort($amount, SORT_DESC, $name, SORT_ASC, $arrayForChart);
         return $arrayForChart;
     }
-    
+
 }
