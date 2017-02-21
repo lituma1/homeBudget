@@ -45,18 +45,21 @@ class Income
     private $description;
 
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="incomes")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="incomes")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
     
     /**
      * @ORM\ManyToOne(targetEntity="IncomeCategory", inversedBy="incomes")
+     * @ORM\JoinColumn(name="income_category_id", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull(message="Proszę zdefiniować kategorie przychodów, w zakładce przychody")
      */
     private $incomeCategory;
     
     /**
-     *@ORM\ManyToOne(targetEntity="Account", inversedBy="incomes")
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="incomes")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull(message="Proszę dodać jakieś konto, w zakładce konta")
      */
     private $account;

@@ -30,13 +30,14 @@ class Type
     private $name;
     
     /**
-     *@ORM\OneToMany(targetEntity="Account", mappedBy="type")
+     * @ORM\OneToMany(targetEntity="Account", mappedBy="type")
      * @var type 
      */
     private $accounts;
     
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="types")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="types")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * @var type 
      */
     private $user;

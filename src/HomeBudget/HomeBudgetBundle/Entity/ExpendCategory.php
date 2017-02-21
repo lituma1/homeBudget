@@ -37,7 +37,8 @@ class ExpendCategory
     private $expends;
     
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="expendCategories")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="expendCategories")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * @var type 
      */
     private $user;

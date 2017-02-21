@@ -45,12 +45,14 @@ class Expend
     private $description;
     
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="expends")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="expends")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $user;
     
     /**
-     *@ORM\ManyToOne(targetEntity="Account", inversedBy="expends")
+     * @ORM\ManyToOne(targetEntity="Account", inversedBy="expends")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull(message="Proszę dodać jakieś konto, w zakładce konta")
      */
     private $account;
@@ -58,6 +60,7 @@ class Expend
     
     /**
      * @ORM\ManyToOne(targetEntity="ExpendCategory", inversedBy="expends")
+     * @ORM\JoinColumn(name="expend_category_id", referencedColumnName="id", onDelete="CASCADE")
      * @Assert\NotNull(message="Proszę zdefiniować kategorie wydatków, w zakładce wydatki")
      */
     private $expendCategory;

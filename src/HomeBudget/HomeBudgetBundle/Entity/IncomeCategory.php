@@ -37,7 +37,8 @@ class IncomeCategory
     private $incomes;
     
     /**
-     *@ORM\ManyToOne(targetEntity="User", inversedBy="incomeCategories")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="incomeCategories")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")
      * @var type 
      */
     private $user;
