@@ -17,12 +17,12 @@ class ExpendCategoryController extends Controller {
     /**
      * Create a set of categories for new user and save in database
      * 
-     * @Route("/incomeCategory/add", name="add_exp_categories")
+     * @Route("/expendCategory/add", name="add_exp_categories")
      * @Security("has_role('ROLE_USER')")
      * @Method({"GET", "POST"})
      */
     public function addExpCategoriesAction(Request $request) {
-        $expCategories = ['Rozrywak', 'Kultura', 'Ubrania', 'Jedzenie', 'Samochód',
+        $expCategories = ['Rozrywka', 'Kultura', 'Ubrania', 'Jedzenie', 'Samochód',
             'Wakacje', 'Edukacja dzieci', 'Prezenty', 'Środki czystości', 'Zwierzęta',
             'Remont', 'Urządzenie mieszkania', 'Gaz', 'Prąd', 'Czynsz', 'Telewizja kablowa',
             'Internet', 'Telefon'];
