@@ -1,0 +1,13 @@
+{% extends "::base2.html.twig" %}
+
+{% block title %}HBBundle:User:delete{% endblock %}
+
+{% block body %}
+<h1>Usunięcie konta jest nieodwracalne</h1>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+{% endblock %}
+
