@@ -25,7 +25,7 @@ class MainController extends Controller {
     /**
      * Show main page
      * 
-     * @Route("/")
+     * @Route("/", name="main_page")
      * 
      */
     public function showMainPageAction() {
@@ -35,8 +35,28 @@ class MainController extends Controller {
         }
 
         return $this->render('HBBundle:Main:show_main_page.html.twig', array(
-                    
         ));
+    }
+
+    /**
+     * Show cookies policy
+     * 
+     * @Route("/cookiesPolicy", name="cookies_policy")
+     */
+    public function showCookiesPolicyAction() {
+
+        return $this->render('HBBundle:Main:cookies_policy.html.twig', array(
+        ));
+    }
+
+    /**
+     * Show contact details
+     * 
+     * @Route("/contact", name="contact_details")
+     */
+    public function showContactPageAction() {
+
+        return $this->render('HBBundle:Main:contact_page.html.twig', array());
     }
 
 }
